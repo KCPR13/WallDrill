@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
@@ -13,7 +15,9 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.launch
+import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -21,6 +25,7 @@ import kotlin.coroutines.suspendCoroutine
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
+    colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
     scaleType: PreviewView.ScaleType = PreviewView.ScaleType.FILL_CENTER,
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 ) {
@@ -37,7 +42,17 @@ fun CameraPreview(
                 )
             }
 
-            // CameraX Preview UseCase
+            val cameraExecutor = Executors.newSingleThreadExecutor()
+
+
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor, ColorAnalyzer(colorDetectionListener))
+                }
+
+//            // CameraX Preview UseCase
             val previewUseCase = androidx.camera.core.Preview.Builder()
                 .build()
                 .also {
@@ -49,8 +64,9 @@ fun CameraPreview(
                 try {
                     // Must unbind the use-cases before rebinding them.
                     cameraProvider.unbindAll()
+
                     cameraProvider.bindToLifecycle(
-                        lifecycleOwner, cameraSelector, previewUseCase
+                        lifecycleOwner, cameraSelector, imageAnalyzer,previewUseCase
                     )
                 } catch (ex: Exception) {
                     Log.e("CameraPreview", "Use case binding failed", ex)

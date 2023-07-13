@@ -17,13 +17,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.MainUiState
 import pl.kacper.misterski.walldrill.ui.MainViewModel
 import pl.kacper.misterski.walldrill.ui.fragments.CalibrationScreen
 import pl.kacper.misterski.walldrill.ui.fragments.SetupScreen
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
             requestFrontCameraPermission()
         }
         setContent {
-                MainScreen(viewModel.uiState)
+                MainScreen(viewModel.uiState,this)
             }
     }
 
@@ -70,15 +71,22 @@ class MainActivity : ComponentActivity() {
         requestPermissionLauncher.launch(permission)
     }
 
+    //TODO separate file
     enum class PermissionStatus {
         GRANTED,
         DENIED,
         NOT_REQUESTED
     }
+
+    //TODO remove is detected
+    override fun onRedColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
+       viewModel.updatePoints(detectedLocations)
+    }
+
 }
 
 @Composable
-fun MainScreen(uiState: StateFlow<MainUiState>) {
+fun MainScreen(uiState: StateFlow<MainUiState>, colorDetectionListener: ColorAnalyzer.ColorDetectionListener) {
     val navController = rememberNavController()
 
     val mainUiState by uiState.collectAsState()
@@ -90,7 +98,7 @@ fun MainScreen(uiState: StateFlow<MainUiState>) {
     }
 
     NavHost(navController = navController, startDestination = destination) {
-        composable("calibration") { CalibrationScreen() }
+        composable("calibration") { CalibrationScreen(colorDetectionListener, uiState) }
         composable("setup") { SetupScreen() }
     }
 
