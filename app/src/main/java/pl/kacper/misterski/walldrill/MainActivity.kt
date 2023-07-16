@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.MainUiState
 import pl.kacper.misterski.walldrill.ui.MainViewModel
-import pl.kacper.misterski.walldrill.ui.fragments.CalibrationScreen
-import pl.kacper.misterski.walldrill.ui.fragments.SetupScreen
+import pl.kacper.misterski.walldrill.ui.fragments.calibration.CalibrationScreen
+import pl.kacper.misterski.walldrill.ui.fragments.setup.SetupScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {

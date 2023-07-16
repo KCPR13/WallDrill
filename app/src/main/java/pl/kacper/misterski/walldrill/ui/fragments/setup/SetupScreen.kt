@@ -1,4 +1,4 @@
-package pl.kacper.misterski.walldrill.ui.fragments
+package pl.kacper.misterski.walldrill.ui.fragments.setup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

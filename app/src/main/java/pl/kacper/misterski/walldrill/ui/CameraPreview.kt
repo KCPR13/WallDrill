@@ -1,4 +1,4 @@
-package pl.kacper.misterski.walldrill.ui.fragments
+package pl.kacper.misterski.walldrill.ui
 
 import android.content.Context
 import android.util.Log

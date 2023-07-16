@@ -59,16 +59,16 @@ import kotlin.experimental.and
          val saturation = hsv[1]
          val value = hsv[2]
 
-         val minHue = 0f
-         val maxHue = 70f // Adjust this value to include the desired range of red hues
+         val minHue = 230f // Adjust this value to include the desired range of red hues
+         val maxHue = 20f // Adjust this value to include the desired range of red hues
 
          val minSaturation = 0.4f // Adjust this value to set the minimum saturation for red detection
          val maxSaturation = 1.0f // Adjust this value to set the maximum saturation for red detection
 
-         val minValue = 0.2f // Adjust this value to set the minimum value/brightness for red detection
+         val minValue = 0.1f // Adjust this value to set the minimum value/brightness for red detection
          val maxValue = 1.0f // Adjust this value to set the maximum value/brightness for red detection
 
-         return (hue >= minHue && hue <= maxHue
+         return (hue >= minHue || hue <= maxHue
                  && saturation >= minSaturation && saturation <= maxSaturation
                  && value >= minValue && value <= maxValue)
      }

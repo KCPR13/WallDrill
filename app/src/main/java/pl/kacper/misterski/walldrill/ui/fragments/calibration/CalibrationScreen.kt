@@ -1,4 +1,4 @@
-package pl.kacper.misterski.walldrill.ui.fragments
+package pl.kacper.misterski.walldrill.ui.fragments.calibration
 
 import android.util.Log
 import androidx.camera.core.CameraSelector
@@ -10,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -23,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import pl.kacper.misterski.walldrill.ui.MainUiState
 import androidx.compose.ui.graphics.Color
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.ui.CameraPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
