@@ -1,31 +1,24 @@
 package pl.kacper.misterski.walldrill.ui
 
-import android.content.Context
 import android.util.Log
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.launch
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import java.util.concurrent.Executor
+import pl.kacper.misterski.walldrill.domain.extensions.getCameraProvider
 import java.util.concurrent.Executors
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
-
 
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
-    colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
+    analyzer: ImageAnalysis.Analyzer?,
     scaleType: PreviewView.ScaleType = PreviewView.ScaleType.FILL_CENTER,
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 ) {
@@ -49,7 +42,9 @@ fun CameraPreview(
                 .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, ColorAnalyzer(colorDetectionListener))
+                    if (analyzer != null) {
+                        it.setAnalyzer(cameraExecutor, analyzer)
+                    }
                 }
 
 //            // CameraX Preview UseCase
@@ -77,15 +72,43 @@ fun CameraPreview(
         }
     )
 }
+//private fun takePhoto(context: Context) { TODO
+//    // Get a stable reference of the modifiable image capture use case
+//    val imageCapture = imageCapture ?: return
+//
+//    // Create time stamped name and MediaStore entry.
+//    val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+//        .format(System.currentTimeMillis())
+//    val contentValues = ContentValues().apply {
+//        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+//        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+//        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+//
+//    }
+//
+//    // Create output options object which contains file + metadata
+//    val outputOptions = ImageCapture.OutputFileOptions
+//        .Builder(contentResolver,
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//            contentValues)
+//        .build()
+//
+//    // Set up image capture listener, which is triggered after photo has
+//    // been taken
+//    imageCapture.takePicture(
+//        outputOptions,
+//        ContextCompat.getMainExecutor(context),
+//        object : ImageCapture.OnImageSavedCallback {
+//            override fun onError(exc: ImageCaptureException) {
+//                Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+//            }
+//
+//            override fun
+//                    onImageSaved(output: ImageCapture.OutputFileResults){
+//                val msg = "Photo capture succeeded: ${output.savedUri}"
+//                Log.d(TAG, msg)
+//            }
+//        }
+//    )
+//}
 
-//TODO K separate file
-suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
-    ProcessCameraProvider.getInstance(this).also { future ->
-        future.addListener({
-            continuation.resume(future.get())
-        }, executor)
-    }
-}
-
-val Context.executor: Executor
-    get() = ContextCompat.getMainExecutor(this)

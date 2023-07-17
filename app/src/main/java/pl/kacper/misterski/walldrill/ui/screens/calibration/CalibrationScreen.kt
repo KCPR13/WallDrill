@@ -1,4 +1,4 @@
-package pl.kacper.misterski.walldrill.ui.fragments.calibration
+package pl.kacper.misterski.walldrill.ui.screens.calibration
 
 import android.util.Log
 import androidx.camera.core.CameraSelector
@@ -17,18 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.flow.StateFlow
-import pl.kacper.misterski.walldrill.ui.MainUiState
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalibrationScreen(colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
-                      uiState: StateFlow<MainUiState>) {
+                      viewModel: CalibrationViewModel = viewModel()) {
 
-    val mainUiState by uiState.collectAsState()
+    val calibrationUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = { TopBar(
@@ -38,14 +37,14 @@ fun CalibrationScreen(colorDetectionListener: ColorAnalyzer.ColorDetectionListen
         content = { paddingValues ->
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             CameraPreview(
-                colorDetectionListener= colorDetectionListener,
+                analyzer = ColorAnalyzer(colorDetectionListener),
                 cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             )
                 // Draw the overlay rectangles on the camera preview
                 androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-                    Log.d("Kacpur", "detectedPoints: ${mainUiState.detectedPoints.size}")
-                    mainUiState.detectedPoints.forEach { location ->
+                    Log.d("Kacpur", "detectedPoints: ${calibrationUiState.detectedPoints.size}")
+                    calibrationUiState.detectedPoints.forEach { location ->
                         drawRect(
                             color = Color.Green,
                             topLeft = Offset(location.first.toFloat(), location.second.toFloat()),

@@ -1,4 +1,4 @@
-package pl.kacper.misterski.walldrill
+package pl.kacper.misterski.walldrill.ui.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,23 +8,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.core.content.ContextCompat
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import pl.kacper.misterski.walldrill.ui.MainUiState
-import pl.kacper.misterski.walldrill.ui.MainViewModel
-import pl.kacper.misterski.walldrill.ui.fragments.calibration.CalibrationScreen
-import pl.kacper.misterski.walldrill.ui.fragments.setup.SetupScreen
+import pl.kacper.misterski.walldrill.domain.enums.PermissionStatus
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
+
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -47,8 +38,9 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
             requestFrontCameraPermission()
         }
         setContent {
-                MainScreen(viewModel.uiState,this)
-            }
+            MainScreen(viewModel.uiState,this)
+        }
+
     }
 
     private fun checkCameraPermissionStatus(): PermissionStatus {
@@ -71,35 +63,10 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
         requestPermissionLauncher.launch(permission)
     }
 
-    //TODO separate file
-    enum class PermissionStatus {
-        GRANTED,
-        DENIED,
-        NOT_REQUESTED
-    }
-
-    //TODO remove is detected
     override fun onRedColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
-       viewModel.updatePoints(detectedLocations)
+        //TODO K
     }
+
 
 }
 
-@Composable
-fun MainScreen(uiState: StateFlow<MainUiState>, colorDetectionListener: ColorAnalyzer.ColorDetectionListener) {
-    val navController = rememberNavController()
-
-    val mainUiState by uiState.collectAsState()
-
-    val destination = if (mainUiState.permissionGranted) {
-        "calibration"
-    } else {
-        "setup"
-    }
-
-    NavHost(navController = navController, startDestination = destination) {
-        composable("calibration") { CalibrationScreen(colorDetectionListener, uiState) }
-        composable("setup") { SetupScreen() }
-    }
-
-}

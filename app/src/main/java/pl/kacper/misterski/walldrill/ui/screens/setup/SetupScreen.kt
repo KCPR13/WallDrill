@@ -1,9 +1,8 @@
-package pl.kacper.misterski.walldrill.ui.fragments.setup
+package pl.kacper.misterski.walldrill.ui.screens.setup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,9 +12,9 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun SetupScreen() {
+fun SetupScreen(modifier: Modifier) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
