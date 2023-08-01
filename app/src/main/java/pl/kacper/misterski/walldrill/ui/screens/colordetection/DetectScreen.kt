@@ -12,18 +12,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import pl.kacper.misterski.walldrill.domain.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 
 const val TAG = "DetectScreen"
 @Composable
-fun ColorDetection(modifier: Modifier) {
+fun ColorDetection(modifier: Modifier, viewModel: ColorDetectionViewModel = viewModel()) {
+
+
+    val state = viewModel.uiState.collectAsState()
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -46,7 +54,7 @@ fun ColorDetection(modifier: Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 CameraPreview(
-                    analyzer = null,
+                    analyzer = DetectColorAnalyzer(viewModel._uiState),
                     cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
                 )
@@ -55,6 +63,18 @@ fun ColorDetection(modifier: Modifier) {
                     .size(300.dp)
                     .background(Color.Transparent))
             }
+
+            Text(
+                text = "Detected color",
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+            Box(modifier = Modifier
+                .size(50.dp)
+                .drawBehind {
+                    drawRect(size = size, color = state.value)
+                }
+            )
 
             Button(
                 onClick = {
