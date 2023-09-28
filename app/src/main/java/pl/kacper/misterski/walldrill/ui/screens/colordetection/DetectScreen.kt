@@ -55,7 +55,7 @@ fun ColorDetection(modifier: Modifier, viewModel: ColorDetectionViewModel = view
             ) {
                 CameraPreview(
                     analyzer = DetectColorAnalyzer(viewModel._uiState),
-                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                    cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                 )
 
