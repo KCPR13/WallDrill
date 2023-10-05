@@ -10,19 +10,23 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+//TODO K separate file
+val Mili = Color(0xffb4c4ae)
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
+    primary = Mili,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = Mili,
     secondary = PurpleGrey40,
     tertiary = Pink40
 
@@ -36,6 +40,16 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+
+
+
+//private val navigationBarItemColors = NavigationBarItemColors(
+//colorResource(id = R.color.mili),
+//Color.Black,
+//Color.Black,
+//colorResource(id = R.color.gray),
+//colorResource(id = R.color.gray)
+//)
 
 @Composable
 fun WallDrillTheme(
@@ -65,6 +79,6 @@ fun WallDrillTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

@@ -24,12 +24,13 @@ import pl.kacper.misterski.walldrill.ui.CameraPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalibrationScreen(colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
+fun CalibrationScreen(modifier: Modifier,colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
                       viewModel: CalibrationViewModel = viewModel()) {
 
     val calibrationUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
+        modifier = modifier,
         topBar = { TopBar(
             Modifier
                 .padding(8.dp)

@@ -38,9 +38,22 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
             requestFrontCameraPermission()
         }
         setContent {
-            MainScreen(viewModel.uiState,this)
+            MainScreen(viewModel.uiState,this,
+                ::onSettingsClick,::onFolderClick, ::onAimClick)
         }
 
+    }
+
+    private fun onAimClick() {
+        TODO("Not yet implemented")
+    }
+
+    private fun onFolderClick() {
+        TODO("Not yet implemented")
+    }
+
+    private fun onSettingsClick() {
+        TODO("Not yet implemented")
     }
 
     private fun checkCameraPermissionStatus(): PermissionStatus {

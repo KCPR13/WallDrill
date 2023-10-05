@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kacper.misterski.walldrill.domain.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 
-const val TAG = "DetectScreen"
 @Composable
 fun ColorDetection(modifier: Modifier, viewModel: ColorDetectionViewModel = viewModel()) {
 

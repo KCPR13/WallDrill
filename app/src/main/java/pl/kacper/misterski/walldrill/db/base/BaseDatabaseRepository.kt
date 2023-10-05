@@ -1,13 +1,12 @@
 package pl.kacper.misterski.walldrill.db.base
 
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-abstract class BaseDatabaseRepository<Entity, Dao> @Inject constructor() {
+abstract class BaseDatabaseRepository<Entity, Dao> {
 
-    protected abstract fun getDao(): Dao
+    abstract fun getDao(): Dao
 
-    protected  val dao: Dao by lazy { getDao() }
+    val daoInstance: Dao by lazy { getDao() }
 
     abstract suspend fun insert(toInsert: Entity)
 

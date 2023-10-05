@@ -9,9 +9,9 @@ class ColorRepository @Inject constructor(private val appDatabase: AppDatabase) 
 
     override fun getDao() = appDatabase.db.configurationDao()
 
-    override fun getAll() = dao.getColors()
+    override fun getAll() = daoInstance.getColors()
 
     override suspend fun insert(toInsert: Color) {
-        dao.insert(toInsert)
+        daoInstance.insert(toInsert)
     }
 }
