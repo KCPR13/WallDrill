@@ -14,8 +14,10 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.StateFlow
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.AppNavigation
+import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
 import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationScreen
 import pl.kacper.misterski.walldrill.ui.screens.colordetection.ColorDetection
+import pl.kacper.misterski.walldrill.ui.screens.folder.FolderScreen
 import pl.kacper.misterski.walldrill.ui.screens.settings.SettingsScreen
 import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
 
@@ -23,20 +25,20 @@ import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
 @Composable
 fun MainScreen(
     uiState: StateFlow<MainUiState>,
-    colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
-    onSettingsClick: () -> Unit, // TODO K cleanup
-    onFolderClick: () -> Unit,
-    onAimClick: () -> Unit
+    colorDetectionListener: ColorAnalyzer.ColorDetectionListener
 
 ) {
     val navController = rememberNavController()
 
     Scaffold(
         Modifier.safeContentPadding(),
-        bottomBar = { BottomBar(onSettingsClick = {
-            navController.navigate(AppNavigation.SETTINGS)
-        },
-            onAimClick = onAimClick, onFolderClick = onFolderClick) }
+        bottomBar = {
+            BottomBar(onSettingsClick = {
+                navController.navigate(AppNavigation.SETTINGS)
+            },
+                onAimClick = { navController.navigate(AppNavigation.AIM) },
+                onFolderClick = { navController.navigate(AppNavigation.FOLDER) })
+        }
     ) { paddingValues ->
         val mainUiState: MainUiState by uiState.collectAsState()
 
@@ -58,15 +60,10 @@ fun MainScreen(
             composable(AppNavigation.COLOR_DETECTION) { ColorDetection(contentModifier) }
             composable(AppNavigation.SETUP) { SetupScreen(contentModifier) }
             composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier) }
-
+            composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
+            composable(AppNavigation.AIM) { AimScreen(contentModifier) }
         }
 
     }
-
-
-
-
-
-
 }
 

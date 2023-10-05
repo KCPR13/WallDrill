@@ -5,4 +5,6 @@ object AppNavigation {
     const val COLOR_DETECTION = "COLOR_DETECTION"
     const val SETUP = "setup"
     const val SETTINGS = "SETTINGS"
+    const val AIM = "AIM"
+    const val FOLDER = "FOLDER"
 }
