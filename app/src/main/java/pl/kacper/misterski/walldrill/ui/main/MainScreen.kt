@@ -57,9 +57,9 @@ fun MainScreen(
                     colorDetectionListener
                 )
             }
-            composable(AppNavigation.COLOR_DETECTION) { ColorDetection(contentModifier) }
+            composable(AppNavigation.COLOR_DETECTION) { ColorDetection(contentModifier, navController = navController) }
             composable(AppNavigation.SETUP) { SetupScreen(contentModifier) }
-            composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier) }
+            composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier, navController = navController) }
             composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
             composable(AppNavigation.AIM) { AimScreen(contentModifier) }
         }
