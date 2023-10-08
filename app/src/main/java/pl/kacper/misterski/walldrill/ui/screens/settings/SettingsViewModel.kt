@@ -18,7 +18,7 @@ class SettingsViewModel @Inject constructor(): ViewModel() {
 
     fun fetchModels(context: Context){
 
-        val COLORDETECTION = SettingsModel(context.getString(R.string.colors), SettingsAction.COLOR_DETECTION)
+        val COLORDETECTION = SettingsModel(context.getString(R.string.colors), SettingsAction.COLORS)
         val calibration = SettingsModel(context.getString(R.string.calibration), SettingsAction.CALIBRATION)
 
         _uiState.update { SettingsUiState(listOf(calibration,COLORDETECTION)) }

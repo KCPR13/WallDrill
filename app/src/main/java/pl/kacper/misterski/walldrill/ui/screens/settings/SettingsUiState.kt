@@ -2,7 +2,7 @@ package pl.kacper.misterski.walldrill.ui.screens.settings
 
 //TODO K separate files
 enum class SettingsAction{
-    COLOR_DETECTION,
+    COLORS,
     CALIBRATION
 }
 

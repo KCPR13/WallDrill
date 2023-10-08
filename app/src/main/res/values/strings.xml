@@ -6,4 +6,5 @@
     <string name="detect_the_color">Detect the color</string>
     <string name="detected_color">Detected color</string>
     <string name="save">Save</string>
+    <string name="no_colors_set">No colors set</string>
 </resources>

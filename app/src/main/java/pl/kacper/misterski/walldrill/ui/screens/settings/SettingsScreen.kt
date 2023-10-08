@@ -59,8 +59,8 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                     modifier = Modifier
                         .clickable {
                             when (model.action) {
-                                SettingsAction.COLOR_DETECTION -> navController.navigate(
-                                    AppNavigation.COLOR_DETECTION
+                                SettingsAction.COLORS -> navController.navigate(
+                                    AppNavigation.COLORS
                                 )
 
                                 SettingsAction.CALIBRATION -> navController.navigate(AppNavigation.CALIBRATION)

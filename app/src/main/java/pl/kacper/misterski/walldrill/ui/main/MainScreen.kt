@@ -17,6 +17,7 @@ import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
 import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationScreen
 import pl.kacper.misterski.walldrill.ui.screens.colordetection.ColorDetection
+import pl.kacper.misterski.walldrill.ui.screens.colors.ColorsScreen
 import pl.kacper.misterski.walldrill.ui.screens.folder.FolderScreen
 import pl.kacper.misterski.walldrill.ui.screens.settings.SettingsScreen
 import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
@@ -62,6 +63,9 @@ fun MainScreen(
             composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier, navController = navController) }
             composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
             composable(AppNavigation.AIM) { AimScreen(contentModifier) }
+            composable(AppNavigation.COLORS) { ColorsScreen(contentModifier, navController = navController) }
+
+
         }
 
     }

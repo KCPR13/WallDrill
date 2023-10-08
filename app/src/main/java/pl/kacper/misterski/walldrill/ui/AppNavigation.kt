@@ -7,4 +7,5 @@ object AppNavigation {
     const val SETTINGS = "SETTINGS"
     const val AIM = "AIM"
     const val FOLDER = "FOLDER"
+    const val COLORS = "COLORS"
 }

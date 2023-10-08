@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -55,13 +54,13 @@ fun ColorDetection(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
 
-    Scaffold(modifier.safeContentPadding(),
+    Scaffold(modifier,
         topBar = {
             AppToolbar(
                 R.string.detect_the_color,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
-                onBackPressedClick = { navController.navigate(AppNavigation.SETTINGS) }
+                onBackPressedClick = { navController.navigate(AppNavigation.COLORS) }
 
             )
         },
