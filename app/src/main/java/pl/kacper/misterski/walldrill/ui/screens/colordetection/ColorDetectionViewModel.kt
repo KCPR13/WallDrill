@@ -9,13 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.domain.DetectColorListener
 import javax.inject.Inject
 
 @HiltViewModel
 class ColorDetectionViewModel @Inject constructor(
-//    private val colorRepository: ColorRepository TODO K
+    private val colorRepository: ColorRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(Color.Black)
@@ -33,12 +35,13 @@ class ColorDetectionViewModel @Inject constructor(
 
 
 
-    fun saveColor(color: String, onColorSaved: () -> Unit){
-        viewModelScope.launch(Dispatchers.IO) {
-//            colorRepository.insert(pl.kacper.misterski.walldrill.db.color.Color(color = color)) TODO K
-            onColorSaved.invoke()
+    fun saveColor(onColorSaved: () -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {// TODO K if empty then select first color
+            colorRepository.insert(pl.kacper.misterski.walldrill.db.color.Color(color = _uiState.value.value.toString()))
+            withContext(Dispatchers.Main){
+                onColorSaved.invoke()
+            }
         }
-
     }
 
 }

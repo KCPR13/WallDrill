@@ -15,5 +15,6 @@ class AppDatabase @Inject constructor(@ApplicationContext context: Context) {
     val db = Room.databaseBuilder(
         context,
         AppRoom::class.java, DB_NAME
-    ).build()
+    ).fallbackToDestructiveMigration()
+        .build()
 }

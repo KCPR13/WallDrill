@@ -12,4 +12,10 @@ interface ColorDao: BaseDao<Color> {
     @Query("SELECT * FROM $TABLE_NAME")
     fun getColors() : Flow<List<Color>?>
 
+    @Query("UPDATE $TABLE_NAME SET selected = :selectedValue")
+    suspend fun uncheckSelectedColor(selectedValue: Boolean = false)
+
+    @Query("UPDATE $TABLE_NAME SET selected = :selectedValue WHERE id = :colorId")
+    suspend fun setColorChecked(colorId: Int, selectedValue: Boolean = true)
+
 }

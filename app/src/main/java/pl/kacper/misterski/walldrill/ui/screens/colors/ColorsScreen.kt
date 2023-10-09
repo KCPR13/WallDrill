@@ -1,10 +1,16 @@
 package pl.kacper.misterski.walldrill.ui.screens.colors
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,23 +32,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.common.SelectedColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ColorsScreen(
     modifier: Modifier,
     navController: NavHostController,
-    viewModel: ColorsViewModel = viewModel()
+    viewModel: ColorsViewModel = hiltViewModel()
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val state = viewModel.uiState.collectAsState()
+    viewModel.fetchColors()
 
 
     Scaffold(modifier,
@@ -72,10 +80,22 @@ fun ColorsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (state.value.colors.isEmpty()) {
+            val colors = state.value.colors
+            if (colors.isEmpty()) {
                 EmptyColorsPlaceHolder(modifier = Modifier.align(Center))
             } else {
-                //TODO K
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    columns = GridCells.Adaptive(minSize = 60.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(colors) { color ->
+                       SelectedColor(modifier = Modifier.size(120.dp).clickable { viewModel.onItemClick(color) },
+                           color = color.getColorObject(),
+                           drawBorder = color.selected)
+                    }
+                }
             }
         }
 
