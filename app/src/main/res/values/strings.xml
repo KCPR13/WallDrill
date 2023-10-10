@@ -9,4 +9,5 @@
     <string name="no_colors_set">No colors set</string>
     <string name="welcome_to_the_app">Welcome to the App!</string>
     <string name="camera_permission_message">If you want to use the app grant Camera Permission</string>
+    <string name="saved_sessions">Saved sessions</string>
 </resources>

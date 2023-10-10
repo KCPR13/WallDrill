@@ -55,7 +55,8 @@ fun MainScreen(
             composable(AppNavigation.CALIBRATION) {
                 CalibrationScreen(
                     contentModifier,
-                    colorDetectionListener
+                    colorDetectionListener,
+                    navController = navController
                 )
             }
             composable(AppNavigation.COLOR_DETECTION) { ColorDetection(contentModifier, navController = navController) }

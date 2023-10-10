@@ -60,10 +60,9 @@ fun ColorDetection(
             AppToolbar(
                 R.string.detect_the_color,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior,
-                onBackPressedClick = { navController.navigate(AppNavigation.COLORS) }
+                scrollBehavior
 
-            )
+            ) { navController.navigate(AppNavigation.COLORS) }
         },
         bottomBar = {
             Button(

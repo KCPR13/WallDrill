@@ -58,10 +58,9 @@ fun ColorsScreen(
             AppToolbar(
                 R.string.colors,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior,
-                onBackPressedClick = { navController.navigate(AppNavigation.SETTINGS) }
+                scrollBehavior
 
-            )
+            ) { navController.navigate(AppNavigation.SETTINGS) }
         },
         floatingActionButton = {
             FloatingActionButton(
