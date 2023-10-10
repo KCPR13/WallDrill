@@ -18,4 +18,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
         permissionGranted = permissionGranted
     ) }
 
+    fun updateBottomBarVisibility(showBottomBar: Boolean) = _uiState.update { it.copy(showBottomBar = showBottomBar) }
+
 }

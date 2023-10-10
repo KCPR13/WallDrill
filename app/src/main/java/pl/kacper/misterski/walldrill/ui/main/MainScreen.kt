@@ -25,23 +25,27 @@ import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    uiState: StateFlow<MainUiState>,
-    colorDetectionListener: ColorAnalyzer.ColorDetectionListener
+    colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
+    viewModel: MainViewModel
 
 ) {
     val navController = rememberNavController()
+    val mainUiState: MainUiState by viewModel.uiState.collectAsState()
+    //TODO K fix bottom bar bug
 
     Scaffold(
         Modifier.safeContentPadding(),
-        bottomBar = {
+        bottomBar = { if (mainUiState.showBottomBar){
             BottomBar(onSettingsClick = {
                 navController.navigate(AppNavigation.SETTINGS)
             },
                 onAimClick = { navController.navigate(AppNavigation.AIM) },
                 onFolderClick = { navController.navigate(AppNavigation.FOLDER) })
         }
+
+        }
     ) { paddingValues ->
-        val mainUiState: MainUiState by uiState.collectAsState()
+
 
         val destination = if (mainUiState.permissionGranted) {
             AppNavigation.SETTINGS // GO TO MAIN SCREEN
@@ -63,12 +67,12 @@ fun MainScreen(
             composable(AppNavigation.SETUP) { SetupScreen(contentModifier) }
             composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier, navController = navController) }
             composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
-            composable(AppNavigation.AIM) { AimScreen(contentModifier) }
+            composable(AppNavigation.AIM) { AimScreen(contentModifier,navController, showBottomBar = {showBottomBar ->
+                viewModel.updateBottomBarVisibility(showBottomBar)
+            }) }
             composable(AppNavigation.COLORS) { ColorsScreen(contentModifier, navController = navController) }
 
-
         }
-
     }
 }
 

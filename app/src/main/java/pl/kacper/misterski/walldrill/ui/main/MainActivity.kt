@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
             requestFrontCameraPermission()
         }
         setContent {
-            MainScreen(viewModel.uiState,this)
+            MainScreen(this, viewModel)
         }
 
     }
