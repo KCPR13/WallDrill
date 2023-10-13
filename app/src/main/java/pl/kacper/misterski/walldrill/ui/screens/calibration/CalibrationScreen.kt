@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
@@ -31,7 +31,7 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 @Composable
 fun CalibrationScreen(
     modifier: Modifier, colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
-    viewModel: CalibrationViewModel = viewModel(),
+    viewModel: CalibrationViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

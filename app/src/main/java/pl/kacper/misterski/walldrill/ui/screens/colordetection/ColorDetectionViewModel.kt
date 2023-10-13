@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.DetectColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.DetectColorListener
+import pl.kacper.misterski.walldrill.domain.interfaces.DetectColorListener
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +24,7 @@ class ColorDetectionViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     //TODO K dispose
-    private val detectColorListener = object:  DetectColorListener{
+    private val detectColorListener = object: DetectColorListener {
         override fun onColorDetected(color: Color) {
             _uiState.update { color }
         }
@@ -36,8 +36,8 @@ class ColorDetectionViewModel @Inject constructor(
 
 
     fun saveColor(onColorSaved: () -> Unit){
-        viewModelScope.launch(Dispatchers.IO) {// TODO K if empty then select first color
-            colorRepository.insert(pl.kacper.misterski.walldrill.db.color.Color(color = _uiState.value.value.toString()))
+        viewModelScope.launch(Dispatchers.IO) {
+            colorRepository.insert(pl.kacper.misterski.walldrill.db.color.Color(color = _uiState.value.value.toString(), selected = !colorRepository.hasAnyColorSaved()))
             withContext(Dispatchers.Main){
                 onColorSaved.invoke()
             }

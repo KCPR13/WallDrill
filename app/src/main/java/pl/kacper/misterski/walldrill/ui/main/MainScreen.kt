@@ -30,7 +30,6 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val mainUiState: MainUiState by viewModel.uiState.collectAsState()
-    //TODO K fix bottom bar bug
 
     Scaffold(
         Modifier.safeContentPadding(),

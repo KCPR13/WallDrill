@@ -23,4 +23,6 @@ class ColorRepository @Inject constructor(private val appDatabase: AppDatabase)
     suspend fun setColorChecked(color: Color) {
         daoInstance.setColorChecked(color.id)
     }
+
+    suspend fun hasAnyColorSaved() = daoInstance.getSavedColorsSize() > 0
 }

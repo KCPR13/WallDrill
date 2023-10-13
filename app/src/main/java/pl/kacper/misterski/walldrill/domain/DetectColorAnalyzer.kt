@@ -6,11 +6,8 @@ import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
+import pl.kacper.misterski.walldrill.domain.interfaces.DetectColorListener
 
-//TODO K separate file
-interface DetectColorListener{
-    fun onColorDetected(color: Color)
-}
 
 class DetectColorAnalyzer(private val listener: DetectColorListener) :
     ImageAnalysis.Analyzer {

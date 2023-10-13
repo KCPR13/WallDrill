@@ -47,7 +47,7 @@ import pl.kacper.misterski.walldrill.ui.theme.Mili
 @Composable
 fun ColorDetection(
     modifier: Modifier,
-    viewModel: ColorDetectionViewModel = hiltViewModel(), // TODO K all viewModels to hiltViewModel
+    viewModel: ColorDetectionViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
 

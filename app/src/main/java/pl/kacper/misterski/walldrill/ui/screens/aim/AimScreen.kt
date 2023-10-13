@@ -44,7 +44,7 @@ fun AimScreen(
                 onClick = {
                     showBottomBar.invoke(true)
                     navController.navigate(AppNavigation.FOLDER)
-                }, // TODO K ??
+                },
                 containerColor = colorResource(id = R.color.mili),
 
                 ) {
