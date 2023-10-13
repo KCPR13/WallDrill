@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.flow.StateFlow
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
@@ -39,7 +38,9 @@ fun MainScreen(
             BottomBar(onSettingsClick = {
                 navController.navigate(AppNavigation.SETTINGS)
             },
-                onAimClick = { navController.navigate(AppNavigation.AIM) },
+                onAimClick = {
+                    viewModel.updateBottomBarVisibility(false)
+                    navController.navigate(AppNavigation.AIM) },
                 onFolderClick = { navController.navigate(AppNavigation.FOLDER) })
         }
 
