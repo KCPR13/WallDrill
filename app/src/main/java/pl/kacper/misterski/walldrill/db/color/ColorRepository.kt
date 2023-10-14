@@ -12,17 +12,13 @@ class ColorRepository @Inject constructor(private val appDatabase: AppDatabase)
 
     override fun getAll() = daoInstance.getColors()
 
-    override suspend fun insert(toInsert: Color) {
-        daoInstance.insert(toInsert)
-    }
+    override suspend fun insert(toInsert: Color) = daoInstance.insert(toInsert)
 
-    suspend fun uncheckSelectedColor() {
-        daoInstance.uncheckSelectedColor()
-    }
+    suspend fun uncheckSelectedColor() =daoInstance.uncheckSelectedColor()
 
-    suspend fun setColorChecked(color: Color) {
-        daoInstance.setColorChecked(color.id)
-    }
+    suspend fun setColorChecked(color: Color) = daoInstance.setColorChecked(color.id)
 
     suspend fun hasAnyColorSaved() = daoInstance.getSavedColorsSize() > 0
+
+    fun getSelectedColor() = daoInstance.getSelectedColor()
 }

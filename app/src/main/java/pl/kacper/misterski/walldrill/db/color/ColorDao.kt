@@ -21,4 +21,7 @@ interface ColorDao: BaseDao<Color> {
     @Query("SELECT COUNT(*) FROM $TABLE_NAME")
     suspend fun getSavedColorsSize(): Int
 
+    @Query("SELECT * FROM $TABLE_NAME WHERE selected = :selectedValue LIMIT 1")
+    fun getSelectedColor(selectedValue: Boolean = true) : Flow<Color?>
+
 }

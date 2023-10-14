@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
             requestFrontCameraPermission()
         }
         setContent {
-            MainScreen(this, viewModel)
+            MainScreen(viewModel)
         }
 
     }
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
         requestPermissionLauncher.launch(permission)
     }
 
-    override fun onRedColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
+    override fun onColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
         //TODO K
     }
 

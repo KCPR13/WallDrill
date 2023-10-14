@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
@@ -30,7 +29,7 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalibrationScreen(
-    modifier: Modifier, colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
+    modifier: Modifier,
     viewModel: CalibrationViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
@@ -51,7 +50,7 @@ fun CalibrationScreen(
                 .fillMaxSize()
                 .padding(paddingValues)) {
                 CameraPreview(
-                    analyzer = ColorAnalyzer(colorDetectionListener),
+                    analyzer = viewModel.colorAnalyzer,
                     cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
                 )
@@ -77,15 +76,6 @@ fun CalibrationScreen(
 fun CalibrationScreenPreview() {
     MaterialTheme {
         CalibrationScreen(modifier = Modifier,
-            colorDetectionListener = object: ColorAnalyzer.ColorDetectionListener{
-                override fun onRedColorDetected(
-                    isDetected: Boolean,
-                    detectedLocations: List<Pair<Int, Int>>
-                ) {
-
-                }
-
-            },
             navController = rememberNavController() )
     }
 }

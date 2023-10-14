@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
 import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationScreen
@@ -24,7 +23,6 @@ import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    colorDetectionListener: ColorAnalyzer.ColorDetectionListener,
     viewModel: MainViewModel
 
 ) {
@@ -59,7 +57,6 @@ fun MainScreen(
             composable(AppNavigation.CALIBRATION) {
                 CalibrationScreen(
                     contentModifier,
-                    colorDetectionListener,
                     navController = navController
                 )
             }

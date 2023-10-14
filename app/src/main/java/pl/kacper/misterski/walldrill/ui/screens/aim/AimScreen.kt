@@ -42,8 +42,9 @@ fun AimScreen(
         {
             FloatingActionButton(
                 onClick = {
-                    showBottomBar.invoke(true)
                     navController.navigate(AppNavigation.FOLDER)
+                    showBottomBar.invoke(true)
+
                 },
                 containerColor = colorResource(id = R.color.mili),
 
