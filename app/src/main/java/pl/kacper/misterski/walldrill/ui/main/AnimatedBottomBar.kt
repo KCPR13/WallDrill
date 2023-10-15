@@ -1,6 +1,7 @@
 package pl.kacper.misterski.walldrill.ui.main
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
@@ -19,20 +20,23 @@ import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @Composable
-fun BottomBar(
+fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
+    show: Boolean,
     onSettingsClick: () -> Unit,
     onFolderClick: () -> Unit,
     onAimClick: () -> Unit
 ) {
-
-    BottomAppBar(
-        modifier = modifier,
-        actions = {
-            BottomBarAction(icon = R.drawable.ic_settings, onClick = onSettingsClick)
-            BottomBarAction(icon = R.drawable.ic_folder, onClick = onFolderClick)
-        },
-        floatingActionButton = {
+    AnimatedVisibility(
+        visible = show,
+    ) {
+        BottomAppBar(
+            modifier = modifier,
+            actions = {
+                BottomBarAction(icon = R.drawable.ic_settings, onClick = onSettingsClick)
+                BottomBarAction(icon = R.drawable.ic_folder, onClick = onFolderClick)
+            },
+            floatingActionButton = {
                 FloatingActionButton(
                     onClick = onAimClick,
                     containerColor = colorResource(id = R.color.mili)
@@ -43,9 +47,9 @@ fun BottomBar(
                     )
                 }
 
-        },
-    )
-
+            },
+        )
+    }
 }
 
 @Composable
@@ -61,9 +65,10 @@ fun BottomBarAction(modifier: Modifier = Modifier, @DrawableRes icon: Int, onCli
 
 @Preview
 @Composable
-fun BottomBarPreview() {
+fun AnimatedBottomBarPreview() {
     WallDrillTheme {
-        BottomBar(modifier = Modifier,
+        AnimatedBottomBar(modifier = Modifier,
+            true,
             {},
             {},
             {})

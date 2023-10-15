@@ -31,16 +31,17 @@ fun MainScreen(
 
     Scaffold(
         Modifier.safeContentPadding(),
-        bottomBar = { if (mainUiState.showBottomBar){
-            BottomBar(onSettingsClick = {
-                navController.navigate(AppNavigation.SETTINGS)
-            },
+        bottomBar = {
+            AnimatedBottomBar(
+                show = mainUiState.showBottomBar,
+                onSettingsClick = {
+                    navController.navigate(AppNavigation.SETTINGS)
+                },
                 onAimClick = {
                     viewModel.updateBottomBarVisibility(false)
-                    navController.navigate(AppNavigation.AIM) },
+                    navController.navigate(AppNavigation.AIM)
+                },
                 onFolderClick = { navController.navigate(AppNavigation.FOLDER) })
-        }
-
         }
     ) { paddingValues ->
 
@@ -60,14 +61,31 @@ fun MainScreen(
                     navController = navController
                 )
             }
-            composable(AppNavigation.COLOR_DETECTION) { ColorDetection(contentModifier, navController = navController) }
+            composable(AppNavigation.COLOR_DETECTION) {
+                ColorDetection(
+                    contentModifier,
+                    navController = navController
+                )
+            }
             composable(AppNavigation.SETUP) { SetupScreen(contentModifier) }
-            composable(AppNavigation.SETTINGS) { SettingsScreen(contentModifier, navController = navController) }
+            composable(AppNavigation.SETTINGS) {
+                SettingsScreen(
+                    contentModifier,
+                    navController = navController
+                )
+            }
             composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
-            composable(AppNavigation.AIM) { AimScreen(contentModifier,navController, showBottomBar = {showBottomBar ->
-                viewModel.updateBottomBarVisibility(showBottomBar)
-            }) }
-            composable(AppNavigation.COLORS) { ColorsScreen(contentModifier, navController = navController) }
+            composable(AppNavigation.AIM) {
+                AimScreen(contentModifier, navController, showBottomBar = { showBottomBar ->
+                    viewModel.updateBottomBarVisibility(showBottomBar)
+                })
+            }
+            composable(AppNavigation.COLORS) {
+                ColorsScreen(
+                    contentModifier,
+                    navController = navController
+                )
+            }
 
         }
     }
