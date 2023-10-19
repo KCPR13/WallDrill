@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import pl.kacper.misterski.walldrill.domain.interfaces.DetectColorListener
 
 
+//TODO K only one analyzer with mode
 class DetectColorAnalyzer(private val listener: DetectColorListener) :
     ImageAnalysis.Analyzer {
 

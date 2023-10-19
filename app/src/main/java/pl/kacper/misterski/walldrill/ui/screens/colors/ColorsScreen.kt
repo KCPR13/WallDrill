@@ -84,15 +84,20 @@ fun ColorsScreen(
                 EmptyColorsPlaceHolder(modifier = Modifier.align(Center))
             } else {
                 LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                     columns = GridCells.Adaptive(minSize = 60.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(colors) { color ->
-                       SelectedColor(modifier = Modifier.size(120.dp).clickable { viewModel.onItemClick(color) },
-                           color = color.getColorObject(),
-                           drawBorder = color.selected)
+                        SelectedColor(modifier = Modifier
+                            .size(120.dp)
+                            .clickable { viewModel.onItemClick(color) },
+                            color = color.getColorObject(),
+                            drawBorder = color.selected,
+                            onRemove = { viewModel.onRemoveItem(color) })
                     }
                 }
             }

@@ -24,4 +24,7 @@ interface ColorDao: BaseDao<Color> {
     @Query("SELECT * FROM $TABLE_NAME WHERE selected = :selectedValue LIMIT 1")
     fun getSelectedColor(selectedValue: Boolean = true) : Flow<Color?>
 
+    @Query("DELETE FROM $TABLE_NAME WHERE color = :color")
+    fun removeColor(color: String)
+
 }

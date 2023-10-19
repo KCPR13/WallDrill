@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,10 +58,9 @@ fun CalibrationScreen(
                     Log.d("Kacpur", "detectedPoints: ${calibrationUiState.detectedPoints.size}")
                     calibrationUiState.detectedPoints.forEach { location ->
                         drawRect(
-                            color = Color.Green,
+                            color = Color.Red,
                             topLeft = Offset(location.first.toFloat(), location.second.toFloat()),
-                            size = Size(1f, 1f),
-                            style = Stroke(width = 5f)
+                            size = Size(1f, 1f)
                         )
                     }
                 }

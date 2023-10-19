@@ -44,5 +44,13 @@ class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRep
         }
     }
 
+    fun onRemoveItem(color: Color){
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.showProgress() }
+            colorsRepository.remove(color)
+            fetchColors()
+        }
+    }
+
 
 }
