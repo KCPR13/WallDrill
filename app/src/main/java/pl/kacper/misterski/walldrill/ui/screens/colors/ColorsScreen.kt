@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -40,7 +39,6 @@ import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
-import pl.kacper.misterski.walldrill.ui.theme.Mili
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,50 +74,35 @@ fun ColorsScreen(
             }
 
         }) { paddingValues ->
-        if (state.value.progress){
-            ProgressScreen(
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues))
-        }else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                val colors = state.value.colors
-                if (colors.isEmpty()) {
-                    EmptyColorsPlaceHolder(modifier = Modifier.align(Center))
-                } else {
-                    LazyVerticalGrid(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        columns = GridCells.Adaptive(minSize = 60.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        items(colors) { color ->
-                            SelectedColor(modifier = Modifier
-                                .size(120.dp)
-                                .clickable { viewModel.onItemClick(color) },
-                                color = color.getColorObject(),
-                                drawBorder = color.selected,
-                                onRemove = { viewModel.onRemoveItem(color) })
-                        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            val colors = state.value.colors
+            if (colors.isEmpty()) {
+                EmptyColorsPlaceHolder(modifier = Modifier.align(Center))
+            } else {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    columns = GridCells.Adaptive(minSize = 60.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(colors) { color ->
+                        SelectedColor(modifier = Modifier
+                            .size(120.dp)
+                            .clickable { viewModel.onItemClick(color) },
+                            color = color.getColorObject(),
+                            drawBorder = color.selected,
+                            onRemove = { viewModel.onRemoveItem(color) })
                     }
                 }
             }
         }
 
-    }
-}
-
-@Composable
-fun ProgressScreen(modifier: Modifier) {
-    Box(modifier = modifier){
-        CircularProgressIndicator(modifier = Modifier.align(Center),
-            color = Mili)
     }
 }
 

@@ -25,7 +25,6 @@ class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRep
 
     fun fetchColors(){
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.showProgress() }
             colorsRepository.getAll().onEach {colors ->
                 val updatedList = colors ?: emptyList()
                 _uiState.update { it.updateList(updatedList) }
@@ -40,7 +39,6 @@ class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRep
     fun onItemClick(color: Color) {
         if (color.selected) return
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.showProgress() }
             colorsRepository.uncheckSelectedColor()
             colorsRepository.setColorChecked(color)
             fetchColors()
@@ -49,7 +47,6 @@ class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRep
 
     fun onRemoveItem(color: Color){
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.showProgress() }
             colorsRepository.remove(color)
             fetchColors()
         }
