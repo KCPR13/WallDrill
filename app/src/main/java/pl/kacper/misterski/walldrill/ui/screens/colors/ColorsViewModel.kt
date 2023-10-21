@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -27,7 +26,6 @@ class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRep
     fun fetchColors(){
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.showProgress() }
-            delay(3000)
             colorsRepository.getAll().onEach {colors ->
                 val updatedList = colors ?: emptyList()
                 _uiState.update { it.updateList(updatedList) }
