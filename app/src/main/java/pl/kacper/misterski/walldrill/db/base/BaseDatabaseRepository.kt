@@ -12,6 +12,6 @@ abstract class BaseDatabaseRepository<Entity, Dao> {
 
     abstract fun getAll(): Flow<List<Entity>?>
 
-    abstract suspend fun remove(color: Entity)
+    abstract suspend fun remove(entity: Entity)
 
 }

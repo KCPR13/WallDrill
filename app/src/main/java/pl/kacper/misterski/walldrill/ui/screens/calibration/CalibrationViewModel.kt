@@ -1,6 +1,6 @@
 package pl.kacper.misterski.walldrill.ui.screens.calibration
 
-import androidx.lifecycle.ViewModel
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,33 +10,46 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pl.kacper.misterski.walldrill.core.di.AimAnalyzer
+import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
+import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 import javax.inject.Inject
 
 @HiltViewModel
-class CalibrationViewModel @Inject constructor(private val colorRepository: ColorRepository, val colorAnalyzer: ColorAnalyzer): ViewModel(), ColorAnalyzer.ColorDetectionListener  {
+class CalibrationViewModel @Inject constructor(
+    private val colorRepository: ColorRepository,
+    @AimAnalyzer val colorAnalyzer: ColorAnalyzer
+) : BaseViewModel(), ColorListener {
 
     private val _uiState = MutableStateFlow(CalibrationUiState())
     val uiState = _uiState.asStateFlow()
-    init {
+
+    fun initAnalyzer() {
         viewModelScope.launch {
             colorRepository.getSelectedColor()
-                .onEach {color -> // TODO K handle null
+                .onEach { color ->
                     color?.let {
                         colorAnalyzer.init(this@CalibrationViewModel, it.getColorObject())
+                    } ?: kotlin.run {
+                        // TODO K handle null
                     }
 
                 }
                 .catch {
-                    //TODO K handle catch
+                    Log.e(TAG, "initAnalyzer error")
+                    it.printStackTrace()
 
-                }.collect() // TODO K not inside init
+                }.collect()
         }
     }
 
-    override fun onColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
-        _uiState.update { CalibrationUiState(detectedLocations.toMutableList()) }
+    fun disposeAnalyzer() = colorAnalyzer.dispose()
+
+    override fun onColorDetected(analyzerResult: AnalyzerResult) {
+        _uiState.update { CalibrationUiState(analyzerResult.detectedPoints) }
     }
 
 

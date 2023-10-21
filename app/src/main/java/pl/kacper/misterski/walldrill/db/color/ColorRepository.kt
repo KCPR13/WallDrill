@@ -12,7 +12,7 @@ class ColorRepository @Inject constructor(private val appDatabase: AppDatabase)
 
     override fun getAll() = daoInstance.getColors()
 
-    override suspend fun remove(color: Color) = daoInstance.removeColor(color.color) // TODO K color.color
+    override suspend fun remove(entity: Color) = daoInstance.removeColor(entity.color)
 
     override suspend fun insert(toInsert: Color) = daoInstance.insert(toInsert)
 

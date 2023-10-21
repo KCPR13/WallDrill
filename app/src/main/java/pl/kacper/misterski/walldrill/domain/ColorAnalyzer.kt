@@ -1,72 +1,90 @@
 package pl.kacper.misterski.walldrill.domain
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
-import javax.inject.Inject
+import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
+import pl.kacper.misterski.walldrill.domain.exceptions.ColorDetectionException
+import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
+import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 
 
-class ColorAnalyzer @Inject constructor(): ImageAnalysis.Analyzer {
+class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Analyzer {
 
-     private var colorDetectionListener: ColorDetectionListener? = null
-     private var colorToDetect: Color? = null
+    private var colorListener: ColorListener? = null
+    private var colorToDetect: Color? = null
+    fun init(
+        colorListener: ColorListener,
+        colorToDetect: Color?=null
+    ) {
+        this.colorListener = colorListener
+        this.colorToDetect = colorToDetect
+    }
 
-     fun init(colorDetectionListener: ColorDetectionListener, colorToDetect: Color){
-         this.colorDetectionListener = colorDetectionListener
-         this.colorToDetect = colorToDetect
-     }
-
-     fun dispose(){ // TODO K usage
-         colorDetectionListener = null
-     }
-
-
-     override fun analyze(image: ImageProxy) {
-         val colorToDetect = colorToDetect ?: return // Exit early if colorToDetect is null
-
-         val buffer = image.planes[0].buffer
-         val data = ByteArray(buffer.remaining())
-         buffer.get(data)
-
-         Log.d("ColorAnalyzer", "planes: ${image.planes.size}")
-         val bitmap =
-             image.toBitmap()
-
-         val width = bitmap.width
-         val height = bitmap.height
+    fun dispose() { // TODO K usage
+        colorListener = null
+    }
 
 
+    override fun analyze(image: ImageProxy) {
+        val buffer = image.planes[0].buffer
+        val data = ByteArray(buffer.remaining())
+        buffer.get(data)
 
-         var detectedPixelsCount = 0
-         val detectedLocations = mutableListOf<Pair<Int, Int>>()
+        val bitmap = image.toBitmap()
 
-         for (y in 0 until height ) {
-             for (x in 0 until width ) {
-                 val pixel = bitmap.getPixel(x,y)
-                 val color = Color(pixel)
 
-                 if (isColorDetected(color, colorToDetect)) {
-                     detectedPixelsCount++
-                     detectedLocations.add(Pair(x, y))
-                 }
-             }
-         }
-         Log.d("ColorAnalyzer", "detectedPoints: ${detectedLocations.size}")
+       val result =  when (analyzerMode) {
+            AnalyzerMode.AIM -> analyzeForAimMode(bitmap)
+            AnalyzerMode.DETECTION -> analyzeForDetectionMode(bitmap)
+        }
 
-         val isColorDetected = detectedPixelsCount > (width * height) / 2 // Adjust this value to control the detection sensitivity
 
-         image.close()
+        image.close()
+        colorListener?.onColorDetected(result)
+    }
 
-         // Notify the activity when the color is detected and provide the detected locations
-         colorDetectionListener?.onColorDetected(isColorDetected, detectedLocations)
-     }
-     private fun isColorDetected(pixelColor: Color, colorToDetect: Color): Boolean {
-         return pixelColor.red  == colorToDetect.red &&
-                 pixelColor.green == colorToDetect.green &&
-                 pixelColor.blue == colorToDetect.blue
-     }
-     interface ColorDetectionListener {
-         fun onColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>)
-     }
+
+    private fun isColorDetected(pixelColor: Color, colorToDetect: Color): Boolean {
+        return pixelColor.red == colorToDetect.red &&
+                pixelColor.green == colorToDetect.green &&
+                pixelColor.blue == colorToDetect.blue
+    }
+
+    private fun analyzeForDetectionMode(bitmap: Bitmap): AnalyzerResult {
+        val x = bitmap.width / 2
+        val y = bitmap.height / 2
+        val centerPixelColor = bitmap.getPixel(x, y)
+        return AnalyzerResult(Color(centerPixelColor), listOf(Pair(x,y)))
+    }
+
+    @Throws(ColorDetectionException::class)
+    private fun analyzeForAimMode(bitmap: Bitmap): AnalyzerResult{
+        val colorToDetect = colorToDetect ?: throw ColorDetectionException() //TODO K handle
+
+        val width = bitmap.width
+        val height = bitmap.height
+
+
+        var detectedPixelsCount = 0
+        val detectedLocations = mutableListOf<Pair<Int, Int>>()
+
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                val pixel = bitmap.getPixel(x, y)
+                val color = Color(pixel)
+
+                if (isColorDetected(color, colorToDetect)) {
+                    detectedPixelsCount++
+                    detectedLocations.add(Pair(x, y))
+                }
+            }
+        }
+        Log.d("ColorAnalyzer", "detectedPoints: ${detectedLocations.size}")
+
+        return AnalyzerResult(colorToDetect,detectedLocations)
+    }
 }
+

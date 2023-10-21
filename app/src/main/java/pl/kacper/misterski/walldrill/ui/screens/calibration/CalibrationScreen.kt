@@ -34,7 +34,7 @@ fun CalibrationScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
-
+    viewModel.initAnalyzer()
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -42,7 +42,10 @@ fun CalibrationScreen(
                 R.string.calibration,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
-                onBackPressedClick = { navController.navigate(AppNavigation.SETTINGS) })
+                onBackPressedClick = {
+                    viewModel.disposeAnalyzer()
+                    navController.navigate(AppNavigation.SETTINGS)
+                })
         },
         content = { paddingValues ->
             Box(modifier = Modifier

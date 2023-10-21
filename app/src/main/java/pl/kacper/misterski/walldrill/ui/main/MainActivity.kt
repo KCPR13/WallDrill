@@ -10,11 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.domain.enums.PermissionStatus
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
+class MainActivity : ComponentActivity() {
 
 
     private val viewModel: MainViewModel by viewModels()
@@ -63,11 +62,6 @@ class MainActivity : ComponentActivity(), ColorAnalyzer.ColorDetectionListener {
         val permission = Manifest.permission.CAMERA
         requestPermissionLauncher.launch(permission)
     }
-
-    override fun onColorDetected(isDetected: Boolean, detectedLocations: List<Pair<Int, Int>>) {
-        //TODO K
-    }
-
 
 }
 

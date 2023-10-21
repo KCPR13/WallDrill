@@ -1,7 +1,6 @@
 package pl.kacper.misterski.walldrill.ui.screens.colordetection
 
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,30 +9,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.kacper.misterski.walldrill.core.BaseViewModel
+import pl.kacper.misterski.walldrill.core.di.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
-import pl.kacper.misterski.walldrill.domain.DetectColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.interfaces.DetectColorListener
+import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
+import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 import javax.inject.Inject
 
 @HiltViewModel
 class ColorDetectionViewModel @Inject constructor(
-    private val colorRepository: ColorRepository
-): ViewModel() {
+    private val colorRepository: ColorRepository,
+    @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer
+): BaseViewModel(), ColorListener {
 
     private val _uiState = MutableStateFlow(Color.Black)
     val uiState = _uiState.asStateFlow()
 
-    //TODO K dispose
-    private val detectColorListener = object: DetectColorListener {
-        override fun onColorDetected(color: Color) {
-            _uiState.update { color }
-        }
-
+    init {
+        colorAnalyzer.init(this)
     }
-
-    val detectColorAnalyzer =  DetectColorAnalyzer(detectColorListener)
-
-
 
     fun saveColor(onColorSaved: () -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,6 +37,10 @@ class ColorDetectionViewModel @Inject constructor(
                 onColorSaved.invoke()
             }
         }
+    }
+
+    override fun onColorDetected(analyzerResult: AnalyzerResult) {
+        _uiState.update { analyzerResult.color }
     }
 
 }

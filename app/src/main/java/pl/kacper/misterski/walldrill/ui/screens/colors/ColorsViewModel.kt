@@ -1,6 +1,5 @@
 package pl.kacper.misterski.walldrill.ui.screens.colors
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -11,13 +10,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRepository): ViewModel() {
+class ColorsViewModel @Inject constructor(private val colorsRepository: ColorRepository): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(ColorsUiState())
     val uiState = _uiState.asStateFlow()
