@@ -32,8 +32,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -42,7 +40,14 @@ import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
+import pl.kacper.misterski.walldrill.ui.theme.BorderWidth
+import pl.kacper.misterski.walldrill.ui.theme.CameraPreviewSize
+import pl.kacper.misterski.walldrill.ui.theme.CornerRadius
+import pl.kacper.misterski.walldrill.ui.theme.FontLarge
 import pl.kacper.misterski.walldrill.ui.theme.Mili
+import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
+import pl.kacper.misterski.walldrill.ui.theme.RingSize
+import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +85,7 @@ fun ColorDetection(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(PaddingLarge),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Mili)
             ) {
@@ -93,13 +98,13 @@ fun ColorDetection(
                 .fillMaxWidth()
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(PaddingLarge)
         ) {
             Box(
                 modifier = Modifier
-                    .size(300.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .border(4.dp, Mili), // TODO K padding constants
+                    .size(CameraPreviewSize)
+                    .clip(RoundedCornerShape(CornerRadius))
+                    .border(BorderWidth, Mili),
                 contentAlignment = Alignment.Center
 
             ) {
@@ -111,17 +116,17 @@ fun ColorDetection(
 
                 Ring(
                     modifier = Modifier
-                        .size(300.dp)
+                        .size(RingSize)
                         .background(Color.Transparent)
                 )
             }
 
             Text(
                 text = stringResource(R.string.detected_color),
-                fontSize = 24.sp
+                fontSize = FontLarge
             )
             SelectedColor(
-                modifier = Modifier.size(50.dp), color = state.value, drawBorder = true
+                modifier = Modifier.size(SelectedColorSize), color = state.value, drawBorder = true
             )
         }
     }

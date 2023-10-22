@@ -18,9 +18,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
+import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,10 +44,10 @@ fun SetupScreen(modifier: Modifier) {
                 .padding(paddingValues)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(PaddingLarge)
         ) {
             Image(
-                modifier = Modifier.padding(top = 24.dp),
+                modifier = Modifier.padding(top = PaddingExtraLarge),
                 painter = painterResource(id = R.drawable.ic_camera),
                 contentDescription = null
             )

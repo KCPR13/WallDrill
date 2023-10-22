@@ -23,12 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
+import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
+import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,14 +64,14 @@ fun AimScreen(
                     Icon(
                         modifier = Modifier
                             .align(Alignment.TopStart)
-                            .padding(24.dp)
+                            .padding(PaddingExtraLarge)
                             .clickable { },//TODO K
 
                         imageVector = Icons.Outlined.Info,
                         contentDescription = null
                     )
 
-                AimPoint(Modifier.align(Alignment.Center).size(100.dp))
+                AimPoint(Modifier.align(Alignment.Center).size(AimPointSize),AimPointSize)
 
             }
         }
@@ -79,13 +81,13 @@ fun AimScreen(
 
 
 @Composable
-private fun AimPoint(modifier: Modifier) {
+private fun AimPoint(modifier: Modifier, radius: Dp) {
     Canvas(
         modifier = modifier
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val circleRadius = 100.dp.toPx()
+        val circleRadius = radius.toPx()
 
         val centerX = canvasWidth / 2
         val centerY = canvasHeight / 2

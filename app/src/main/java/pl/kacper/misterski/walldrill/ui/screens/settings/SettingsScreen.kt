@@ -27,14 +27,15 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.theme.CardElevation
+import pl.kacper.misterski.walldrill.ui.theme.FontMedium
+import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +67,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                                 SettingsAction.CALIBRATION -> navController.navigate(AppNavigation.CALIBRATION)
                             }
                         }
-                        .padding(16.dp)
+                        .padding(PaddingLarge)
                         .fillMaxWidth(), model = model
                 )
             }
@@ -80,7 +81,7 @@ private fun SettingsItem(modifier: Modifier, model: SettingsModel) {
         modifier,
         shape = RectangleShape,
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = CardElevation
         ),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -93,15 +94,15 @@ private fun SettingsItem(modifier: Modifier, model: SettingsModel) {
         ) {
             Text(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(PaddingLarge)
                     .align(Alignment.CenterVertically),
-                fontSize = 16.sp,
+                fontSize = FontMedium,
                 text = model.title,
             )
             Icon(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(end = 16.dp),
+                    .padding(end = PaddingLarge),
                 imageVector = Icons.Filled.KeyboardArrowRight,
                 contentDescription = null
             )

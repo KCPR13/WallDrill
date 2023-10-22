@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
+import pl.kacper.misterski.walldrill.ui.theme.BottomBarIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @Composable
@@ -55,7 +55,7 @@ fun AnimatedBottomBar(
 @Composable
 fun BottomBarAction(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
     IconButton(modifier = modifier,onClick = { onClick.invoke() }) {
-        Image(modifier= Modifier.size(30.dp),painter = painterResource(id = icon), contentDescription = null,
+        Image(modifier= Modifier.size(BottomBarIconSize),painter = painterResource(id = icon), contentDescription = null,
             colorFilter = ColorFilter.tint(Color.Black))
 
     }

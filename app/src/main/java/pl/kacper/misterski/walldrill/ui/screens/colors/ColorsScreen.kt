@@ -31,7 +31,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -39,6 +38,10 @@ import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
+import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
+import pl.kacper.misterski.walldrill.ui.theme.MinGridSize
+import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
+import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,14 +89,14 @@ fun ColorsScreen(
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
-                    columns = GridCells.Adaptive(minSize = 60.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                        .padding(PaddingLarge),
+                    columns = GridCells.Adaptive(minSize = MinGridSize),
+                    horizontalArrangement = Arrangement.spacedBy(PaddingMedium),
+                    verticalArrangement = Arrangement.spacedBy(PaddingMedium),
                 ) {
                     items(colors) { color ->
                         SelectedColor(modifier = Modifier
-                            .size(120.dp)
+                            .size(MaxGridSize)
                             .clickable { viewModel.onItemClick(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
@@ -114,7 +117,7 @@ private fun EmptyColorsPlaceHolder(modifier: Modifier) {
     ) {
         Image(painter = painterResource(id = R.drawable.ic_paint), contentDescription = null)
         Text(
-            modifier = Modifier.padding(vertical = 16.dp),
+            modifier = Modifier.padding(vertical = PaddingLarge),
             text = stringResource(R.string.no_colors_set)
         )
 

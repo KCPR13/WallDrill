@@ -14,9 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.domain.extensions.isColorDark
+import pl.kacper.misterski.walldrill.ui.theme.CornerRadius
 import pl.kacper.misterski.walldrill.ui.theme.Mili
+import pl.kacper.misterski.walldrill.ui.theme.PaddingSmall
 
 @Composable
 fun SelectedColor(
@@ -26,11 +27,11 @@ fun SelectedColor(
     var mod = modifier
 
     if (drawBorder) {
-        mod = mod.border(4.dp, Mili)
+        mod = mod.border(PaddingSmall, Mili)
     }
 
     Box(modifier = mod
-        .clip(RoundedCornerShape(4.dp))
+        .clip(RoundedCornerShape(CornerRadius))
         .drawBehind {
             drawRect(size = size, color = color)
         }
@@ -40,7 +41,7 @@ fun SelectedColor(
                 tint = if (color.isColorDark()) Color.White else Color.Black,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(4.dp)
+                    .padding(PaddingSmall)
                     .clickable { removeColor.invoke() },
                 imageVector = Icons.Outlined.Clear, contentDescription = null
             )
