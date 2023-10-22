@@ -23,7 +23,7 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
         this.colorToDetect = colorToDetect
     }
 
-    fun dispose() { // TODO K usage
+    fun dispose() {
         colorListener = null
     }
 

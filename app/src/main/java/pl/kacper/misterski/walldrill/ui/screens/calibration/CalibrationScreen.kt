@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,6 +36,11 @@ fun CalibrationScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
     viewModel.initAnalyzer()
+    DisposableEffect(calibrationUiState) {
+        onDispose {
+            viewModel.disposeAnalyzer()
+        }
+    }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -43,7 +49,6 @@ fun CalibrationScreen(
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
                 onBackPressedClick = {
-                    viewModel.disposeAnalyzer()
                     navController.navigate(AppNavigation.SETTINGS)
                 })
         },

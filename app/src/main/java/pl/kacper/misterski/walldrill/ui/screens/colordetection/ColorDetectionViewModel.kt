@@ -1,5 +1,6 @@
 package pl.kacper.misterski.walldrill.ui.screens.colordetection
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,26 +22,41 @@ import javax.inject.Inject
 class ColorDetectionViewModel @Inject constructor(
     private val colorRepository: ColorRepository,
     @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer
-): BaseViewModel(), ColorListener {
+) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(Color.Black)
     val uiState = _uiState.asStateFlow()
 
-    init {
-        colorAnalyzer.init(this)
+    private var colorListener: ColorListener? = null
+
+    fun initAnalyzer() {
+        colorListener = object : ColorListener {
+            override fun onColorDetected(analyzerResult: AnalyzerResult) {
+                _uiState.update { analyzerResult.color }
+            }
+
+        }
+        colorAnalyzer.init(colorListener!!)
     }
 
-    fun saveColor(onColorSaved: () -> Unit){
+    fun saveColor(onColorSaved: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            colorRepository.insert(pl.kacper.misterski.walldrill.db.color.Color(color = _uiState.value.value.toString(), selected = !colorRepository.hasAnyColorSaved()))
-            withContext(Dispatchers.Main){
+            colorRepository.insert(
+                pl.kacper.misterski.walldrill.db.color.Color(
+                    color = _uiState.value.value.toString(),
+                    selected = !colorRepository.hasAnyColorSaved()
+                )
+            )
+            withContext(Dispatchers.Main) {
                 onColorSaved.invoke()
             }
         }
     }
 
-    override fun onColorDetected(analyzerResult: AnalyzerResult) {
-        _uiState.update { analyzerResult.color }
+    fun disposeAnalyzer() {
+        Log.d(TAG, "disposeAnalyzer")
+        colorListener = null
+        colorAnalyzer.dispose()
     }
 
 }
