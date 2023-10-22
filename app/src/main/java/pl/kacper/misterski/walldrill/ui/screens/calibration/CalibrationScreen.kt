@@ -6,21 +6,25 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
@@ -35,7 +39,15 @@ fun CalibrationScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
-    viewModel.initAnalyzer()
+    val snackbarScope = rememberCoroutineScope()
+    val snackbarMessage = stringResource(R.string.no_color_selected)
+    viewModel.initAnalyzer{
+        snackbarScope.launch {
+           calibrationUiState.snackbarHostState.showSnackbar(message = snackbarMessage, withDismissAction = true)
+            navController.navigate(AppNavigation.SETTINGS)// dismiss the screen when the snackbar finishes
+
+        }
+    }
     DisposableEffect(calibrationUiState) {
         onDispose {
             viewModel.disposeAnalyzer()
@@ -43,6 +55,9 @@ fun CalibrationScreen(
     }
     Scaffold(
         modifier = modifier,
+        snackbarHost = {
+            SnackbarHost(hostState = calibrationUiState.snackbarHostState)
+        },
         topBar = {
             AppToolbar(
                 R.string.calibration,

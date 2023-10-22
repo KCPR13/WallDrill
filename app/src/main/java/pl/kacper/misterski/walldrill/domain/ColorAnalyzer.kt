@@ -6,7 +6,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
-import pl.kacper.misterski.walldrill.domain.exceptions.ColorDetectionException
 import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
 import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 
@@ -43,7 +42,7 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
 
 
         image.close()
-        colorListener?.onColorDetected(result)
+        result?.let { colorListener?.onColorDetected(it) }
     }
 
 
@@ -60,9 +59,8 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
         return AnalyzerResult(Color(centerPixelColor), listOf(Pair(x,y)))
     }
 
-    @Throws(ColorDetectionException::class)
-    private fun analyzeForAimMode(bitmap: Bitmap): AnalyzerResult{
-        val colorToDetect = colorToDetect ?: throw ColorDetectionException() //TODO K handle
+    private fun analyzeForAimMode(bitmap: Bitmap): AnalyzerResult?{
+        val colorToDetect = colorToDetect ?: return null
 
         val width = bitmap.width
         val height = bitmap.height

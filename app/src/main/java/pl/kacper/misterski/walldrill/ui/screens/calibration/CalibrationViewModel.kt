@@ -30,7 +30,7 @@ class CalibrationViewModel @Inject constructor(
     private var colorListener: ColorListener? = null
 
 
-    fun initAnalyzer() {
+    fun initAnalyzer(onColorNull: () -> Unit) {
         colorListener = object : ColorListener {
             override fun onColorDetected(analyzerResult: AnalyzerResult) {
                 _uiState.update { CalibrationUiState(analyzerResult.detectedPoints) }
@@ -44,13 +44,14 @@ class CalibrationViewModel @Inject constructor(
                     color?.let {
                         colorAnalyzer.init(colorListener!!, it.getColorObject())
                     } ?: kotlin.run {
-                        // TODO K handle null
+                        onColorNull.invoke()
                     }
 
                 }
                 .catch {
                     Log.e(TAG, "initAnalyzer error")
                     it.printStackTrace()
+                    onColorNull.invoke()
 
                 }.collect()
         }
