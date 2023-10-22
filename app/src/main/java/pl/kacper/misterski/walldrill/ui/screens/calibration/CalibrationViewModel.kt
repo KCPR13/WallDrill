@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.core.di.AimAnalyzer
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
@@ -27,33 +28,44 @@ class CalibrationViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CalibrationUiState())
     val uiState = _uiState.asStateFlow()
 
-    private var colorListener: ColorListener? = null
-
-
-    fun initAnalyzer(onColorNull: () -> Unit) {
-        colorListener = object : ColorListener {
-            override fun onColorDetected(analyzerResult: AnalyzerResult) {
-                _uiState.update { CalibrationUiState(analyzerResult.detectedPoints) }
-            }
-
+    private var colorListener: ColorListener? = object : ColorListener {
+        override fun onColorDetected(analyzerResult: AnalyzerResult) {
+            _uiState.update { CalibrationUiState(detectedPoints = analyzerResult.detectedPoints) }
         }
 
+    }
+
+
+    init {
+        initAnalyzer()
+    }
+
+    private fun initAnalyzer() {
+        Log.d(TAG, "initAnalyzer")
         viewModelScope.launch {
+            _uiState.update { it.showProgress() }
             colorRepository.getSelectedColor()
                 .onEach { color ->
-                    color?.let {
-                        colorAnalyzer.init(colorListener!!, it.getColorObject())
+                    color?.let { colorNotNull ->
+                        colorListener = object : ColorListener {
+                            override fun onColorDetected(analyzerResult: AnalyzerResult) {
+                                _uiState.update { CalibrationUiState(detectedPoints = analyzerResult.detectedPoints) }
+                            }
+
+                        }
+                        colorAnalyzer.init(colorListener!!, colorNotNull.getColorObject())
+                        _uiState.update { it.hideProgress() }
                     } ?: kotlin.run {
-                        onColorNull.invoke()
+                        _uiState.update { it.showError(R.string.no_color_selected) }
                     }
 
                 }
-                .catch {
-                    Log.e(TAG, "initAnalyzer error")
-                    it.printStackTrace()
-                    onColorNull.invoke()
-
-                }.collect()
+                .catch { error ->
+                    Log.e(TAG, "initAnalyzer error: ${error.message}")
+                    error.printStackTrace()
+                    _uiState.update { it.showError(R.string.no_color_selected) }
+                }
+                .collect()
         }
     }
 

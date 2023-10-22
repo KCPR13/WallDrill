@@ -14,6 +14,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
+import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,14 +42,20 @@ fun CalibrationScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
     val snackbarScope = rememberCoroutineScope()
-    val snackbarMessage = stringResource(R.string.no_color_selected)
-    viewModel.initAnalyzer{
+
+    calibrationUiState.snackbarMessage?.let { message ->
+        val snackbarMessage = stringResource(message)
         snackbarScope.launch {
-           calibrationUiState.snackbarHostState.showSnackbar(message = snackbarMessage, withDismissAction = true)
+            calibrationUiState.snackbarHostState.showSnackbar(
+                message = snackbarMessage,
+                withDismissAction = true
+            )
             navController.navigate(AppNavigation.SETTINGS)// dismiss the screen when the snackbar finishes
 
         }
     }
+
+
     DisposableEffect(calibrationUiState) {
         onDispose {
             viewModel.disposeAnalyzer()
@@ -68,23 +76,33 @@ fun CalibrationScreen(
                 })
         },
         content = { paddingValues ->
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)) {
-                CameraPreview(
-                    analyzer = viewModel.colorAnalyzer,
-                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
 
-                )
-                // Draw the overlay rectangles on the camera preview
-                androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-                    Log.d("Kacpur", "detectedPoints: ${calibrationUiState.detectedPoints.size}")
-                    calibrationUiState.detectedPoints.forEach { location ->
-                        drawRect(
-                            color = Color.Red,
-                            topLeft = Offset(location.first.toFloat(), location.second.toFloat()),
-                            size = Size(1f, 1f)
-                        )
+                if (calibrationUiState.progress) {
+                    AppProgress(Modifier.align(Alignment.Center))
+                } else {
+                    CameraPreview(
+                        analyzer = viewModel.colorAnalyzer,
+                        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+                    )
+                    // Draw the overlay rectangles on the camera preview
+                    androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+                        Log.d("Kacpur", "detectedPoints: ${calibrationUiState.detectedPoints.size}")
+                        calibrationUiState.detectedPoints.forEach { location ->
+                            drawRect(
+                                color = Color.Red,
+                                topLeft = Offset(
+                                    location.first.toFloat(),
+                                    location.second.toFloat()
+                                ),
+                                size = Size(1f, 1f)
+                            )
+                        }
                     }
                 }
             }
@@ -96,7 +114,9 @@ fun CalibrationScreen(
 @Composable
 fun CalibrationScreenPreview() {
     MaterialTheme {
-        CalibrationScreen(modifier = Modifier,
-            navController = rememberNavController() )
+        CalibrationScreen(
+            modifier = Modifier,
+            navController = rememberNavController()
+        )
     }
 }
