@@ -1,6 +1,5 @@
 package pl.kacper.misterski.walldrill.ui.screens.colordetection
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,8 +13,6 @@ import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.core.di.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
-import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,16 +24,11 @@ class ColorDetectionViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(Color.Black)
     val uiState = _uiState.asStateFlow()
 
-    private var colorListener: ColorListener? = null
 
-    fun initAnalyzer() {
-        colorListener = object : ColorListener {
-            override fun onColorDetected(analyzerResult: AnalyzerResult) {
-                _uiState.update { analyzerResult.color }
-            }
-
+    init {
+        colorAnalyzer.init { analyzerResult ->
+            _uiState.update { analyzerResult.color }
         }
-        colorAnalyzer.init(colorListener!!)
     }
 
     fun saveColor(onColorSaved: () -> Unit) {
@@ -52,11 +44,4 @@ class ColorDetectionViewModel @Inject constructor(
             }
         }
     }
-
-    fun disposeAnalyzer() {
-        Log.d(TAG, "disposeAnalyzer")
-        colorListener = null
-        colorAnalyzer.dispose()
-    }
-
 }

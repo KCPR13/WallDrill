@@ -6,26 +6,22 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
-import pl.kacper.misterski.walldrill.domain.interfaces.ColorListener
 import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 
 
 class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Analyzer {
 
-    private var colorListener: ColorListener? = null
+    private val TAG = "ColorAnalyzer"
+
+    private var onColorDetected: ((AnalyzerResult) -> Unit)? = null
     private var colorToDetect: Color? = null
     fun init(
-        colorListener: ColorListener,
-        colorToDetect: Color?=null
+        colorToDetect: Color?=null,
+        onColorDetected: ((AnalyzerResult) -> Unit)?,
     ) {
-        this.colorListener = colorListener
+        this.onColorDetected = onColorDetected
         this.colorToDetect = colorToDetect
     }
-
-    fun dispose() {
-        colorListener = null
-    }
-
 
     override fun analyze(image: ImageProxy) {
         val buffer = image.planes[0].buffer
@@ -42,7 +38,7 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
 
 
         image.close()
-        result?.let { colorListener?.onColorDetected(it) }
+        result?.let { onColorDetected?.invoke(it) }
     }
 
 
@@ -80,7 +76,7 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
                 }
             }
         }
-        Log.d("ColorAnalyzer", "detectedPoints: ${detectedLocations.size}")
+        Log.d(TAG, "detectedPoints: ${detectedLocations.size}")
 
         return AnalyzerResult(colorToDetect,detectedLocations)
     }

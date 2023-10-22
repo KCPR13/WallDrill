@@ -3,7 +3,7 @@ package pl.kacper.misterski.walldrill.core.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ViewModelComponent
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import javax.inject.Qualifier
@@ -18,7 +18,7 @@ annotation class DetectColorAnalyzer
 annotation class AimAnalyzer
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 object AppProvider {
 
     @DetectColorAnalyzer
