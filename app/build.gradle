@@ -102,4 +102,5 @@ dependencies {
 
     implementation 'com.google.mlkit:object-detection:17.0.0'
 
+    implementation project(':openCV')
 }
