@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarIconSize
@@ -33,8 +35,8 @@ fun AnimatedBottomBar(
         BottomAppBar(
             modifier = modifier,
             actions = {
-                BottomBarAction(icon = R.drawable.ic_settings, onClick = onSettingsClick)
-                BottomBarAction(icon = R.drawable.ic_folder, onClick = onFolderClick)
+                BottomBarAction(icon = R.drawable.ic_settings, testTag = stringResource(R.string.test_tag_settings_icon), onClick = onSettingsClick)
+                BottomBarAction(icon = R.drawable.ic_folder, testTag = stringResource(R.string.test_tag_folder_icon) , onClick = onFolderClick)
             },
             floatingActionButton = {
                 FloatingActionButton(
@@ -53,8 +55,8 @@ fun AnimatedBottomBar(
 }
 
 @Composable
-fun BottomBarAction(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
-    IconButton(modifier = modifier,onClick = { onClick.invoke() }) {
+fun BottomBarAction(modifier: Modifier = Modifier, @DrawableRes icon: Int, testTag: String, onClick: () -> Unit) {
+    IconButton(modifier = modifier.testTag(testTag),onClick = { onClick.invoke() }) {
         Image(modifier= Modifier.size(BottomBarIconSize),painter = painterResource(id = icon), contentDescription = null,
             colorFilter = ColorFilter.tint(Color.Black))
 

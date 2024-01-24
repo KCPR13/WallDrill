@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
@@ -39,7 +39,7 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel(),
+fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = viewModel(),
                    navController: NavHostController) {
 
     val state = viewModel.uiState.collectAsState()

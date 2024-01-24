@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.kacper.misterski.walldrill.domain.enums.PermissionStatus
 
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
             requestFrontCameraPermission()
         }
         setContent {
-            MainScreen(viewModel)
+            MainScreen(viewModel, rememberNavController())
         }
 
     }

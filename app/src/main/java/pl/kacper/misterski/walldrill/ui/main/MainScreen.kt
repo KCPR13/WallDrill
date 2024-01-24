@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,14 +22,15 @@ import pl.kacper.misterski.walldrill.ui.screens.colors.ColorsScreen
 import pl.kacper.misterski.walldrill.ui.screens.folder.FolderScreen
 import pl.kacper.misterski.walldrill.ui.screens.settings.SettingsScreen
 import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    navController: NavHostController
 
 ) {
-    val navController = rememberNavController()
     val mainUiState: MainUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -88,6 +92,14 @@ fun MainScreen(
             }
 
         }
+    }
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    WallDrillTheme {
+        MainScreen(viewModel =  hiltViewModel(), rememberNavController())
     }
 }
 

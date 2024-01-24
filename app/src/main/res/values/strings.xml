@@ -11,4 +11,6 @@
     <string name="camera_permission_message">If you want to use the app grant Camera Permission</string>
     <string name="saved_sessions">Saved sessions</string>
     <string name="no_color_selected">No color selected. You can add color in the settings.</string>
+    <string name="test_tag_settings_icon">TestTagsettings icon</string>
+    <string name="test_tag_folder_icon">TestTagfolder icon</string>
 </resources>
