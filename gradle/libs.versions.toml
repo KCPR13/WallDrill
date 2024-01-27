@@ -4,21 +4,35 @@ sdk = "34"
 minSdk = "29"
 versionCode = "1"
 versionName = "1.0"
+#jvmTarget = "1.8"
+namespace = "pl.kacper.misterski.walldrill"
 
 #GRADLE
 androidGradlePlugin = "8.2.1"
 
 #DEPENDENCIES
 ktx = "1.9.0"
-kotlin = "1.7.20"
+kotlin = "1.9.20"
 hilt = "2.44"
 room = "2.4.0"
 camerax = "1.3.1"
 navigation-compose = "2.6.0"
 navigation-compose-hilt = "1.0.0"
+lifecycle = "2.3.1"
+activityCompose = "1.5.1"
+composeBom = "2022.10.00"
+compose = "1.6.0"
+compose-material = "1.1.2"
+junit = "1.1.5"
+espressoCore = "3.5.1"
+compose-ui-test = "1.0.3"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+#kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+
+
 #HILT
 android-hilt = { group = "com.google.dagger", name= "hilt-android", version.ref = "hilt" }
 android-hiltKapt = { group = "com.google.dagger", name= "hilt-android-compiler", version.ref = "hilt" }
@@ -33,15 +47,23 @@ androidx-camera-view  = { group = "androidx.camera", name = "camera-view", versi
 #COMPOSE
 androidx-compose-navigation  = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 androidx-compose-hiltNavigation  = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "navigation-compose-hilt" }
-androidx-compose-ui  = { group = "androidx.compose.ui", name = "ui", version.ref = "navigation-compose" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
+androidx-compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "compose" }
+androidx-compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
+androidx-compose-material = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material" }
+androidx-compose-composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 
+#TEST
+junit-core = { group = "junit", name = "junit", version.ref = "junit" }
+junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+expresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit-rules = { group = "androidx.test", name = "rules", version.ref = "junit" }
+junit-compose-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 
-
-
-#implementation 'androidx.compose.ui:ui'
-#implementation 'androidx.compose.ui:ui-graphics'
-#implementation 'androidx.compose.ui:ui-tooling-preview'
-#implementation 'androidx.compose.material3:material3'
+compose-test-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
+compose-test-manifest =  { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
+compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit", version.ref = "compose-ui-test" }
 
 
 [plugins]
