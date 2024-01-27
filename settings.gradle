@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "WallDrill"
 include ':app'
-include ':openCV'
+//include ':openCV' TODO K remove opencv lib?

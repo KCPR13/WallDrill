@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.android.kapt)
+    alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
 }
 
@@ -44,12 +45,10 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
+
     buildFeatures {
         compose true
     }
@@ -60,14 +59,10 @@ android {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
-
-
     }
 }
 
 dependencies {
-
-    implementation project(':openCV')
 
     implementation libs.androidx.ktx
     implementation(libs.lifecycle)
@@ -78,13 +73,13 @@ dependencies {
     implementation libs.androidx.camera.camera2
 
 //    Hilt
-    implementation libs.android.hilt
-    kapt(libs.android.hiltKapt)
+    implementation libs.hilt
+    kapt(libs.hiltKapt)
 
 //    Room
     implementation libs.android.room.ktx
     implementation libs.android.room.runtime
-    kapt(libs.android.roomKapt)
+    ksp(libs.android.roomKapt)
 
 //    Compose
     implementation libs.androidx.compose.navigation
