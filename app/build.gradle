@@ -6,11 +6,14 @@ plugins {
 }
 
 android {
-    namespace libs.versions.namespace.get() // should move to toml?
+
+    def appId = "pl.kacper.misterski.walldrill"
+
+    namespace appId
     compileSdk libs.versions.sdk.get().toInteger()
 
     defaultConfig {
-        applicationId libs.versions.namespace.get()
+        applicationId appId
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.sdk.get().toInteger()
         versionCode libs.versions.versionCode.get().toInteger()
@@ -45,13 +48,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = libs.versions.jvmTarget.get()
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.5.4"
+        kotlinCompilerExtensionVersion libs.versions.kotlinCompilerExtensionVersion.get()
     }
     packagingOptions {
         resources {
@@ -67,6 +70,7 @@ dependencies {
     implementation project(':openCV')
 
     implementation libs.androidx.ktx
+    implementation(libs.lifecycle)
 
 //    Camera
     implementation libs.androidx.camera.view
@@ -94,9 +98,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.composeBom))
 
 
-    //implementation(platform(libs.kotlin))
-    implementation(libs.lifecycle)
-
 //   Tests
     testImplementation libs.junit.core
 
@@ -104,11 +105,8 @@ dependencies {
     androidTestImplementation libs.expresso.core
     androidTestImplementation libs.junit.rules
     androidTestImplementation libs.junit.compose.test
-    androidTestImplementation libs.compose.ui.test
-
+    androidTestImplementation libs.navigation.test
 
     debugImplementation libs.compose.test.manifest
-    debugImplementation libs.compose.test.tooling // compose version
-//    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
-////
+    debugImplementation libs.compose.test.tooling
 }
