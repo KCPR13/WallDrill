@@ -85,7 +85,6 @@ dependencies {
     implementation libs.android.room.ktx
     implementation libs.android.room.runtime
     kapt(libs.android.roomKapt)
-//    TODO move to KSP
 
 //    Compose
     implementation libs.androidx.compose.navigation
