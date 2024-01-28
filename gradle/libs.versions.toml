@@ -30,6 +30,9 @@ junit = "1.1.5"
 junit-rules = "1.5.0"
 espressoCore = "3.5.1"
 junit-core = "4.13.2"
+version-catalog-update = "0.8.3"
+gradle-versions = "0.51.0"
+
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
@@ -77,4 +80,5 @@ android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 android-ksp = { id = "com.google.devtools.ksp", version.ref =  "ksp" }
-
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }

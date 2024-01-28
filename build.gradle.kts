@@ -6,5 +6,8 @@ plugins {
     alias(libs.plugins.android.hilt) apply false
     alias(libs.plugins.android.kapt) apply false
     alias(libs.plugins.android.ksp) apply false
+    alias(libs.plugins.version.catalog.update)
+    alias(libs.plugins.gradle.versions)
 }
 
+apply("${project.rootDir}/scripts/gradle-update.gradle")

@@ -19,7 +19,7 @@
 // - or attach library module from OpenCV Android SDK
 //   (without copying into application project directory, allow to share the same module between projects)
 //
-//   Edit "settings.gradle" and add these lines:
+//   Edit "settings.gradle.kts" and add these lines:
 //
 //   def opencvsdk='<path_to_opencv_android_sdk_rootdir>'
 //   // You can put declaration above into gradle.properties file instead (including file in HOME directory),
@@ -34,7 +34,7 @@
 // - Android Studio way:
 //   "Open Module Settings" (F4) -> "Dependencies" tab
 //
-// - or add "project(':opencv')" dependency into app/build.gradle:
+// - or add "project(':opencv')" dependency into app/build.gradle.kts:
 //
 //   dependencies {
 //       implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -62,7 +62,7 @@
 //   ...
 //   target_link_libraries(native-lib ${OpenCV_LIBRARIES})
 //
-// - Add "OpenCV_DIR" and enable C++ exceptions/RTTI support via app/build.gradle
+// - Add "OpenCV_DIR" and enable C++ exceptions/RTTI support via app/build.gradle.kts
 //   Documentation about CMake options: https://developer.android.com/ndk/guides/cmake.html
 //
 //   defaultConfig {
@@ -75,7 +75,7 @@
 //       }
 //   }
 //
-// - (optional) Limit/filter ABIs to build ('android' scope of 'app/build.gradle'):
+// - (optional) Limit/filter ABIs to build ('android' scope of 'app/build.gradle.kts'):
 //   Useful information: https://developer.android.com/studio/build/gradle-tips.html (Configure separate APKs per ABI)
 //
 //   splits {
