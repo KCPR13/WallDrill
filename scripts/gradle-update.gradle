@@ -2,7 +2,7 @@ versionCatalogUpdate {
     sortByKey.set(true)
 
     keep {
-        keepUnusedVersions.set(true) // TOOO K remove???
+        keepUnusedVersions.set(true)
         keepUnusedLibraries.set(true)
         keepUnusedPlugins.set(true)
     }

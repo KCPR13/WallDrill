@@ -4,7 +4,11 @@ plugins {
     alias(libs.plugins.android.kapt)
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
+    alias(libs.plugins.spotless)
 }
+
+//TODO K remove?
+apply("${project.rootDir}/scripts/spotless.gradle.kts")
 
 android {
 
@@ -113,4 +117,42 @@ dependencies {
 
     debugImplementation (libs.compose.test.manifest)
     debugImplementation (libs.compose.test.tooling)
+}
+
+//TODO K move to separate file
+spotless {
+
+    val ktlintVersion = "0.46.1"
+    kotlin {
+        target("**/*.kt")
+        targetExclude("**/build/**/*.kt")
+        ktlint(ktlintVersion).editorConfigOverride(
+            mapOf(
+                "ktlint_code_style" to "android",
+                "ij_kotlin_allow_trailing_comma" to true,
+                // These rules were introduced in ktlint 0.46.0 and should not be
+                // enabled without further discussion. They are disabled for now.
+                // See: https://github.com/pinterest/ktlint/releases/tag/0.46.0
+                "disabled_rules" to
+                        "filename," +
+                        "annotation,annotation-spacing," +
+                        "argument-list-wrapping," +
+                        "double-colon-spacing," +
+                        "enum-entry-name-case," +
+                        "multiline-if-else," +
+                        "no-empty-first-line-in-method-block," +
+                        "package-name," +
+                        "trailing-comma," +
+                        "spacing-around-angle-brackets," +
+                        "spacing-between-declarations-with-annotations," +
+                        "spacing-between-declarations-with-comments," +
+                        "unary-op-spacing"
+            )
+        )
+        licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+    }
+    format("kts") {
+        target("**/*.kts")
+        targetExclude("**/build/**/*.kts")
+    }
 }
