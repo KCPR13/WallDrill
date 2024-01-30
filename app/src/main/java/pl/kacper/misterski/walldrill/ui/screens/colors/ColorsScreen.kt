@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
@@ -48,7 +49,7 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 fun ColorsScreen(
     modifier: Modifier,
     navController: NavHostController,
-    viewModel: ColorsViewModel = hiltViewModel()
+    viewModel: ColorsViewModel = viewModel()
 ) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

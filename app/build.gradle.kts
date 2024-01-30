@@ -7,9 +7,6 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-//TODO K remove?
-apply("${project.rootDir}/scripts/spotless.gradle.kts")
-
 android {
 
     val appId = "pl.kacper.misterski.walldrill"

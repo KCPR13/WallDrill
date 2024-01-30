@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -39,7 +40,7 @@ class AppNavigationTest : TestCase() {
         androidComposeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
-            MainScreen(viewModel = hiltViewModel(), navController = navController)
+            MainScreen(viewModel = viewModel(), navController = navController)
         }
     }
 
