@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.ui.screens.aim
 
 import androidx.compose.foundation.Canvas
@@ -9,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,58 +46,61 @@ import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AimScreen(
     modifier: Modifier,
     navController: NavHostController,
-    showBottomBar: (Boolean) -> Unit
+    showBottomBar: (Boolean) -> Unit,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Scaffold(modifier = modifier, floatingActionButton =
-        {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(AppNavigation.FOLDER)
-                    showBottomBar.invoke(true)
-
+        Scaffold(
+            modifier = modifier,
+            floatingActionButton =
+                {
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate(AppNavigation.FOLDER)
+                            showBottomBar.invoke(true)
+                        },
+                        containerColor = colorResource(id = R.color.mili),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.KeyboardArrowLeft,
+                            contentDescription = null,
+                        )
+                    }
                 },
-                containerColor = colorResource(id = R.color.mili),
-
-                ) {
+        ) { paddingValues ->
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+            ) {
                 Icon(
-                    imageVector = Icons.Outlined.KeyboardArrowLeft,
-                    contentDescription = null
-                )
-            }
-
-        }) { paddingValues ->
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)) {
-                    Icon(
-                        modifier = Modifier
+                    modifier =
+                        Modifier
                             .align(Alignment.TopStart)
                             .padding(PaddingExtraLarge)
-                            .clickable { },//TODO K
+                            .clickable { },
+                    // TODO K
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                )
 
-                        imageVector = Icons.Outlined.Info,
-                        contentDescription = null
-                    )
-
-                AimPoint(Modifier.align(Alignment.Center).size(AimPointSize),AimPointSize)
-
+                AimPoint(Modifier.align(Alignment.Center).size(AimPointSize), AimPointSize)
             }
         }
     }
-
 }
 
-
 @Composable
-private fun AimPoint(modifier: Modifier, radius: Dp) {
+private fun AimPoint(
+    modifier: Modifier,
+    radius: Dp,
+) {
     Canvas(
-        modifier = modifier
+        modifier = modifier,
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
@@ -95,7 +112,7 @@ private fun AimPoint(modifier: Modifier, radius: Dp) {
         drawCircle(
             color = Color.Red,
             radius = circleRadius,
-            center = Offset(centerX, centerY)
+            center = Offset(centerX, centerY),
         )
     }
 }
@@ -104,7 +121,6 @@ private fun AimPoint(modifier: Modifier, radius: Dp) {
 @Composable
 fun AimScreenPreview() {
     MaterialTheme {
-        AimScreen(modifier = Modifier, navController = rememberNavController() , showBottomBar = {} )
+        AimScreen(modifier = Modifier, navController = rememberNavController(), showBottomBar = {})
     }
 }
-

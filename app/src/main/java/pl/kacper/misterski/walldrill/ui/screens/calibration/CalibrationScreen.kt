@@ -1,8 +1,25 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.ui.screens.calibration
 
 import android.util.Log
 import androidx.camera.core.CameraSelector
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -37,7 +53,7 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 fun CalibrationScreen(
     modifier: Modifier,
     viewModel: CalibrationViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
@@ -48,13 +64,12 @@ fun CalibrationScreen(
         snackbarScope.launch {
             calibrationUiState.snackbarHostState.showSnackbar(
                 message = snackbarMessage,
-                withDismissAction = true
+                withDismissAction = true,
             )
-            navController.navigate(AppNavigation.SETTINGS)// dismiss the screen when the snackbar finishes
-
+            navController.navigate(AppNavigation.SETTINGS)
+            // TODO  dismiss the screen when the snackbar finishes
         }
     }
-
 
     Scaffold(
         modifier = modifier,
@@ -68,22 +83,22 @@ fun CalibrationScreen(
                 scrollBehavior,
                 onBackPressedClick = {
                     navController.navigate(AppNavigation.SETTINGS)
-                })
+                },
+            )
         },
         content = { paddingValues ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
-
                 if (calibrationUiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
                 } else {
                     CameraPreview(
                         analyzer = viewModel.colorAnalyzer,
-                        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
+                        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
                     )
                     // Draw the overlay rectangles on the camera preview
                     androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
@@ -91,17 +106,18 @@ fun CalibrationScreen(
                         calibrationUiState.detectedPoints.forEach { location ->
                             drawRect(
                                 color = Color.Red,
-                                topLeft = Offset(
-                                    location.first.toFloat(),
-                                    location.second.toFloat()
-                                ),
-                                size = Size(1f, 1f)
+                                topLeft =
+                                    Offset(
+                                        location.first.toFloat(),
+                                        location.second.toFloat(),
+                                    ),
+                                size = Size(1f, 1f),
                             )
                         }
                     }
                 }
             }
-        }
+        },
     )
 }
 
@@ -111,7 +127,7 @@ fun CalibrationScreenPreview() {
     MaterialTheme {
         CalibrationScreen(
             modifier = Modifier,
-            navController = rememberNavController()
+            navController = rememberNavController(),
         )
     }
 }

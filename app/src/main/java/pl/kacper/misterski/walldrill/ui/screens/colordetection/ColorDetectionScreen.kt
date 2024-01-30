@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.ui.screens.colordetection
 
 import androidx.camera.core.CameraSelector
@@ -31,7 +46,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -54,19 +68,18 @@ import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
 fun ColorDetection(
     modifier: Modifier,
     viewModel: ColorDetectionViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
-
     val state = viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    Scaffold(modifier,
+    Scaffold(
+        modifier,
         topBar = {
             AppToolbar(
                 R.string.detect_the_color,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior
-
+                scrollBehavior,
             ) { navController.navigate(AppNavigation.COLORS) }
         },
         bottomBar = {
@@ -75,68 +88,70 @@ fun ColorDetection(
                     viewModel.saveColor {
                         navController.navigate(AppNavigation.COLORS)
                     }
-
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingLarge),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(PaddingLarge),
                 shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = Mili)
+                colors = ButtonDefaults.buttonColors(containerColor = Mili),
             ) {
                 Text(text = stringResource(R.string.save))
             }
-        }) { paddingValues ->
+        },
+    ) { paddingValues ->
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(PaddingLarge)
+            verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {
             Box(
-                modifier = Modifier
-                    .size(CameraPreviewSize)
-                    .clip(RoundedCornerShape(CornerRadius))
-                    .border(BorderWidth, Mili),
-                contentAlignment = Alignment.Center
-
+                modifier =
+                    Modifier
+                        .size(CameraPreviewSize)
+                        .clip(RoundedCornerShape(CornerRadius))
+                        .border(BorderWidth, Mili),
+                contentAlignment = Alignment.Center,
             ) {
                 CameraPreview(
                     analyzer = viewModel.colorAnalyzer,
-                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
+                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
                 )
 
                 Ring(
-                    modifier = Modifier
-                        .size(RingSize)
-                        .background(Color.Transparent)
+                    modifier =
+                        Modifier
+                            .size(RingSize)
+                            .background(Color.Transparent),
                 )
             }
 
             Text(
                 text = stringResource(R.string.detected_color),
-                fontSize = FontLarge
+                fontSize = FontLarge,
             )
             SelectedColor(
-                modifier = Modifier.size(SelectedColorSize), color = state.value, drawBorder = true
+                modifier = Modifier.size(SelectedColorSize),
+                color = state.value,
+                drawBorder = true,
             )
         }
     }
-
 }
-
 
 @Composable
 private fun Ring(modifier: Modifier) {
     Canvas(
-        modifier
+        modifier,
     ) {
         drawCircle(
             brush = Brush.sweepGradient(listOf(Color.Blue, Color.Blue)),
             radius = 50f,
-            style = Stroke(4f)
+            style = Stroke(4f),
         )
     }
 }

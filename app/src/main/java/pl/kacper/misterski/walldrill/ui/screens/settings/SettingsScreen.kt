@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.ui.screens.settings
 
 import androidx.compose.foundation.clickable
@@ -39,36 +54,41 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = viewModel(),
-                   navController: NavHostController) {
-
+fun SettingsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel = viewModel(),
+    navController: NavHostController,
+) {
     val state = viewModel.uiState.collectAsState()
     viewModel.fetchModels(LocalContext.current)
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(modifier,
+    Scaffold(
+        modifier,
         topBar = {
             AppToolbar(
                 R.string.settings,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior
+                scrollBehavior,
             )
-        }) { paddingValues ->
+        },
+    ) { paddingValues ->
         LazyColumn(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             items(state.value.models) { model ->
                 SettingsItem(
-                    modifier = Modifier
-                        .clickable {
-                            when (model.action) {
-                                SettingsAction.COLORS -> navController.navigate(
-                                    AppNavigation.COLORS
-                                )
-
-                                SettingsAction.CALIBRATION -> navController.navigate(AppNavigation.CALIBRATION)
+                    modifier =
+                        Modifier
+                            .clickable {
+                                when (model.action) {
+                                    SettingsAction.COLORS ->
+                                        navController.navigate(AppNavigation.COLORS)
+                                    SettingsAction.CALIBRATION ->
+                                        navController.navigate(AppNavigation.CALIBRATION)
+                                }
                             }
-                        }
-                        .padding(PaddingLarge)
-                        .fillMaxWidth(), model = model
+                            .padding(PaddingLarge)
+                            .fillMaxWidth(),
+                    model = model,
                 )
             }
         }
@@ -76,44 +96,46 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
 }
 
 @Composable
-private fun SettingsItem(modifier: Modifier, model: SettingsModel) {
+private fun SettingsItem(
+    modifier: Modifier,
+    model: SettingsModel,
+) {
     Card(
         modifier,
         shape = RectangleShape,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = CardElevation
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-        )
+        elevation =
+            CardDefaults.cardElevation(
+                defaultElevation = CardElevation,
+            ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color.White,
+            ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                modifier = Modifier
-                    .padding(PaddingLarge)
-                    .align(Alignment.CenterVertically),
+                modifier =
+                    Modifier
+                        .padding(PaddingLarge)
+                        .align(Alignment.CenterVertically),
                 fontSize = FontMedium,
                 text = model.title,
             )
             Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(end = PaddingLarge),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = PaddingLarge),
                 imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
-
 }
-
-
-
-
 
 @Preview
 @Composable

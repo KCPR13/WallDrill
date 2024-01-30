@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.ui.screens.setup
 
 import androidx.compose.foundation.Image
@@ -23,39 +38,37 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupScreen(modifier: Modifier) {
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-
-    Scaffold(modifier,
+    Scaffold(
+        modifier,
         topBar = {
             AppToolbar(
                 R.string.welcome_to_the_app,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior
+                scrollBehavior,
             )
-        }) { paddingValues ->
+        },
+    ) { paddingValues ->
         Column(
-            modifier = modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier =
+                modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(PaddingLarge)
+            verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {
             Image(
                 modifier = Modifier.padding(top = PaddingExtraLarge),
                 painter = painterResource(id = R.drawable.ic_camera),
-                contentDescription = null
+                contentDescription = null,
             )
             Text(text = stringResource(R.string.camera_permission_message))
         }
     }
-
-
 }
 
 @Preview
