@@ -16,23 +16,41 @@
 package pl.kacper.misterski.walldrill.domain
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
+import org.opencv.android.Utils
+import org.opencv.core.Core
+import org.opencv.core.Mat
+import org.opencv.core.MatOfPoint
+import org.opencv.core.MatOfPoint2f
+import org.opencv.core.Point
+import org.opencv.core.Rect
+import org.opencv.core.Scalar
+import org.opencv.core.Size
+import org.opencv.imgproc.Imgproc
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
-import kotlin.math.abs
-import android.graphics.Color as AndroidColor
 
 class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Analyzer {
     companion object {
         const val TAG = "ColorAnalyzer"
     }
+// TODO K cleanup
 
+    // TODO K instead of lambda hot flow
     private var onColorDetected: ((AnalyzerResult) -> Unit)? = null
     private var colorToDetect: Color? = null
+
+    private val options =
+        ObjectDetectorOptions.Builder()
+            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
+            .enableClassification() // Optional
+            .build()
+
+    private val objectDetector = ObjectDetection.getClient(options)
 
     fun init(
         colorToDetect: Color? = null,
@@ -43,107 +61,110 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
     }
 
     override fun analyze(image: ImageProxy) {
-        val buffer = image.planes[0].buffer
-        val data = ByteArray(buffer.remaining())
-        buffer.get(data)
-
         val bitmap = image.toBitmap()
 
         val result =
             when (analyzerMode) {
-                AnalyzerMode.AIM -> analyzeForAimMode(bitmap)
-                AnalyzerMode.DETECTION -> analyzeForDetectionMode(bitmap)
+                AnalyzerMode.AIM -> analyzeForAimMode(image)
+                AnalyzerMode.COLOR_DETECTION -> detectColor(bitmap)
             }
 
-        image.close()
         result?.let { onColorDetected?.invoke(it) }
+        image.close()
     }
 
-    // TODO K ktlint adding extra , on the param
-    private fun isColorDetected(
-        pixelColor: Color,
-        prevPixelColor: Color?,
-    ): Boolean {
-//
-//        return pixelColor.red == colorToDetect.red &&
-//                pixelColor.green == colorToDetect.green &&
-//                pixelColor.blue == colorToDetect.blue
+    private fun detectRedCircle(image: Bitmap): Rect? { // List<Pair<Int, Int>>? {
+        // Convert Bitmap to Mat
+        val mat = Mat()
+        Utils.bitmapToMat(image, mat)
 
-        val threshold = 0.02f
-        val argb = pixelColor.toArgb()
+        // Preprocessing: Reduce noise with a Gaussian blur
+        Imgproc.GaussianBlur(mat, mat, Size(5.0, 5.0), 0.0)
 
-        // Convert Color to luminance (grayscale)
-        val luminance =
-            (
-                0.299 * AndroidColor.red(argb) +
-                    0.587 * AndroidColor.green(argb) +
-                    0.114 * AndroidColor.blue(argb)
-            ) / 255.0
+        // Convert to HSV color space
+        val hsvMat = Mat()
+        Imgproc.cvtColor(mat, hsvMat, Imgproc.COLOR_RGB2HSV)
 
-        if (prevPixelColor == null) return false
-        val prevArgb = prevPixelColor.toArgb()
-        val prevLuminance =
-            (
-                0.299 * AndroidColor.red(prevArgb) +
-                    0.587 * AndroidColor.green(prevArgb) +
-                    0.114 * AndroidColor.blue(prevArgb)
-            ) / 255.0
+//        // Fine-tune these ranges based on your specific red color
+//        val lowerRed = Scalar(0.0, 100.0, 100.0) // Adjust these values
+//        val upperRed = Scalar(255.0, 255.0, 255.0) // Adjust these values
 
-        val diff = abs(luminance - prevLuminance)
+//        val lowerRed = Scalar(0.0, 100.0, 100.0) // Adjust these values
+//        val upperRed = Scalar(10.0, 255.0, 255.0) // Adjust these values
 
-        // Check if the luminance crosses the specified threshold
-        return diff > threshold && (prevPixelColor.isBlackOrWhite() && pixelColor.isBlackOrWhite())
+        val lowerRed = Scalar(0.0, 100.0, 100.0) // Adjust these values
+        val upperRed = Scalar(255.0, 255.0, 255.0) // Adjust these values
+
+        // Threshold the HSV image to get only red colors
+        val mask = Mat()
+        Core.inRange(hsvMat, lowerRed, upperRed, mask)
+
+        // Further noise reduction with morphological opening (remove small objects from the foreground)
+        Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_OPEN, Mat(), Point(-1.0, -1.0), 2)
+
+        // Find contours
+        val contours = ArrayList<MatOfPoint>()
+        val hierarchy = Mat()
+        Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+
+        // Filter for circular shapes and a certain size
+        val circleContours =
+            contours.filter { contour ->
+                val contour2f = MatOfPoint2f(*contour.toArray())
+                val center = Point()
+                val radius = FloatArray(1)
+                Imgproc.minEnclosingCircle(contour2f, center, radius)
+                val circularity =
+                    (
+                        4 * Math.PI *
+                            Imgproc.contourArea(
+                                contour,
+                            )
+                    ) / (Imgproc.arcLength(contour2f, true) * Imgproc.arcLength(contour2f, true))
+                circularity > 0.8 && radius[0] > 10 // Adjust the minimum radius as needed
+            }
+
+        // Get the largest circle based on area
+        return circleContours.maxByOrNull { Imgproc.contourArea(it) }?.let { contour ->
+            val rect = Imgproc.boundingRect(contour)
+            rect
+            //            listOf(
+//                Pair(rect.x, rect.y), // Top-left corner
+//                Pair(rect.x + rect.width, rect.y), // Top-right corner
+//                Pair(rect.x + rect.width, rect.y + rect.height), // Bottom-right corner
+//                Pair(rect.x, rect.y + rect.height), // Bottom-left corner
+//            )
+        }
     }
 
-    private fun analyzeForDetectionMode(bitmap: Bitmap): AnalyzerResult {
+    private fun detectColor(bitmap: Bitmap): AnalyzerResult {
         val x = bitmap.width / 2
         val y = bitmap.height / 2
         val centerPixelColor = bitmap.getPixel(x, y)
         return AnalyzerResult(Color(centerPixelColor), listOf(Pair(x, y)))
     }
 
-    private fun analyzeForAimMode(bitmap: Bitmap): AnalyzerResult? {
-        val colorToDetect = colorToDetect ?: return null
+    // TODO to implement
+    private fun analyzeForAimMode(image: ImageProxy): AnalyzerResult? {
+        val bitmap = image.toBitmap()
+        val result = detectRedCircle(bitmap)
 
-        val width = bitmap.width
-        val height = bitmap.height
+//        objectDetector.process(inputImage)
+//            .addOnSuccessListener { detectedObjects ->
+//                for (detectedObject in detectedObjects) {
+//                    val boundingBox = detectedObject.boundingBox
+//                    val trackingId = detectedObject.trackingId
+//                    for (label in detectedObject.labels) {
+//                        val text = label.text
+//                    }
+//                }
+//            }
+//            .addOnFailureListener { e ->
+//                // Task failed with an exception
+//                // ...
+//            }
 
-        var detectedPixelsCount = 0
-        val detectedLocations = mutableListOf<Pair<Int, Int>>()
-
-        var prevPixelColor: Color? = null
-        for (y in 0 until height) {
-            for (x in 0 until width) {
-                val pixel = bitmap.getPixel(x, y)
-                val color = Color(pixel)
-
-                if (isColorDetected(color, prevPixelColor)) {
-                    detectedPixelsCount++
-                    detectedLocations.add(Pair(x, y))
-                }
-                prevPixelColor = color
-            }
-        }
-        Log.d(TAG, "detectedPoints: ${detectedLocations.size}")
-
-        return AnalyzerResult(colorToDetect, detectedLocations)
+        // Log.d(TAG, "detected points: ${result?.size}")
+        return AnalyzerResult(Color.Yellow, emptyList(), result, image.width, image.height, image.imageInfo.rotationDegrees)
     }
-}
-
-fun Color.isBlackOrWhite(
-    blackThreshold: Float = 0.1f,
-    whiteThreshold: Float = 0.95f,
-): Boolean {
-    val argb = this.toArgb()
-
-    // Calculate luminance (grayscale)
-    val luminance =
-        (
-            0.299 * AndroidColor.red(argb) +
-                0.587 * AndroidColor.green(argb) +
-                0.114 * AndroidColor.blue(argb)
-        ) / 255.0
-
-    // Check if the color is black or white based on the thresholds
-    return luminance <= blackThreshold || luminance >= whiteThreshold
 }

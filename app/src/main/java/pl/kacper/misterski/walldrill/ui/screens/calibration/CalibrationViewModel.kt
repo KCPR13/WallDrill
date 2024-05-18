@@ -20,15 +20,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.core.di.AimAnalyzer
-import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import javax.inject.Inject
 
@@ -36,7 +32,6 @@ import javax.inject.Inject
 class CalibrationViewModel
     @Inject
     constructor(
-        private val colorRepository: ColorRepository,
         @AimAnalyzer val colorAnalyzer: ColorAnalyzer,
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(CalibrationUiState())
@@ -45,29 +40,61 @@ class CalibrationViewModel
         init {
             initAnalyzer()
         }
+// TODO K cleanup
 
         private fun initAnalyzer() {
             Log.d(tag, "initAnalyzer")
             viewModelScope.launch {
-                _uiState.update { it.showProgress() }
-                colorRepository.getSelectedColor()
-                    .onEach { color ->
-                        color?.let { colorNotNull ->
-                            colorAnalyzer.init(colorToDetect = colorNotNull.getColorObject()) {
-                                    analyzerResult ->
-                                _uiState.update { CalibrationUiState(detectedPoints = analyzerResult.detectedPoints) }
-                            }
-                            _uiState.update { it.hideProgress() }
-                        } ?: kotlin.run {
-                            _uiState.update { it.showError(R.string.no_color_selected) }
-                        }
+                // _uiState.update { it.showProgress() }
+//                colorRepository.getSelectedColor()
+//                    .onEach { color ->
+//                        color?.let { colorNotNull ->
+                colorAnalyzer.init(colorToDetect = null) { analyzerResult ->
+                    _uiState.update {
+                        CalibrationUiState(
+                            rect = analyzerResult.rect,
+                            detectedPoints =
+                                analyzerResult
+                                    .detectedPoints,
+                            width = analyzerResult.width,
+                            hight = analyzerResult.height,
+                            rotationDegrees = analyzerResult.rotationDegrees,
+                        )
                     }
-                    .catch { error ->
-                        Log.e(tag, "initAnalyzer error: ${error.message}")
-                        error.printStackTrace()
-                        _uiState.update { it.showError(R.string.no_color_selected) }
-                    }
-                    .collect()
+                }
+                //  _uiState.update { it.hideProgress() }
+            } ?: kotlin.run {
+                _uiState.update { it.showError(R.string.no_color_selected) }
             }
+//                    }
+//                    .catch { error ->
+//                        Log.e(tag, "initAnalyzer error: ${error.message}")
+//                        error.printStackTrace()
+//                        _uiState.update { it.showError(R.string.no_color_selected) }
+//                    }
+//                    .collect()
+        }
+
+        fun calculateCircleRadius(points: List<Pair<Float, Float>>): Float {
+            val centerX = points.map { it.first }.average()
+            val centerY = points.map { it.second }.average()
+
+            val distances =
+                points.map { (x, y) ->
+                    val dx = x - centerX
+                    val dy = y - centerY
+                    Math.sqrt((dx * dx + dy * dy).toDouble()).toFloat()
+                }
+
+            // Return the average distance as the radius
+            return distances.average().toFloat()
+        }
+
+        fun calculateScaleFactor(
+            circleRadius: Float,
+            desiredRectangleSize: Float,
+        ): Float {
+            // Adjust the scaling factor based on the ratio between the circle radius and the desired rectangle size
+            return desiredRectangleSize / circleRadius
         }
     }

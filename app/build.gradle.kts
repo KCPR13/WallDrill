@@ -68,14 +68,16 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
     }
-//    packagingOptions { TODO K remove?
-//        resources {
-//            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-//        }
-//    }
+    packaging { // TODO K remove?
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
+
+    implementation(project(":openCV"))
 
     implementation(libs.androidx.ktx)
     implementation(libs.lifecycle)
@@ -115,6 +117,8 @@ dependencies {
 
     debugImplementation(libs.compose.test.manifest)
     debugImplementation(libs.compose.test.tooling)
+
+    //  implementation(libs.mlkit.detection) TODO K remove?
 }
 
 // TODO K move to separate file

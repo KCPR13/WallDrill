@@ -36,7 +36,7 @@ annotation class AimAnalyzer
 object AppProvider {
     @DetectColorAnalyzer
     @Provides
-    fun provideDetectColorAnalyzer() = ColorAnalyzer(AnalyzerMode.DETECTION)
+    fun provideDetectColorAnalyzer() = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION)
 
     @AimAnalyzer
     @Provides

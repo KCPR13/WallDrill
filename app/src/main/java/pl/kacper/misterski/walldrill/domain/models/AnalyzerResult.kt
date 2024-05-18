@@ -16,5 +16,14 @@
 package pl.kacper.misterski.walldrill.domain.models
 
 import androidx.compose.ui.graphics.Color
+import org.opencv.core.Rect
 
-data class AnalyzerResult(val color: Color, val detectedPoints: List<Pair<Int, Int>>)
+// TODO K need all fields?
+data class AnalyzerResult(
+    val color: Color,
+    val detectedPoints: List<Pair<Int, Int>>,
+    val rect: Rect? = null,
+    val width: Int = 0,
+    val height: Int = 0,
+    val rotationDegrees: Int = 0,
+)

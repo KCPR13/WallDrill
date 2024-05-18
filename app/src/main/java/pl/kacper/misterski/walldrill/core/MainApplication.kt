@@ -16,7 +16,18 @@
 package pl.kacper.misterski.walldrill.core
 
 import android.app.Application
+import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
+import org.opencv.android.OpenCVLoader
 
 @HiltAndroidApp
-class MainApplication : Application()
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        if (!OpenCVLoader.initDebug()) { // TODO K cleanup
+            Log.e("OpenCV", "Unable to load OpenCV!")
+        } else {
+            Log.d("OpenCV", "OpenCV loaded successfully!")
+        }
+    }
+}

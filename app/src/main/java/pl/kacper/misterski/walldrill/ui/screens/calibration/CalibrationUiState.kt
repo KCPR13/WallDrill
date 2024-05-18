@@ -17,12 +17,18 @@ package pl.kacper.misterski.walldrill.ui.screens.calibration
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.SnackbarHostState
+import org.opencv.core.Rect
+// TODO K cleanup
 
 data class CalibrationUiState(
     val progress: Boolean = false,
+    val rect: Rect? = null,
     val detectedPoints: List<Pair<Int, Int>> = mutableListOf(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     @StringRes val snackbarMessage: Int? = null,
+    val width: Int = 0,
+    val hight: Int = 0,
+    val rotationDegrees: Int = 0,
 ) {
     fun showProgress() = this.copy(progress = true)
 
