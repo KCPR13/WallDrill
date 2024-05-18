@@ -19,8 +19,6 @@ import android.graphics.Bitmap
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.Color
-import com.google.mlkit.vision.objects.ObjectDetection
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import org.opencv.android.Utils
 import org.opencv.core.Core
 import org.opencv.core.Mat
@@ -43,14 +41,6 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
     // TODO K instead of lambda hot flow
     private var onColorDetected: ((AnalyzerResult) -> Unit)? = null
     private var colorToDetect: Color? = null
-
-    private val options =
-        ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
-            .enableClassification() // Optional
-            .build()
-
-    private val objectDetector = ObjectDetection.getClient(options)
 
     fun init(
         colorToDetect: Color? = null,

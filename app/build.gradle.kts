@@ -117,8 +117,6 @@ dependencies {
 
     debugImplementation(libs.compose.test.manifest)
     debugImplementation(libs.compose.test.tooling)
-
-    //  implementation(libs.mlkit.detection) TODO K remove?
 }
 
 // TODO K move to separate file
