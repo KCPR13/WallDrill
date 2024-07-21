@@ -27,9 +27,7 @@ data class Color(
     @ColumnInfo(name = "color") val color: String = "",
     @ColumnInfo(name = "selected") val selected: Boolean = false,
 ) {
-    fun getColorObject(): Color {
-        return Color(color.toULong())
-    }
+    fun getColorObject(): Color = Color(color.toULong())
 
     companion object {
         const val TABLE_NAME = "color"

@@ -90,9 +90,9 @@ fun ColorDetection(
                     }
                 },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(PaddingLarge),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingLarge),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Mili),
             ) {
@@ -103,18 +103,18 @@ fun ColorDetection(
 
         Column(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues),
+            Modifier
+                .fillMaxWidth()
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .size(CameraPreviewSize)
-                        .clip(RoundedCornerShape(CornerRadius))
-                        .border(BorderWidth, Mili),
+                Modifier
+                    .size(CameraPreviewSize)
+                    .clip(RoundedCornerShape(CornerRadius))
+                    .border(BorderWidth, Mili),
                 contentAlignment = Alignment.Center,
             ) {
                 CameraPreview(
@@ -124,9 +124,9 @@ fun ColorDetection(
 
                 Ring(
                     modifier =
-                        Modifier
-                            .size(RingSize)
-                            .background(Color.Transparent),
+                    Modifier
+                        .size(RingSize)
+                        .background(Color.Transparent),
                 )
             }
 

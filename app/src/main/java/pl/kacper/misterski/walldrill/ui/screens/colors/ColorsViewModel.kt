@@ -34,41 +34,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ColorsViewModel
-    @Inject
-    constructor(
-        private val colorsRepository: ColorRepository,
-        @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
-    ) :
+@Inject
+constructor(
+    private val colorsRepository: ColorRepository,
+    @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
+) :
     BaseViewModel() {
-        private val _uiState = MutableStateFlow(ColorsUiState())
-        val uiState = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ColorsUiState())
+    val uiState = _uiState.asStateFlow()
 
-        fun fetchColors() {
-            viewModelScope.launch(backgroundDispatcher) {
-                colorsRepository.getAll().onEach { colors ->
-                    val updatedList = colors ?: emptyList()
-                    _uiState.update { it.updateList(updatedList) }
-                }.catch { error ->
-                    Log.e(tag, "fetchColors exception")
-                    error.printStackTrace()
-                    _uiState.update { it.updateList(emptyList()) }
-                }.collect()
-            }
-        }
-
-        fun onItemClick(color: Color) {
-            if (color.selected) return
-            viewModelScope.launch(backgroundDispatcher) {
-                colorsRepository.uncheckSelectedColor()
-                colorsRepository.setColorChecked(color)
-                fetchColors()
-            }
-        }
-
-        fun onRemoveItem(color: Color) {
-            viewModelScope.launch(backgroundDispatcher) {
-                colorsRepository.remove(color)
-                fetchColors()
-            }
+    fun fetchColors() {
+        viewModelScope.launch(backgroundDispatcher) {
+            colorsRepository.getAll().onEach { colors ->
+                val updatedList = colors ?: emptyList()
+                _uiState.update { it.updateList(updatedList) }
+            }.catch { error ->
+                Log.e(tag, "fetchColors exception")
+                error.printStackTrace()
+                _uiState.update { it.updateList(emptyList()) }
+            }.collect()
         }
     }
+
+    fun onItemClick(color: Color) {
+        if (color.selected) return
+        viewModelScope.launch(backgroundDispatcher) {
+            colorsRepository.uncheckSelectedColor()
+            colorsRepository.setColorChecked(color)
+            fetchColors()
+        }
+    }
+
+    fun onRemoveItem(color: Color) {
+        viewModelScope.launch(backgroundDispatcher) {
+            colorsRepository.remove(color)
+            fetchColors()
+        }
+    }
+}

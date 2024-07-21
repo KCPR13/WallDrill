@@ -49,20 +49,20 @@ fun SelectedColor(
 
     Box(
         modifier =
-            mod
-                .clip(RoundedCornerShape(CornerRadius))
-                .drawBehind {
-                    drawRect(size = size, color = color)
-                },
+        mod
+            .clip(RoundedCornerShape(CornerRadius))
+            .drawBehind {
+                drawRect(size = size, color = color)
+            },
     ) {
         onRemove?.let { removeColor ->
             Icon(
                 tint = if (color.isColorDark()) Color.White else Color.Black,
                 modifier =
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(PaddingSmall)
-                        .clickable { removeColor.invoke() },
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(PaddingSmall)
+                    .clickable { removeColor.invoke() },
                 imageVector = Icons.Outlined.Clear,
                 contentDescription = null,
             )

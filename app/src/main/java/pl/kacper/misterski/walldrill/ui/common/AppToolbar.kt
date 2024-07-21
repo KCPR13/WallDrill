@@ -42,10 +42,10 @@ fun AppToolbar(
     CenterAlignedTopAppBar(
         modifier = modifier,
         colors =
-            TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = Color.White,
-                titleContentColor = Color.Black,
-            ),
+        TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = Color.White,
+            titleContentColor = Color.Black,
+        ),
         title = {
             Text(
                 text = stringResource(id = title),

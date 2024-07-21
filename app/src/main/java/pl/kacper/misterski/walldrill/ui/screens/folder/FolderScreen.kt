@@ -48,9 +48,9 @@ fun FolderScreen(modifier: Modifier) {
     ) { paddingValues ->
         Text(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
             text = "TO IMPLEMENT",
             textAlign = TextAlign.Center,
         )

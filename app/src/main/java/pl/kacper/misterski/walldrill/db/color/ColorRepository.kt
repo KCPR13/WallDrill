@@ -20,22 +20,22 @@ import pl.kacper.misterski.walldrill.db.base.BaseDatabaseRepository
 import javax.inject.Inject
 
 class ColorRepository
-    @Inject
-    constructor(private val appDatabase: AppDatabase) :
+@Inject
+constructor(private val appDatabase: AppDatabase) :
     BaseDatabaseRepository<Color, ColorDao>() {
-        override fun getDao() = appDatabase.db.configurationDao()
+    override fun getDao() = appDatabase.db.configurationDao()
 
-        override fun getAll() = daoInstance.getColors()
+    override fun getAll() = daoInstance.getColors()
 
-        override suspend fun remove(entity: Color) = daoInstance.removeColor(entity.color)
+    override suspend fun remove(entity: Color) = daoInstance.removeColor(entity.color)
 
-        override suspend fun insert(toInsert: Color) = daoInstance.insert(toInsert)
+    override suspend fun insert(toInsert: Color) = daoInstance.insert(toInsert)
 
-        suspend fun uncheckSelectedColor() = daoInstance.uncheckSelectedColor()
+    suspend fun uncheckSelectedColor() = daoInstance.uncheckSelectedColor()
 
-        suspend fun setColorChecked(color: Color) = daoInstance.setColorChecked(color.id)
+    suspend fun setColorChecked(color: Color) = daoInstance.setColorChecked(color.id)
 
-        suspend fun hasAnyColorSaved() = daoInstance.getSavedColorsSize() > 0
+    suspend fun hasAnyColorSaved() = daoInstance.getSavedColorsSize() > 0
 
-        fun getSelectedColor() = daoInstance.getSelectedColor()
-    }
+    fun getSelectedColor() = daoInstance.getSelectedColor()
+}

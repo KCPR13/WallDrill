@@ -110,7 +110,7 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
                             Imgproc.contourArea(
                                 contour,
                             )
-                    ) / (Imgproc.arcLength(contour2f, true) * Imgproc.arcLength(contour2f, true))
+                        ) / (Imgproc.arcLength(contour2f, true) * Imgproc.arcLength(contour2f, true))
                 circularity > 0.8 && radius[0] > 10 // Adjust the minimum radius as needed
             }
 

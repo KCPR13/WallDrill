@@ -77,17 +77,17 @@ fun SettingsScreen(
             items(state.value.models) { model ->
                 SettingsItem(
                     modifier =
-                        Modifier
-                            .clickable {
-                                when (model.action) {
-                                    SettingsAction.COLORS ->
-                                        navController.navigate(AppNavigation.COLORS)
-                                    SettingsAction.CALIBRATION ->
-                                        navController.navigate(AppNavigation.CALIBRATION)
-                                }
+                    Modifier
+                        .clickable {
+                            when (model.action) {
+                                SettingsAction.COLORS ->
+                                    navController.navigate(AppNavigation.COLORS)
+                                SettingsAction.CALIBRATION ->
+                                    navController.navigate(AppNavigation.CALIBRATION)
                             }
-                            .padding(PaddingLarge)
-                            .fillMaxWidth(),
+                        }
+                        .padding(PaddingLarge)
+                        .fillMaxWidth(),
                     model = model,
                 )
             }
@@ -104,13 +104,13 @@ private fun SettingsItem(
         modifier,
         shape = RectangleShape,
         elevation =
-            CardDefaults.cardElevation(
-                defaultElevation = CardElevation,
-            ),
+        CardDefaults.cardElevation(
+            defaultElevation = CardElevation,
+        ),
         colors =
-            CardDefaults.cardColors(
-                containerColor = Color.White,
-            ),
+        CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -119,17 +119,17 @@ private fun SettingsItem(
         ) {
             Text(
                 modifier =
-                    Modifier
-                        .padding(PaddingLarge)
-                        .align(Alignment.CenterVertically),
+                Modifier
+                    .padding(PaddingLarge)
+                    .align(Alignment.CenterVertically),
                 fontSize = FontMedium,
                 text = model.title,
             )
             Icon(
                 modifier =
-                    Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(end = PaddingLarge),
+                Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = PaddingLarge),
                 imageVector = Icons.Filled.KeyboardArrowRight,
                 contentDescription = null,
             )

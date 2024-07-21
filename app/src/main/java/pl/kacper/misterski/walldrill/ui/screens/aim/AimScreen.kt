@@ -56,33 +56,33 @@ fun AimScreen(
         Scaffold(
             modifier = modifier,
             floatingActionButton =
-                {
-                    FloatingActionButton(
-                        onClick = {
-                            navController.navigate(AppNavigation.FOLDER)
-                            showBottomBar.invoke(true)
-                        },
-                        containerColor = colorResource(id = R.color.mili),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.KeyboardArrowLeft,
-                            contentDescription = null,
-                        )
-                    }
-                },
+            {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(AppNavigation.FOLDER)
+                        showBottomBar.invoke(true)
+                    },
+                    containerColor = colorResource(id = R.color.mili),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.KeyboardArrowLeft,
+                        contentDescription = null,
+                    )
+                }
+            },
         ) { paddingValues ->
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             ) {
                 Icon(
                     modifier =
-                        Modifier
-                            .align(Alignment.TopStart)
-                            .padding(PaddingExtraLarge)
-                            .clickable { },
+                    Modifier
+                        .align(Alignment.TopStart)
+                        .padding(PaddingExtraLarge)
+                        .clickable { },
                     // TODO K
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,

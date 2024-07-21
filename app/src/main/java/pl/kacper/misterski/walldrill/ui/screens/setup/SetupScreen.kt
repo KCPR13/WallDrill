@@ -55,9 +55,9 @@ fun SetupScreen(modifier: Modifier) {
     ) { paddingValues ->
         Column(
             modifier =
-                modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {

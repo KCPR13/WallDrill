@@ -35,33 +35,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ColorDetectionViewModel
-    @Inject
-    constructor(
-        private val colorRepository: ColorRepository,
-        @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer,
-        @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
-        @MainDispatcher val mainDispatcher: MainCoroutineDispatcher,
-    ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(Color.Black)
-        val uiState = _uiState.asStateFlow()
+@Inject
+constructor(
+    private val colorRepository: ColorRepository,
+    @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer,
+    @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
+    @MainDispatcher val mainDispatcher: MainCoroutineDispatcher,
+) : BaseViewModel() {
+    private val _uiState = MutableStateFlow(Color.Black)
+    val uiState = _uiState.asStateFlow()
 
-        init {
-            colorAnalyzer.init { analyzerResult ->
-                _uiState.update { analyzerResult.color }
-            }
+    init {
+        colorAnalyzer.init { analyzerResult ->
+            _uiState.update { analyzerResult.color }
         }
+    }
 
-        fun saveColor(onColorSaved: () -> Unit) {
-            viewModelScope.launch(backgroundDispatcher) {
-                colorRepository.insert(
-                    pl.kacper.misterski.walldrill.db.color.Color(
-                        color = _uiState.value.value.toString(),
-                        selected = !colorRepository.hasAnyColorSaved(),
-                    ),
-                )
-                withContext(mainDispatcher) {
-                    onColorSaved.invoke()
-                }
+    fun saveColor(onColorSaved: () -> Unit) {
+        viewModelScope.launch(backgroundDispatcher) {
+            colorRepository.insert(
+                pl.kacper.misterski.walldrill.db.color.Color(
+                    color = _uiState.value.value.toString(),
+                    selected = !colorRepository.hasAnyColorSaved(),
+                ),
+            )
+            withContext(mainDispatcher) {
+                onColorSaved.invoke()
             }
         }
     }
+}

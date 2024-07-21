@@ -26,15 +26,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel
-    @Inject
-    constructor() : BaseViewModel() {
-        private val _uiState = MutableStateFlow(SettingsUiState())
-        val uiState = _uiState.asStateFlow()
+@Inject
+constructor() : BaseViewModel() {
+    private val _uiState = MutableStateFlow(SettingsUiState())
+    val uiState = _uiState.asStateFlow()
 
-        fun fetchModels(context: Context) {
-            val COLORDETECTION = SettingsModel(context.getString(R.string.colors), SettingsAction.COLORS)
-            val calibration = SettingsModel(context.getString(R.string.calibration), SettingsAction.CALIBRATION)
+    fun fetchModels(context: Context) {
+        val COLORDETECTION = SettingsModel(context.getString(R.string.colors), SettingsAction.COLORS)
+        val calibration = SettingsModel(context.getString(R.string.calibration), SettingsAction.CALIBRATION)
 
-            _uiState.update { SettingsUiState(listOf(calibration, COLORDETECTION)) }
-        }
+        _uiState.update { SettingsUiState(listOf(calibration, COLORDETECTION)) }
     }
+}

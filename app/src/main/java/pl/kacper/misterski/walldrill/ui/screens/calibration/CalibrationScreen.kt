@@ -93,9 +93,9 @@ fun CalibrationScreen(
         content = { paddingValues ->
             BoxWithConstraints(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             ) {
                 if (calibrationUiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))

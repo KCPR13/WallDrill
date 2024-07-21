@@ -30,7 +30,10 @@ interface ColorDao : BaseDao<Color> {
     suspend fun uncheckSelectedColor(selectedValue: Boolean = false)
 
     @Query("UPDATE $TABLE_NAME SET selected = :selectedValue WHERE id = :colorId")
-    suspend fun setColorChecked(colorId: Int, selectedValue: Boolean = true)
+    suspend fun setColorChecked(
+        colorId: Int,
+        selectedValue: Boolean = true,
+    )
 
     @Query("SELECT COUNT(*) FROM $TABLE_NAME")
     suspend fun getSavedColorsSize(): Int
