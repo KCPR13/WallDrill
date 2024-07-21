@@ -44,13 +44,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            MainScreen(viewModel, rememberNavController())
+        }
         val isGranted = checkCameraPermissionStatus() == PermissionStatus.GRANTED
         viewModel.updatePermissionState(isGranted)
         if (!isGranted) {
             requestFrontCameraPermission()
-        }
-        setContent {
-            MainScreen(viewModel, rememberNavController())
         }
     }
 
