@@ -92,9 +92,9 @@ fun ColorsScreen(
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             val colors = state.value.colors
             if (colors.isEmpty()) {
@@ -102,9 +102,9 @@ fun ColorsScreen(
             } else {
                 LazyVerticalGrid(
                     modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(PaddingLarge),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(PaddingLarge),
                     columns = GridCells.Adaptive(minSize = MinGridSize),
                     horizontalArrangement = Arrangement.spacedBy(PaddingMedium),
                     verticalArrangement = Arrangement.spacedBy(PaddingMedium),
@@ -112,9 +112,9 @@ fun ColorsScreen(
                     items(colors) { color ->
                         SelectedColor(
                             modifier =
-                            Modifier
-                                .size(MaxGridSize)
-                                .clickable { viewModel.onItemClick(color) },
+                                Modifier
+                                    .size(MaxGridSize)
+                                    .clickable { viewModel.onItemClick(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
                             onRemove = { viewModel.onRemoveItem(color) },

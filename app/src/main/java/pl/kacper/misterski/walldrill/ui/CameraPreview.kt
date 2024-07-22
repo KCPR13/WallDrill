@@ -37,7 +37,7 @@ fun CameraPreview(
     scaleType: PreviewView.ScaleType = PreviewView.ScaleType.FILL_CENTER,
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
 ) {
-    var coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val lifecycleOwner =
         LocalLifecycleOwner.current
     AndroidView(
