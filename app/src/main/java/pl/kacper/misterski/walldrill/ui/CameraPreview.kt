@@ -15,11 +15,8 @@
  */
 package pl.kacper.misterski.walldrill.ui
 
-import android.content.Context
 import android.util.Log
-import android.view.Surface
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
@@ -29,22 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.getSystemService
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.domain.extensions.getCameraProvider
 import java.util.concurrent.Executors
-// TODO K cleanup
-
-fun getRotationCompensation(context: Context): Int {
-    val display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-    return when (display.rotation) {
-        Surface.ROTATION_0 -> Surface.ROTATION_0
-        Surface.ROTATION_90 -> Surface.ROTATION_270
-        Surface.ROTATION_180 -> Surface.ROTATION_180
-        Surface.ROTATION_270 -> Surface.ROTATION_90
-        else -> Surface.ROTATION_0
-    }
-}
 
 @Composable
 fun CameraPreview(
@@ -71,7 +55,8 @@ fun CameraPreview(
             val cameraExecutor = Executors.newSingleThreadExecutor()
 
             val imageAnalyzer =
-                ImageAnalysis.Builder()
+                ImageAnalysis
+                    .Builder()
                     .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
                     .build()
                     .also {
@@ -82,7 +67,8 @@ fun CameraPreview(
 
 //            // CameraX Preview UseCase
             val previewUseCase =
-                androidx.camera.core.Preview.Builder()
+                androidx.camera.core.Preview
+                    .Builder()
                     .build()
                     .also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
