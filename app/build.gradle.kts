@@ -6,6 +6,7 @@ plugins {
 	alias(libs.plugins.android.hilt)
 	alias(libs.plugins.spotless)
 	alias(libs.plugins.ktlint)
+	alias(libs.plugins.detekt)
 }
 
 android {
