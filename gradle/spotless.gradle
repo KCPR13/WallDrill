@@ -1,0 +1,37 @@
+spotless {
+	def ktlintVersion = "0.48.0"
+	kotlin {
+		target("**/*.kt")
+		targetExclude("**/build/**/*.kt", '/spotless/**')
+		ktlint(ktlintVersion)
+			.setEditorConfigPath("$rootDir/gradle/.editorconfig")
+		trimTrailingWhitespace()
+		indentWithSpaces()
+		endWithNewline()
+		licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+	}
+	format("kts") {
+		target("**/*.kts")
+		targetExclude("**/build/**/*.kts")
+	}
+}
+
+task generateSpotlessReport {
+	description = 'Runs spotlessCheck and generates a report in spotless-report.txt'
+	group = 'verification'
+
+	doLast {
+		def isWindows = System.getProperty('os.name').toLowerCase().contains('win')
+		def gradlewCommand = isWindows ? 'gradlew.bat' : './gradlew'
+		def outputFile = file("${project.buildDir}/reports/spotless-report.txt")
+		outputFile.parentFile.mkdirs() // Ensure the directory exists
+
+		def processBuilder = new ProcessBuilder(
+			gradlewCommand, "spotlessCheck"
+		)
+		processBuilder.redirectErrorStream(true)
+		processBuilder.redirectOutput(ProcessBuilder.Redirect.to(outputFile))
+		def process = processBuilder.start()
+		process.waitFor()
+	}
+}

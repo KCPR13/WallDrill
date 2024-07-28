@@ -91,12 +91,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'com.diffplug.spotless'
-apply plugin: 'io.gitlab.arturbosch.detekt'
-
-//plugins {
-//    id 'org.jetbrains.kotlin.android' version '1.7.10'
-//}
 
 def openCVersionName = "4.8.0"
 def openCVersionCode = ((4 * 100 + 8) * 100 + 0) * 10 + 0
@@ -122,8 +116,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
 
@@ -165,4 +159,8 @@ android {
 }
 
 dependencies {
+}
+
+tasks.named('lintFix') {
+    enabled = false
 }

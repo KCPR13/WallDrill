@@ -32,7 +32,9 @@ import org.opencv.imgproc.Imgproc
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import pl.kacper.misterski.walldrill.domain.models.AnalyzerResult
 
-class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Analyzer {
+class ColorAnalyzer(
+    private val analyzerMode: AnalyzerMode,
+) : ImageAnalysis.Analyzer {
     companion object {
         const val TAG = "ColorAnalyzer"
     }
@@ -95,7 +97,13 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
         // Find contours
         val contours = ArrayList<MatOfPoint>()
         val hierarchy = Mat()
-        Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        Imgproc.findContours(
+            mask,
+            contours,
+            hierarchy,
+            Imgproc.RETR_EXTERNAL,
+            Imgproc.CHAIN_APPROX_SIMPLE,
+        )
 
         // Filter for circular shapes and a certain size
         val circleContours =
@@ -110,7 +118,13 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
                             Imgproc.contourArea(
                                 contour,
                             )
-                        ) / (Imgproc.arcLength(contour2f, true) * Imgproc.arcLength(contour2f, true))
+                        ) / (
+                        Imgproc.arcLength(contour2f, true) *
+                            Imgproc.arcLength(
+                                contour2f,
+                                true,
+                            )
+                        )
                 circularity > 0.8 && radius[0] > 10 // Adjust the minimum radius as needed
             }
 
@@ -155,6 +169,13 @@ class ColorAnalyzer(private val analyzerMode: AnalyzerMode) : ImageAnalysis.Anal
 //            }
 
         // Log.d(TAG, "detected points: ${result?.size}")
-        return AnalyzerResult(Color.Yellow, emptyList(), result, image.width, image.height, image.imageInfo.rotationDegrees)
+        return AnalyzerResult(
+            Color.Yellow,
+            emptyList(),
+            result,
+            image.width,
+            image.height,
+            image.imageInfo.rotationDegrees,
+        )
     }
 }

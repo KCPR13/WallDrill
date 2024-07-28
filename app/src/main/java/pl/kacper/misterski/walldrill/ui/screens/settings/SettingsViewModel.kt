@@ -32,8 +32,14 @@ constructor() : BaseViewModel() {
     val uiState = _uiState.asStateFlow()
 
     fun fetchModels(context: Context) {
-        val COLORDETECTION = SettingsModel(context.getString(R.string.colors), SettingsAction.COLORS)
-        val calibration = SettingsModel(context.getString(R.string.calibration), SettingsAction.CALIBRATION)
+        val COLORDETECTION = SettingsModel(
+            context.getString(R.string.colors),
+            SettingsAction.COLORS,
+        )
+        val calibration = SettingsModel(
+            context.getString(R.string.calibration),
+            SettingsAction.CALIBRATION,
+        )
 
         _uiState.update { SettingsUiState(listOf(calibration, COLORDETECTION)) }
     }

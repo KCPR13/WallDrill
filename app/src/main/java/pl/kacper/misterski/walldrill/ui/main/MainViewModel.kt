@@ -36,5 +36,7 @@ constructor() : BaseViewModel() {
             )
         }
 
-    fun updateBottomBarVisibility(showBottomBar: Boolean) = _uiState.update { it.copy(showBottomBar = showBottomBar) }
+    fun updateBottomBarVisibility(showBottomBar: Boolean) = _uiState.update {
+        it.copy(showBottomBar = showBottomBar)
+    }
 }
