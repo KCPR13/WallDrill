@@ -47,10 +47,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
@@ -67,8 +64,8 @@ import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
 @Composable
 fun ColorDetection(
     modifier: Modifier,
+    onColorsClick: () -> Unit = {},
     viewModel: ColorDetectionViewModel = viewModel(),
-    navController: NavHostController,
 ) {
     val state = viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -80,19 +77,19 @@ fun ColorDetection(
                 R.string.detect_the_color,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
-            ) { navController.navigate(AppNavigation.COLORS) }
+            ) { onColorsClick.invoke() }
         },
         bottomBar = {
             Button(
                 onClick = {
                     viewModel.saveColor {
-                        navController.navigate(AppNavigation.COLORS)
+                        onColorsClick.invoke()
                     }
                 },
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingLarge),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(PaddingLarge),
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Mili),
             ) {
@@ -103,18 +100,18 @@ fun ColorDetection(
 
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(paddingValues),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .size(CameraPreviewSize)
-                    .clip(RoundedCornerShape(CornerRadius))
-                    .border(BorderWidth, Mili),
+                    Modifier
+                        .size(CameraPreviewSize)
+                        .clip(RoundedCornerShape(CornerRadius))
+                        .border(BorderWidth, Mili),
                 contentAlignment = Alignment.Center,
             ) {
                 CameraPreview(
@@ -124,9 +121,9 @@ fun ColorDetection(
 
                 Ring(
                     modifier =
-                    Modifier
-                        .size(RingSize)
-                        .background(Color.Transparent),
+                        Modifier
+                            .size(RingSize)
+                            .background(Color.Transparent),
                 )
             }
 
@@ -160,6 +157,6 @@ private fun Ring(modifier: Modifier) {
 @Composable
 fun ColorDetectPreview() {
     MaterialTheme {
-        ColorDetection(Modifier, navController = rememberNavController())
+        ColorDetection(Modifier, onColorsClick = {})
     }
 }

@@ -47,10 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
@@ -62,7 +59,8 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 @Composable
 fun ColorsScreen(
     modifier: Modifier,
-    navController: NavHostController,
+    onSettingsClick: () -> Unit,
+    onColorDetectionClick: () -> Unit,
     viewModel: ColorsViewModel = viewModel(),
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -76,11 +74,11 @@ fun ColorsScreen(
                 R.string.colors,
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
-            ) { navController.navigate(AppNavigation.SETTINGS) }
+            ) { onSettingsClick.invoke() }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(AppNavigation.COLOR_DETECTION) },
+                onClick = { onColorDetectionClick.invoke() },
                 containerColor = colorResource(id = R.color.mili),
             ) {
                 Icon(
@@ -92,9 +90,9 @@ fun ColorsScreen(
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             val colors = state.value.colors
             if (colors.isEmpty()) {
@@ -102,9 +100,9 @@ fun ColorsScreen(
             } else {
                 LazyVerticalGrid(
                     modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(PaddingLarge),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(PaddingLarge),
                     columns = GridCells.Adaptive(minSize = MinGridSize),
                     horizontalArrangement = Arrangement.spacedBy(PaddingMedium),
                     verticalArrangement = Arrangement.spacedBy(PaddingMedium),
@@ -112,9 +110,9 @@ fun ColorsScreen(
                     items(colors) { color ->
                         SelectedColor(
                             modifier =
-                            Modifier
-                                .size(MaxGridSize)
-                                .clickable { viewModel.onItemClick(color) },
+                                Modifier
+                                    .size(MaxGridSize)
+                                    .clickable { viewModel.onItemClick(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
                             onRemove = { viewModel.onRemoveItem(color) },
@@ -144,6 +142,6 @@ private fun EmptyColorsPlaceHolder(modifier: Modifier) {
 @Composable
 fun ColorsScreenPreview() {
     MaterialTheme {
-        ColorsScreen(modifier = Modifier, navController = rememberNavController())
+        ColorsScreen(modifier = Modifier, onSettingsClick = {}, onColorDetectionClick = {})
     }
 }

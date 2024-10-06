@@ -41,12 +41,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.opencv.core.Rect
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
@@ -56,8 +53,8 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 @Composable
 fun CalibrationScreen(
     modifier: Modifier,
+    onSettingsClick: () -> Unit = {},
     viewModel: CalibrationViewModel = hiltViewModel(),
-    navController: NavHostController,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val calibrationUiState by viewModel.uiState.collectAsState()
@@ -70,7 +67,7 @@ fun CalibrationScreen(
                 message = snackbarMessage,
                 withDismissAction = true,
             )
-            navController.navigate(AppNavigation.SETTINGS)
+            onSettingsClick.invoke()
             // TODO  dismiss the screen when the snackbar finishes
         }
     }
@@ -86,16 +83,16 @@ fun CalibrationScreen(
                 Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior,
                 onBackPressedClick = {
-                    navController.navigate(AppNavigation.SETTINGS)
+                    onSettingsClick.invoke()
                 },
             )
         },
         content = { paddingValues ->
             BoxWithConstraints(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 if (calibrationUiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
@@ -121,6 +118,7 @@ fun CalibrationScreen(
                     if (rect != null) {
                         val viewWidth = constraints.maxWidth
                         val viewHeight = constraints.maxHeight
+                        Log.d("Kacpur", "viewWidth: $viewWidth, viewHeight: $viewHeight")
                         val rotationDegrees = calibrationUiState.rotationDegrees
                         DisplayRectangle(
                             Modifier
@@ -153,11 +151,13 @@ fun transformCoordinates(
             val newHeight = rect.width
             return Rect(newX, newY, newWidth, newHeight)
         }
+
         180 -> {
             val newX = imageWidth - rect.x - rect.width
             val newY = imageHeight - rect.y - rect.height
             return Rect(newX, newY, rect.width, rect.height)
         }
+
         270 -> {
             val newX = rect.y
             val newY = imageWidth - rect.x - rect.width
@@ -165,6 +165,7 @@ fun transformCoordinates(
             val newHeight = rect.width
             return Rect(newX, newY, newWidth, newHeight)
         }
+
         else -> return rect // 0 lub 360 stopni
     }
 }
@@ -268,7 +269,7 @@ fun CalibrationScreenPreview() {
     MaterialTheme {
         CalibrationScreen(
             modifier = Modifier,
-            navController = rememberNavController(),
+            onSettingsClick = {},
         )
     }
 }

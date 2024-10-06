@@ -25,85 +25,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import pl.kacper.misterski.walldrill.ui.AppNavigation
-import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
-import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationScreen
-import pl.kacper.misterski.walldrill.ui.screens.colordetection.ColorDetection
-import pl.kacper.misterski.walldrill.ui.screens.colors.ColorsScreen
-import pl.kacper.misterski.walldrill.ui.screens.folder.FolderScreen
-import pl.kacper.misterski.walldrill.ui.screens.settings.SettingsScreen
-import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
+import pl.kacper.misterski.walldrill.ui.navigation.AppNavHost
+import pl.kacper.misterski.walldrill.ui.navigation.NavigationItem
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @Composable
 fun MainScreen(
+    modifier: Modifier = Modifier,
     viewModel: MainViewModel,
-    navController: NavHostController,
+    navController: NavHostController = rememberNavController(),
 ) {
     val mainUiState: MainUiState by viewModel.uiState.collectAsState()
-
     Scaffold(
-        Modifier.safeContentPadding(),
+        modifier.safeContentPadding(),
         bottomBar = {
             AnimatedBottomBar(
                 show = mainUiState.showBottomBar,
                 onSettingsClick = {
-                    navController.navigate(AppNavigation.SETTINGS)
+                    navController.navigate(NavigationItem.Settings.route)
                 },
                 onAimClick = {
                     viewModel.updateBottomBarVisibility(false)
-                    navController.navigate(AppNavigation.AIM)
+                    navController.navigate(NavigationItem.Aim.route)
                 },
-                onFolderClick = { navController.navigate(AppNavigation.FOLDER) },
+                onFolderClick = { navController.navigate(NavigationItem.Folder.route) },
             )
         },
     ) { paddingValues ->
 
-        val destination =
+        val startDestination =
             if (mainUiState.permissionGranted) {
-                AppNavigation.SETTINGS // GO TO MAIN SCREEN
+                NavigationItem.Settings.route
             } else {
-                AppNavigation.SETUP
+                NavigationItem.Setup.route
             }
 
         val contentModifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
 
-        NavHost(navController = navController, startDestination = destination) {
-            composable(AppNavigation.CALIBRATION) {
-                CalibrationScreen(
-                    contentModifier,
-                    navController = navController,
-                )
-            }
-            composable(AppNavigation.COLOR_DETECTION) {
-                ColorDetection(
-                    contentModifier,
-                    navController = navController,
-                )
-            }
-            composable(AppNavigation.SETUP) { SetupScreen(contentModifier) }
-            composable(AppNavigation.SETTINGS) {
-                SettingsScreen(
-                    contentModifier,
-                    navController = navController,
-                )
-            }
-            composable(AppNavigation.FOLDER) { FolderScreen(contentModifier) }
-            composable(AppNavigation.AIM) {
-                AimScreen(contentModifier, navController, showBottomBar = { showBottomBar ->
-                    viewModel.updateBottomBarVisibility(showBottomBar)
-                })
-            }
-            composable(AppNavigation.COLORS) {
-                ColorsScreen(
-                    contentModifier,
-                    navController = navController,
-                )
-            }
-        }
+        AppNavHost(
+            modifier = contentModifier,
+            navController = navController,
+            startDestination = startDestination,
+        )
     }
 }
 
@@ -111,6 +75,8 @@ fun MainScreen(
 @Composable
 fun MainScreenPreview() {
     WallDrillTheme {
-        MainScreen(viewModel = viewModel(), rememberNavController())
+        MainScreen(
+            viewModel = viewModel(),
+        )
     }
 }

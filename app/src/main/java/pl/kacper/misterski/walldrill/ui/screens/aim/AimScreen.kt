@@ -39,50 +39,46 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 
 @Composable
 fun AimScreen(
-    modifier: Modifier,
-    navController: NavHostController,
-    showBottomBar: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    onFolderClick: () -> Unit = {},
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
             modifier = modifier,
             floatingActionButton =
-            {
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate(AppNavigation.FOLDER)
-                        showBottomBar.invoke(true)
-                    },
-                    containerColor = colorResource(id = R.color.mili),
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowLeft,
-                        contentDescription = null,
-                    )
-                }
-            },
+                {
+                    FloatingActionButton(
+                        onClick = {
+                            onFolderClick.invoke()
+                            // showBottomBar.invoke(true) TODO K needed?
+                        },
+                        containerColor = colorResource(id = R.color.mili),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.KeyboardArrowLeft,
+                            contentDescription = null,
+                        )
+                    }
+                },
         ) { paddingValues ->
             Box(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 Icon(
                     modifier =
-                    Modifier
-                        .align(Alignment.TopStart)
-                        .padding(PaddingExtraLarge)
-                        .clickable { },
+                        Modifier
+                            .align(Alignment.TopStart)
+                            .padding(PaddingExtraLarge)
+                            .clickable { },
                     // TODO K
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
@@ -121,6 +117,6 @@ private fun AimPoint(
 @Composable
 fun AimScreenPreview() {
     MaterialTheme {
-        AimScreen(modifier = Modifier, navController = rememberNavController(), showBottomBar = {})
+        AimScreen(modifier = Modifier, onFolderClick = {})
     }
 }

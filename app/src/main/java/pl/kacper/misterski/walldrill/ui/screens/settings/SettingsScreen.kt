@@ -43,10 +43,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.ui.AppNavigation
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.theme.CardElevation
 import pl.kacper.misterski.walldrill.ui.theme.FontMedium
@@ -56,8 +53,9 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
+    onColorsClick: () -> Unit = {},
+    onCalibrationClick: () -> Unit = {},
     viewModel: SettingsViewModel = viewModel(),
-    navController: NavHostController,
 ) {
     val state = viewModel.uiState.collectAsState()
     viewModel.fetchModels(LocalContext.current)
@@ -77,17 +75,17 @@ fun SettingsScreen(
             items(state.value.models) { model ->
                 SettingsItem(
                     modifier =
-                    Modifier
-                        .clickable {
-                            when (model.action) {
-                                SettingsAction.COLORS ->
-                                    navController.navigate(AppNavigation.COLORS)
-                                SettingsAction.CALIBRATION ->
-                                    navController.navigate(AppNavigation.CALIBRATION)
-                            }
-                        }
-                        .padding(PaddingLarge)
-                        .fillMaxWidth(),
+                        Modifier
+                            .clickable {
+                                when (model.action) {
+                                    SettingsAction.COLORS ->
+                                        onColorsClick.invoke()
+
+                                    SettingsAction.CALIBRATION ->
+                                        onCalibrationClick.invoke()
+                                }
+                            }.padding(PaddingLarge)
+                            .fillMaxWidth(),
                     model = model,
                 )
             }
@@ -104,13 +102,13 @@ private fun SettingsItem(
         modifier,
         shape = RectangleShape,
         elevation =
-        CardDefaults.cardElevation(
-            defaultElevation = CardElevation,
-        ),
+            CardDefaults.cardElevation(
+                defaultElevation = CardElevation,
+            ),
         colors =
-        CardDefaults.cardColors(
-            containerColor = Color.White,
-        ),
+            CardDefaults.cardColors(
+                containerColor = Color.White,
+            ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -119,17 +117,17 @@ private fun SettingsItem(
         ) {
             Text(
                 modifier =
-                Modifier
-                    .padding(PaddingLarge)
-                    .align(Alignment.CenterVertically),
+                    Modifier
+                        .padding(PaddingLarge)
+                        .align(Alignment.CenterVertically),
                 fontSize = FontMedium,
                 text = model.title,
             )
             Icon(
                 modifier =
-                Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(end = PaddingLarge),
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = PaddingLarge),
                 imageVector = Icons.Filled.KeyboardArrowRight,
                 contentDescription = null,
             )
@@ -141,6 +139,6 @@ private fun SettingsItem(
 @Composable
 fun SettingsScreenPreview() {
     MaterialTheme {
-        SettingsScreen(navController = rememberNavController())
+        SettingsScreen(onColorsClick = {}, onCalibrationClick = {})
     }
 }
