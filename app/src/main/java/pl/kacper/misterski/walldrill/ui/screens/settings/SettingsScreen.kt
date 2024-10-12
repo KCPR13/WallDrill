@@ -34,15 +34,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.theme.CardElevation
@@ -55,11 +52,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     onColorsClick: () -> Unit = {},
     onCalibrationClick: () -> Unit = {},
-    viewModel: SettingsViewModel = viewModel(),
+    uiState: SettingsUiState,
 ) {
-    val state = viewModel.uiState.collectAsState()
-    viewModel.fetchModels(LocalContext.current)
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier,
@@ -72,7 +66,7 @@ fun SettingsScreen(
         },
     ) { paddingValues ->
         LazyColumn(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            items(state.value.models) { model ->
+            items(uiState.models) { model ->
                 SettingsItem(
                     modifier =
                         Modifier
@@ -139,6 +133,11 @@ private fun SettingsItem(
 @Composable
 fun SettingsScreenPreview() {
     MaterialTheme {
-        SettingsScreen(onColorsClick = {}, onCalibrationClick = {})
+        SettingsScreen(
+            onColorsClick = {},
+            onCalibrationClick = {},
+            modifier = TODO(),
+            uiState = TODO(),
+        )
     }
 }

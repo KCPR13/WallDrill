@@ -22,7 +22,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -34,6 +33,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.kacper.misterski.walldrill.ui.main.MainScreen
+import pl.kacper.misterski.walldrill.ui.main.MainUiState
 
 @RunWith(AndroidJUnit4::class)
 class AppNavigationTest : TestCase() {
@@ -53,7 +53,11 @@ class AppNavigationTest : TestCase() {
         androidComposeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
-            MainScreen(viewModel = viewModel(), navController = navController)
+            MainScreen(
+                navController = navController,
+                uiState = MainUiState(),
+                onAimClick = {},
+            )
         }
     }
 

@@ -37,7 +37,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -46,8 +45,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kacper.misterski.walldrill.R
+import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
@@ -59,13 +58,13 @@ import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 @Composable
 fun ColorsScreen(
     modifier: Modifier,
+    uiState: ColorsUiState,
     onSettingsClick: () -> Unit,
     onColorDetectionClick: () -> Unit,
-    viewModel: ColorsViewModel = viewModel(),
+    onRemoveItem: (Color) -> Unit,
+    onItemClick: (Color) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val state = viewModel.uiState.collectAsState()
-    viewModel.fetchColors()
 
     Scaffold(
         modifier,
@@ -94,7 +93,7 @@ fun ColorsScreen(
                     .fillMaxSize()
                     .padding(paddingValues),
         ) {
-            val colors = state.value.colors
+            val colors = uiState.colors
             if (colors.isEmpty()) {
                 EmptyColorsPlaceHolder(modifier = Modifier.align(Center))
             } else {
@@ -112,10 +111,10 @@ fun ColorsScreen(
                             modifier =
                                 Modifier
                                     .size(MaxGridSize)
-                                    .clickable { viewModel.onItemClick(color) },
+                                    .clickable { onItemClick.invoke(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
-                            onRemove = { viewModel.onRemoveItem(color) },
+                            onRemove = { onRemoveItem.invoke(color) },
                         )
                     }
                 }
@@ -142,6 +141,13 @@ private fun EmptyColorsPlaceHolder(modifier: Modifier) {
 @Composable
 fun ColorsScreenPreview() {
     MaterialTheme {
-        ColorsScreen(modifier = Modifier, onSettingsClick = {}, onColorDetectionClick = {})
+        ColorsScreen(
+            modifier = Modifier,
+            onSettingsClick = {},
+            onColorDetectionClick = {},
+            uiState = ColorsUiState(emptyList()),
+            onRemoveItem = {},
+            onItemClick = {},
+        )
     }
 }

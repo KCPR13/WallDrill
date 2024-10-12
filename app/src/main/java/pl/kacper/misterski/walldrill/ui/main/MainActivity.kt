@@ -24,6 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import pl.kacper.misterski.walldrill.domain.enums.PermissionStatus
 
@@ -44,7 +45,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen(viewModel = viewModel)
+            val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+            MainScreen(
+                uiState = uiState,
+                onAimClick = { viewModel.updateBottomBarVisibility(false) },
+            )
         }
         val isGranted = checkCameraPermissionStatus() == PermissionStatus.GRANTED
         viewModel.updatePermissionState(isGranted)

@@ -35,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,8 +45,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kacper.misterski.walldrill.R
+import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
@@ -64,10 +64,11 @@ import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
 @Composable
 fun ColorDetection(
     modifier: Modifier,
-    onColorsClick: () -> Unit = {},
-    viewModel: ColorDetectionViewModel = viewModel(),
+    onColorsClick: () -> Unit,
+    onSaveColor: () -> Unit,
+    uiState: Color,
+    colorAnalyzer: ColorAnalyzer,
 ) {
-    val state = viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -82,9 +83,8 @@ fun ColorDetection(
         bottomBar = {
             Button(
                 onClick = {
-                    viewModel.saveColor {
-                        onColorsClick.invoke()
-                    }
+                    onSaveColor.invoke()
+                    onColorsClick.invoke()
                 },
                 modifier =
                     Modifier
@@ -115,7 +115,7 @@ fun ColorDetection(
                 contentAlignment = Alignment.Center,
             ) {
                 CameraPreview(
-                    analyzer = viewModel.colorAnalyzer,
+                    analyzer = colorAnalyzer,
                     cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
                 )
 
@@ -133,7 +133,7 @@ fun ColorDetection(
             )
             SelectedColor(
                 modifier = Modifier.size(SelectedColorSize),
-                color = state.value,
+                color = uiState,
                 drawBorder = true,
             )
         }
@@ -157,6 +157,12 @@ private fun Ring(modifier: Modifier) {
 @Composable
 fun ColorDetectPreview() {
     MaterialTheme {
-        ColorDetection(Modifier, onColorsClick = {})
+        ColorDetection(
+            Modifier,
+            onColorsClick = {},
+            onSaveColor = { },
+            uiState = Color.Red,
+            colorAnalyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
+        )
     }
 }

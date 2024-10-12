@@ -19,49 +19,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.core.di.BackgroundDispatcher
 import pl.kacper.misterski.walldrill.core.di.DetectColorAnalyzer
-import pl.kacper.misterski.walldrill.core.di.MainDispatcher
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import javax.inject.Inject
 
 @HiltViewModel
 class ColorDetectionViewModel
-@Inject
-constructor(
-    private val colorRepository: ColorRepository,
-    @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer,
-    @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
-    @MainDispatcher val mainDispatcher: MainCoroutineDispatcher,
-) : BaseViewModel() {
-    private val _uiState = MutableStateFlow(Color.Black)
-    val uiState = _uiState.asStateFlow()
+    @Inject
+    constructor(
+        private val colorRepository: ColorRepository,
+        @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer,
+        @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
+    ) : BaseViewModel() {
+        private val _uiState = MutableStateFlow(Color.Black)
+        val uiState = _uiState.asStateFlow()
 
-    init {
-        colorAnalyzer.init { analyzerResult ->
-            _uiState.update { analyzerResult.color }
+        init {
+            colorAnalyzer.init { analyzerResult ->
+                _uiState.update { analyzerResult.color }
+            }
         }
-    }
 
-    fun saveColor(onColorSaved: () -> Unit) {
-        viewModelScope.launch(backgroundDispatcher) {
-            colorRepository.insert(
-                pl.kacper.misterski.walldrill.db.color.Color(
-                    color = _uiState.value.value.toString(),
-                    selected = !colorRepository.hasAnyColorSaved(),
-                ),
-            )
-            withContext(mainDispatcher) {
-                onColorSaved.invoke()
+        fun saveColor() {
+            CoroutineScope(backgroundDispatcher).launch {
+                colorRepository.insert(
+                    pl.kacper.misterski.walldrill.db.color.Color(
+                        color = _uiState.value.value.toString(),
+                        selected = !colorRepository.hasAnyColorSaved(),
+                    ),
+                )
             }
         }
     }
-}

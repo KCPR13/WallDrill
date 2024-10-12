@@ -28,8 +28,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,10 +38,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.opencv.core.Rect
 import pl.kacper.misterski.walldrill.R
+import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
@@ -54,16 +53,16 @@ import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 fun CalibrationScreen(
     modifier: Modifier,
     onSettingsClick: () -> Unit = {},
-    viewModel: CalibrationViewModel = hiltViewModel(),
+    uiState: CalibrationUiState,
+    analyzer: ColorAnalyzer,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val calibrationUiState by viewModel.uiState.collectAsState()
     val snackbarScope = rememberCoroutineScope()
 
-    calibrationUiState.snackbarMessage?.let { message ->
+    uiState.snackbarMessage?.let { message ->
         val snackbarMessage = stringResource(message)
         snackbarScope.launch {
-            calibrationUiState.snackbarHostState.showSnackbar(
+            uiState.snackbarHostState.showSnackbar(
                 message = snackbarMessage,
                 withDismissAction = true,
             )
@@ -75,7 +74,7 @@ fun CalibrationScreen(
     Scaffold(
         modifier = modifier,
         snackbarHost = {
-            SnackbarHost(hostState = calibrationUiState.snackbarHostState)
+            SnackbarHost(hostState = uiState.snackbarHostState)
         },
         topBar = {
             AppToolbar(
@@ -94,17 +93,17 @@ fun CalibrationScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
             ) {
-                if (calibrationUiState.progress) {
+                if (uiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
                 } else {
                     CameraPreview(
                         modifier = Modifier.fillMaxSize(),
-                        analyzer = viewModel.colorAnalyzer,
+                        analyzer = analyzer,
                         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
                     )
 
                     val points =
-                        calibrationUiState.detectedPoints.map {
+                        uiState.detectedPoints.map {
                             Pair(
                                 it.first.toFloat(),
                                 it.second.toFloat
@@ -114,18 +113,18 @@ fun CalibrationScreen(
 
                     Log.d("Kacpur", "detected points: ${points.size}")
 
-                    val rect = calibrationUiState.rect
+                    val rect = uiState.rect
                     if (rect != null) {
                         val viewWidth = constraints.maxWidth
                         val viewHeight = constraints.maxHeight
                         Log.d("Kacpur", "viewWidth: $viewWidth, viewHeight: $viewHeight")
-                        val rotationDegrees = calibrationUiState.rotationDegrees
+                        val rotationDegrees = uiState.rotationDegrees
                         DisplayRectangle(
                             Modifier
                                 .fillMaxSize(),
                             rect,
-                            calibrationUiState.width,
-                            calibrationUiState.hight,
+                            uiState.width,
+                            uiState.hight,
                             viewWidth,
                             viewHeight,
                             rotationDegrees,
@@ -270,6 +269,8 @@ fun CalibrationScreenPreview() {
         CalibrationScreen(
             modifier = Modifier,
             onSettingsClick = {},
+            uiState = CalibrationUiState(),
+            analyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
         )
     }
 }

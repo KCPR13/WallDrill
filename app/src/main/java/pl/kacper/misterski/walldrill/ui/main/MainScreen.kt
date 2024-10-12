@@ -19,11 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.ui.navigation.AppNavHost
@@ -33,20 +30,20 @@ import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel,
+    uiState: MainUiState,
+    onAimClick: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
-    val mainUiState: MainUiState by viewModel.uiState.collectAsState()
     Scaffold(
         modifier.safeContentPadding(),
         bottomBar = {
             AnimatedBottomBar(
-                show = mainUiState.showBottomBar,
+                show = uiState.showBottomBar,
                 onSettingsClick = {
                     navController.navigate(NavigationItem.Settings.route)
                 },
                 onAimClick = {
-                    viewModel.updateBottomBarVisibility(false)
+                    onAimClick.invoke()
                     navController.navigate(NavigationItem.Aim.route)
                 },
                 onFolderClick = { navController.navigate(NavigationItem.Folder.route) },
@@ -55,7 +52,7 @@ fun MainScreen(
     ) { paddingValues ->
 
         val startDestination =
-            if (mainUiState.permissionGranted) {
+            if (uiState.permissionGranted) {
                 NavigationItem.Settings.route
             } else {
                 NavigationItem.Setup.route
@@ -76,7 +73,8 @@ fun MainScreen(
 fun MainScreenPreview() {
     WallDrillTheme {
         MainScreen(
-            viewModel = viewModel(),
+            uiState = MainUiState(),
+            onAimClick = { },
         )
     }
 }

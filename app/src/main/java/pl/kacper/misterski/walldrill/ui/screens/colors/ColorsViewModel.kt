@@ -16,17 +16,18 @@
 package pl.kacper.misterski.walldrill.ui.screens.colors
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.core.di.BackgroundDispatcher
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
@@ -34,41 +35,52 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ColorsViewModel
-@Inject
-constructor(
-    private val colorsRepository: ColorRepository,
-    @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
-) :
-    BaseViewModel() {
-    private val _uiState = MutableStateFlow(ColorsUiState())
-    val uiState = _uiState.asStateFlow()
+    @Inject
+    constructor(
+        private val colorsRepository: ColorRepository,
+        @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(ColorsUiState())
+        val uiState =
+            _uiState
+                .onStart {
+                    fetchColors() // TODO K checkIfWorks
+                }.stateIn(
+                    viewModelScope,
+                    started =
+                        kotlinx.coroutines.flow.SharingStarted
+                            .WhileSubscribed(5000),
+                    initialValue = ColorsUiState(),
+                )
 
-    fun fetchColors() {
-        viewModelScope.launch(backgroundDispatcher) {
-            colorsRepository.getAll().onEach { colors ->
-                val updatedList = colors ?: emptyList()
-                _uiState.update { it.updateList(updatedList) }
-            }.catch { error ->
-                Log.e(tag, "fetchColors exception")
-                error.printStackTrace()
-                _uiState.update { it.updateList(emptyList()) }
-            }.collect()
+        private fun fetchColors() {
+            viewModelScope.launch(backgroundDispatcher) {
+                colorsRepository
+                    .getAll()
+                    .onEach { colors ->
+                        val updatedList = colors ?: emptyList()
+                        _uiState.update { it.updateList(updatedList) }
+                    }.catch { error ->
+                        Log.e("ColorsViewModel", "fetchColors exception")
+                        error.printStackTrace()
+                        _uiState.update { it.updateList(emptyList()) }
+                    }.collect()
+            }
+        }
+
+        fun onItemClick(color: Color) {
+            if (color.selected) return
+            viewModelScope.launch(backgroundDispatcher) {
+                colorsRepository.uncheckSelectedColor()
+                colorsRepository.setColorChecked(color)
+                fetchColors()
+            }
+        }
+
+        fun onRemoveItem(color: Color) {
+            viewModelScope.launch(backgroundDispatcher) {
+                colorsRepository.remove(color)
+                fetchColors()
+            }
         }
     }
-
-    fun onItemClick(color: Color) {
-        if (color.selected) return
-        viewModelScope.launch(backgroundDispatcher) {
-            colorsRepository.uncheckSelectedColor()
-            colorsRepository.setColorChecked(color)
-            fetchColors()
-        }
-    }
-
-    fun onRemoveItem(color: Color) {
-        viewModelScope.launch(backgroundDispatcher) {
-            colorsRepository.remove(color)
-            fetchColors()
-        }
-    }
-}
