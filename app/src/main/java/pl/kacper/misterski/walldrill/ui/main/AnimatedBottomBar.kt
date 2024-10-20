@@ -18,6 +18,7 @@ package pl.kacper.misterski.walldrill.ui.main
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
@@ -31,7 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
@@ -88,12 +89,17 @@ fun BottomBarAction(
             modifier = Modifier.size(BottomBarIconSize),
             painter = painterResource(id = icon),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(Color.Black),
+            colorFilter =
+                if (isSystemInDarkTheme()) {
+                    ColorFilter.tint(Color.White)
+                } else {
+                    ColorFilter.tint(Color.Black)
+                },
         )
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun AnimatedBottomBarPreview() {
     WallDrillTheme {

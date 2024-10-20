@@ -28,7 +28,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,15 +35,15 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.theme.CardElevation
 import pl.kacper.misterski.walldrill.ui.theme.FontMedium
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,10 +98,10 @@ private fun SettingsItem(
             CardDefaults.cardElevation(
                 defaultElevation = CardElevation,
             ),
-        colors =
-            CardDefaults.cardColors(
-                containerColor = Color.White,
-            ),
+//        colors = TODO K remove?
+//            CardDefaults.cardColors(
+//                containerColor = Color.White,
+//            ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -129,10 +128,10 @@ private fun SettingsItem(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun SettingsScreenPreview() {
-    MaterialTheme {
+    WallDrillTheme {
         SettingsScreen(
             onColorsClick = {},
             onCalibrationClick = {},

@@ -29,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,7 +43,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
 import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
@@ -55,10 +54,11 @@ import pl.kacper.misterski.walldrill.ui.theme.BorderWidth
 import pl.kacper.misterski.walldrill.ui.theme.CameraPreviewSize
 import pl.kacper.misterski.walldrill.ui.theme.CornerRadius
 import pl.kacper.misterski.walldrill.ui.theme.FontLarge
-import pl.kacper.misterski.walldrill.ui.theme.Mili
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 import pl.kacper.misterski.walldrill.ui.theme.RingSize
 import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
+import pl.kacper.misterski.walldrill.ui.theme.primaryDark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,7 +91,7 @@ fun ColorDetection(
                         .fillMaxWidth()
                         .padding(PaddingLarge),
                 shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = Mili),
+                colors = ButtonDefaults.buttonColors(containerColor = primaryDark),
             ) {
                 Text(text = stringResource(R.string.save))
             }
@@ -111,7 +111,7 @@ fun ColorDetection(
                     Modifier
                         .size(CameraPreviewSize)
                         .clip(RoundedCornerShape(CornerRadius))
-                        .border(BorderWidth, Mili),
+                        .border(BorderWidth, primaryDark),
                 contentAlignment = Alignment.Center,
             ) {
                 CameraPreview(
@@ -153,10 +153,10 @@ private fun Ring(modifier: Modifier) {
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun ColorDetectPreview() {
-    MaterialTheme {
+    WallDrillTheme {
         ColorDetection(
             Modifier,
             onColorsClick = {},

@@ -29,10 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import pl.kacper.misterski.walldrill.domain.extensions.isColorDark
 import pl.kacper.misterski.walldrill.ui.theme.CornerRadius
-import pl.kacper.misterski.walldrill.ui.theme.Mili
 import pl.kacper.misterski.walldrill.ui.theme.PaddingSmall
+import pl.kacper.misterski.walldrill.ui.theme.primaryDark
 
 @Composable
 fun SelectedColor(
@@ -44,25 +43,25 @@ fun SelectedColor(
     var mod = modifier
 
     if (drawBorder) {
-        mod = mod.border(PaddingSmall, Mili)
+        mod = mod.border(PaddingSmall, primaryDark)
     }
 
     Box(
         modifier =
-        mod
-            .clip(RoundedCornerShape(CornerRadius))
-            .drawBehind {
-                drawRect(size = size, color = color)
-            },
+            mod
+                .clip(RoundedCornerShape(CornerRadius))
+                .drawBehind {
+                    drawRect(size = size, color = color)
+                },
     ) {
         onRemove?.let { removeColor ->
             Icon(
-                tint = if (color.isColorDark()) Color.White else Color.Black,
+                //  tint = if (color.isColorDark()) Color.White else Color.Black, TODO K remove?
                 modifier =
-                Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(PaddingSmall)
-                    .clickable { removeColor.invoke() },
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(PaddingSmall)
+                        .clickable { removeColor.invoke() },
                 imageVector = Icons.Outlined.Clear,
                 contentDescription = null,
             )

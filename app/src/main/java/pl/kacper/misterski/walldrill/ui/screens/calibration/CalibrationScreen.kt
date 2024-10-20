@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.TopAppBarDefaults
@@ -37,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import kotlinx.coroutines.launch
 import org.opencv.core.Rect
 import pl.kacper.misterski.walldrill.R
@@ -46,6 +45,7 @@ import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 // TODO K cleanup
 @OptIn(ExperimentalMaterial3Api::class)
@@ -262,10 +262,10 @@ fun DisplayRectangle(
 //        )
 //    }
 // }
-@Preview
+@PreviewLightDark
 @Composable
 fun CalibrationScreenPreview() {
-    MaterialTheme {
+    WallDrillTheme {
         CalibrationScreen(
             modifier = Modifier,
             onSettingsClick = {},

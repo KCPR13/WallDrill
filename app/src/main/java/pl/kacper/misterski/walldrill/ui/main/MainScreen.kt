@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import pl.kacper.misterski.walldrill.ui.navigation.AppNavHost
@@ -68,7 +68,7 @@ fun MainScreen(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun MainScreenPreview() {
     WallDrillTheme {

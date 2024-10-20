@@ -16,24 +16,24 @@
 package pl.kacper.misterski.walldrill.ui.common
 
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import pl.kacper.misterski.walldrill.ui.theme.Mili
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
+import pl.kacper.misterski.walldrill.ui.theme.primaryDark
 
 @Composable
 fun AppProgress(modifier: Modifier) {
     CircularProgressIndicator(
         modifier = modifier,
-        color = Mili,
+        color = primaryDark,
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun AppProgressPreview() {
-    MaterialTheme {
+    WallDrillTheme {
         AppProgress(Modifier)
     }
 }

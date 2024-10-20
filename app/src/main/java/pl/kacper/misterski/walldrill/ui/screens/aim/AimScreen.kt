@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -36,12 +35,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @Composable
 fun AimScreen(
@@ -113,10 +113,10 @@ private fun AimPoint(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 fun AimScreenPreview() {
-    MaterialTheme {
+    WallDrillTheme {
         AimScreen(modifier = Modifier, onFolderClick = {})
     }
 }
