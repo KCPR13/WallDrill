@@ -1,10 +1,13 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.android.kapt)
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
-//    alias(libs.plugins.detekt)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -69,8 +72,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -101,6 +104,7 @@ dependencies {
 
 //    Hilt
     implementation(libs.hilt)
+    implementation(libs.androidx.ui.text.google.fonts)
     kapt(libs.hiltKapt)
 
 //    Room
@@ -129,4 +133,34 @@ dependencies {
 
     debugImplementation(libs.compose.test.manifest)
     debugImplementation(libs.compose.test.tooling)
+
+    implementation(libs.kotlinx.serialization.json)
+}
+
+subprojects {
+    afterEvaluate {
+        tasks.named("preBuild") {
+            dependsOn("spotlessApply")
+        }
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8"
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        reports {
+            xml {
+                required.set(true)
+                outputLocation.set(file("build/reports/detekt/detekt-report.xml"))
+            }
+            html {
+                required.set(true)
+                outputLocation.set(file("build/reports/detekt/detekt-report.html"))
+            }
+        }
+    }
 }
