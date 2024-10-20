@@ -78,7 +78,6 @@ fun ColorsScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onColorDetectionClick.invoke() },
-                containerColor = colorResource(id = R.color.mili),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Add,

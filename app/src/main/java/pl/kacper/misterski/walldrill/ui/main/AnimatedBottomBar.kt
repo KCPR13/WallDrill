@@ -65,7 +65,6 @@ fun AnimatedBottomBar(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = onAimClick,
-                    containerColor = colorResource(id = R.color.mili),
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_shooting),

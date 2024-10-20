@@ -58,7 +58,6 @@ fun AimScreen(
                             onFolderClick.invoke()
                             // showBottomBar.invoke(true) TODO K needed?
                         },
-                        containerColor = colorResource(id = R.color.mili),
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowLeft,
