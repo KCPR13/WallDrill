@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.core.di
+package pl.kacper.misterski.walldrill.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 
 @Qualifier
@@ -29,6 +31,10 @@ annotation class BackgroundScope
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class MainScope
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ApplicationScope
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -48,4 +54,8 @@ object CoreProvider {
     @MainDispatcher
     @Provides
     fun provideMainDispatcher() = Dispatchers.Main
+
+    @ApplicationScope
+    @Provides
+    fun provideApplicationScope() = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 }

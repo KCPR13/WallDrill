@@ -41,7 +41,7 @@ fun AppNavHost(
         composable(NavigationItem.Calibration.route) {
             val viewModel: CalibrationViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
+            val redDot = viewModel.redDot.collectAsStateWithLifecycle().value
             CalibrationScreen(
                 modifier = modifier,
                 onSettingsClick = {
@@ -49,6 +49,7 @@ fun AppNavHost(
                 },
                 uiState = uiState,
                 analyzer = viewModel.colorAnalyzer,
+                redDotRect = redDot,
             )
         }
         composable(NavigationItem.ColorDetection.route) {

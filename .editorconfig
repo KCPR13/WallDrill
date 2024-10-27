@@ -39,7 +39,7 @@ indent_style = unset
 indent_size = unset
 ij_formatter_enabled = false
 
-[*.{kt, kts}]
+[*.{kt,kts}]
 ktlint_code_style = ktlint_official
 max_line_length = 100
 ij_kotlin_allow_trailing_comma=true

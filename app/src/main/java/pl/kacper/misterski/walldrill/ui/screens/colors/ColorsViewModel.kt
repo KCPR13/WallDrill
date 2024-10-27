@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import pl.kacper.misterski.walldrill.core.di.BackgroundDispatcher
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
+import pl.kacper.misterski.walldrill.di.BackgroundDispatcher
 import javax.inject.Inject
 
 @HiltViewModel

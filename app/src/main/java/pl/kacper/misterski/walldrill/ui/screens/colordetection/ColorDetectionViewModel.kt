@@ -22,13 +22,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.core.BaseViewModel
-import pl.kacper.misterski.walldrill.core.di.BackgroundDispatcher
-import pl.kacper.misterski.walldrill.core.di.DetectColorAnalyzer
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
+import pl.kacper.misterski.walldrill.di.BackgroundDispatcher
+import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,17 +35,20 @@ class ColorDetectionViewModel
     @Inject
     constructor(
         private val colorRepository: ColorRepository,
-        @DetectColorAnalyzer val colorAnalyzer: ColorAnalyzer,
+        val colorAnalyzer: TestColorAnalyzer,
         @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher,
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(Color.Black)
         val uiState = _uiState.asStateFlow()
 
-        init {
-            colorAnalyzer.init { analyzerResult ->
-                _uiState.update { analyzerResult.color }
-            }
-        }
+        val redDot = // TODO K needed?
+            colorAnalyzer.redDot.stateIn(
+                scope = viewModelScope,
+                started =
+                    kotlinx.coroutines.flow.SharingStarted
+                        .WhileSubscribed(5000),
+                initialValue = null,
+            )
 
         fun saveColor() {
             CoroutineScope(backgroundDispatcher).launch {

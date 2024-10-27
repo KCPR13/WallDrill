@@ -43,10 +43,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
+import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
@@ -57,7 +55,6 @@ import pl.kacper.misterski.walldrill.ui.theme.FontLarge
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 import pl.kacper.misterski.walldrill.ui.theme.RingSize
 import pl.kacper.misterski.walldrill.ui.theme.SelectedColorSize
-import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 import pl.kacper.misterski.walldrill.ui.theme.primaryDark
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +64,7 @@ fun ColorDetection(
     onColorsClick: () -> Unit,
     onSaveColor: () -> Unit,
     uiState: Color,
-    colorAnalyzer: ColorAnalyzer,
+    colorAnalyzer: TestColorAnalyzer,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -153,16 +150,16 @@ private fun Ring(modifier: Modifier) {
     }
 }
 
-@PreviewLightDark
-@Composable
-fun ColorDetectPreview() {
-    WallDrillTheme {
-        ColorDetection(
-            Modifier,
-            onColorsClick = {},
-            onSaveColor = { },
-            uiState = Color.Red,
-            colorAnalyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
-        )
-    }
-}
+// @PreviewLightDark
+// @Composable TODO K commented
+// fun ColorDetectPreview() {
+//    WallDrillTheme {
+//        ColorDetection(
+//            Modifier,
+//            onColorsClick = {},
+//            onSaveColor = { },
+//            uiState = Color.Red,
+//            colorAnalyzer = TestColorAnalyzer( ApplicationScope()),
+//        )
+//    }
+// }

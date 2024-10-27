@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.core.di
+package pl.kacper.misterski.walldrill.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
-import javax.inject.Qualifier
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class DetectColorAnalyzer
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AimAnalyzer
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 
 @Module
 @InstallIn(ViewModelComponent::class)
 object AppProvider {
-    @DetectColorAnalyzer
     @Provides
-    fun provideDetectColorAnalyzer() = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION)
-
-    @AimAnalyzer
-    @Provides
-    fun provideAimAnalyzer() = ColorAnalyzer(AnalyzerMode.AIM)
+    fun provideTestColorAnalyzer(
+        @ApplicationScope applicationScope: CoroutineScope,
+        @BackgroundDispatcher backgroundDispatcher: CoroutineDispatcher,
+    ) = TestColorAnalyzer(applicationScope, backgroundDispatcher)
 }

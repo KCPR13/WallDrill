@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -40,15 +41,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments +=
-                    mapOf(
-                        "room.schemaLocation" to "$projectDir/schemas",
-                        "room.incremental" to "true",
-                    )
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -79,9 +73,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
-    }
     packaging {
         // TODO K remove?
         resources {
@@ -91,8 +82,6 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":openCV"))
 
     implementation(libs.androidx.ktx)
     implementation(libs.lifecycle)
@@ -105,6 +94,7 @@ dependencies {
 //    Hilt
     implementation(libs.hilt)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.expresso.core)
     kapt(libs.hiltKapt)
 
 //    Room
@@ -135,6 +125,10 @@ dependencies {
     debugImplementation(libs.compose.test.tooling)
 
     implementation(libs.kotlinx.serialization.json)
+
+//    TODO K remove?
+    implementation("androidx.camera:camera-extensions:1.3.4")
+    implementation("androidx.camera:camera-view:1.3.4") // lub nowsza wersja
 }
 
 subprojects {

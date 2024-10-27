@@ -15,9 +15,14 @@
  */
 package pl.kacper.misterski.walldrill.ui.screens.calibration
 
-import android.util.Log
+import android.graphics.Rect
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,17 +40,16 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
-import org.opencv.core.Rect
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.domain.ColorAnalyzer
-import pl.kacper.misterski.walldrill.domain.enums.AnalyzerMode
-import pl.kacper.misterski.walldrill.ui.CameraPreview
+import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
-import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 // TODO K cleanup
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +58,8 @@ fun CalibrationScreen(
     modifier: Modifier,
     onSettingsClick: () -> Unit = {},
     uiState: CalibrationUiState,
-    analyzer: ColorAnalyzer,
+    analyzer: TestColorAnalyzer,
+    redDotRect: Rect?,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val snackbarScope = rememberCoroutineScope()
@@ -96,181 +101,101 @@ fun CalibrationScreen(
                 if (uiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
                 } else {
-                    CameraPreview(
-                        modifier = Modifier.fillMaxSize(),
-                        analyzer = analyzer,
-                        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA,
-                    )
-
-                    val points =
-                        uiState.detectedPoints.map {
-                            Pair(
-                                it.first.toFloat(),
-                                it.second.toFloat
-                                    (),
-                            )
-                        }
-
-                    Log.d("Kacpur", "detected points: ${points.size}")
-
-                    val rect = uiState.rect
-                    if (rect != null) {
-                        val viewWidth = constraints.maxWidth
-                        val viewHeight = constraints.maxHeight
-                        Log.d("Kacpur", "viewWidth: $viewWidth, viewHeight: $viewHeight")
-                        val rotationDegrees = uiState.rotationDegrees
-                        DisplayRectangle(
-                            Modifier
-                                .fillMaxSize(),
-                            rect,
-                            uiState.width,
-                            uiState.hight,
-                            viewWidth,
-                            viewHeight,
-                            rotationDegrees,
-                        )
-                    }
+                    TestCameraScreen(analyzer, redDotRect)
                 }
             }
         },
     )
 }
 
-fun transformCoordinates(
-    rect: Rect,
-    imageWidth: Int,
-    imageHeight: Int,
-    rotationDegrees: Int,
-): Rect {
-    when (rotationDegrees) {
-        90 -> {
-            val newX = imageHeight - rect.y - rect.height
-            val newY = rect.x
-            val newWidth = rect.height
-            val newHeight = rect.width
-            return Rect(newX, newY, newWidth, newHeight)
+@Composable
+fun TestCameraScreen(
+    analyzer: TestColorAnalyzer,
+    redDotRect: Rect?,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        CameraPreviewWithDetection(
+            analyzer,
+            Modifier.fillMaxSize(),
+        )
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            redDotRect?.let { rect ->
+                drawRect(
+                    color = Color.Red,
+                    topLeft = Offset(rect.left.toFloat(), rect.top.toFloat()),
+                    size =
+                        Size(
+                            (rect.right - rect.left).toFloat(),
+                            (rect.bottom - rect.top).toFloat(),
+                        ),
+                    style = Stroke(width = 4f),
+                )
+            }
         }
-
-        180 -> {
-            val newX = imageWidth - rect.x - rect.width
-            val newY = imageHeight - rect.y - rect.height
-            return Rect(newX, newY, rect.width, rect.height)
-        }
-
-        270 -> {
-            val newX = rect.y
-            val newY = imageWidth - rect.x - rect.width
-            val newWidth = rect.height
-            val newHeight = rect.width
-            return Rect(newX, newY, newWidth, newHeight)
-        }
-
-        else -> return rect // 0 lub 360 stopni
     }
-}
-
-fun invertYCoordinate(
-    rect: Rect,
-    imageHeight: Int,
-): Rect {
-    val newX = rect.x
-    // Odwracamy współrzędne Y, aby pasowały do orientacji ekranu
-    val newY = imageHeight - rect.y - rect.height
-    val newWidth = rect.width
-    val newHeight = rect.height
-
-    return Rect(newX, newY, newWidth, newHeight)
-}
-
-fun scaleRect(
-    rect: Rect,
-    scaleX: Float,
-    scaleY: Float,
-): Rect {
-    val newX = (rect.x * scaleX)
-    val newY = (rect.y * scaleY)
-    val newWidth = (rect.width * scaleX)
-    val newHeight = (rect.height * scaleY)
-
-    return Rect(newX.toInt(), newY.toInt(), newWidth.toInt(), newHeight.toInt())
 }
 
 @Composable
-fun DisplayRectangle(
+fun CameraPreviewWithDetection(
+    testColorAnalyzer: TestColorAnalyzer,
     modifier: Modifier,
-    rect: Rect,
-    originalImageWidth: Int,
-    originalImageHeight: Int,
-    viewWidth: Int,
-    viewHeight: Int,
-    rotationDegrees: Int,
 ) {
-    val scaleX = viewWidth.toFloat() / originalImageWidth.toFloat()
-    val scaleY = viewHeight.toFloat() / originalImageHeight.toFloat()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    val transformed =
-        scaleRect(
-            //  invertYCoordinate(
-            transformCoordinates(rect, originalImageWidth, originalImageHeight, rotationDegrees),
-            // originalImageHeight,
-            // ),
-            scaleX,
-            scaleY,
-        )
+    AndroidView(
+        modifier = modifier,
+        factory = { ctx ->
+            val previewView = PreviewView(ctx)
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
 
-    Canvas(modifier = modifier) {
-        drawRect(
-            color = Color.Red,
-            topLeft = Offset(transformed.x.toFloat(), transformed.y.toFloat()),
-            size = Size(transformed.width.toFloat(), transformed.height.toFloat()),
-            style = Stroke(width = 5f),
-        )
-    }
+            cameraProviderFuture.addListener({
+                val cameraProvider = cameraProviderFuture.get()
+
+                // Konfiguracja Preview
+                val preview =
+                    Preview.Builder().build().apply {
+                        setSurfaceProvider(previewView.surfaceProvider)
+                    }
+
+                // Konfiguracja ImageAnalysis
+                val imageAnalyzer =
+                    ImageAnalysis
+                        .Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build()
+                        .also {
+                            it.setAnalyzer(
+                                ContextCompat.getMainExecutor(ctx),
+                                testColorAnalyzer,
+                            )
+                        }
+
+                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    preview,
+                    imageAnalyzer,
+                )
+            }, ContextCompat.getMainExecutor(ctx))
+
+            previewView
+        },
+    )
 }
 
-// @Composable
-// fun DisplayRectangle(
-//    modifier: Modifier,
-//    rect: Rect,
-//    originalImageWidth: Int,
-//    originalImageHeight: Int,
-//    viewWidth: Int,
-//    viewHeight: Int,
-// ) {
-//    val scaleX = viewWidth / originalImageWidth
-//    val scaleY = viewHeight / originalImageWidth
-//
-//    val transformed =
-//        scaleRect(
-//            invertYCoordinate(
-//                transformCoordinates(
-//                    rect,
-//                    originalImageWidth,
-//                    originalImageHeight,
-//                ),
-//                originalImageHeight,
-//            ),
-//            scaleX,
-//            scaleY,
-//        )
-//    Canvas(modifier = modifier) {
-//        drawRect(
-//            color = Color.Red,
-//            topLeft = Offset(transformed.x.toFloat(), transformed.y.toFloat()),
-//            size = Size(transformed.width.toFloat(), transformed.height.toFloat()),
-//            style = Stroke(width = 5f),
+// @PreviewLightDark
+// @Composable TODO K setup
+// fun CalibrationScreenPreview() {
+//    WallDrillTheme {
+//        CalibrationScreen(
+//            modifier = Modifier,
+//            onSettingsClick = {},
+//            uiState = CalibrationUiState(),
+//            analyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
 //        )
 //    }
 // }
-@PreviewLightDark
-@Composable
-fun CalibrationScreenPreview() {
-    WallDrillTheme {
-        CalibrationScreen(
-            modifier = Modifier,
-            onSettingsClick = {},
-            uiState = CalibrationUiState(),
-            analyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
-        )
-    }
-}

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.hilt) apply false
     alias(libs.plugins.android.kapt) apply false
     alias(libs.plugins.android.ksp) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.version.catalog.update)
     alias(libs.plugins.gradle.versions)
     alias(libs.plugins.spotless)
@@ -13,7 +14,7 @@ plugins {
 }
 
 apply(from = "$rootDir/gradle/gradle-update.gradle")
-apply(from = "$rootDir/gradle/spotless.gradle")
+ apply(from = "$rootDir/gradle/spotless.gradle")
 
 detekt {
     buildUponDefaultConfig = true

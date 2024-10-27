@@ -15,15 +15,27 @@
  */
 package pl.kacper.misterski.walldrill.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.ImageFormat
+import android.hardware.camera2.CameraCharacteristics
 import android.util.Log
+import android.util.Size
 import android.view.ViewGroup
+import androidx.annotation.OptIn
+import androidx.camera.camera2.interop.Camera2CameraInfo
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.launch
@@ -38,8 +50,33 @@ fun CameraPreview(
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val lifecycleOwner =
         LocalLifecycleOwner.current
+
+    DisposableEffect(Unit) {
+        val cameraProvider = cameraProviderFuture.get()
+        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+        // Get camera characteristics
+        val cameraCharacteristics = getCameraCharacteristics(context, cameraSelector)
+
+        if (cameraCharacteristics != null) {
+            val streamConfigurationMap = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            val resolutions = streamConfigurationMap?.getOutputSizes(ImageFormat.JPEG)
+
+            // Log the available resolutions
+            resolutions?.forEach { size ->
+                Log.d("CameraCapture", "Resolution: ${size.width}x${size.height}")
+            }
+        }
+
+        onDispose {
+            cameraProvider.unbindAll()
+        }
+    }
+
     AndroidView(
         modifier = modifier,
         factory = { context ->
@@ -59,6 +96,7 @@ fun CameraPreview(
                 ImageAnalysis
                     .Builder()
                     .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+                    .setTargetResolution(Size(1080, 1835))
                     .build()
                     .also {
                         if (analyzer != null) {
@@ -95,4 +133,23 @@ fun CameraPreview(
             previewView
         },
     )
+}
+
+//TODO K NEEDED?
+// Helper function to get camera characteristics
+@SuppressLint("RestrictedApi")
+@OptIn(ExperimentalCamera2Interop::class)
+fun getCameraCharacteristics(
+    context: Context,
+    cameraSelector: CameraSelector,
+): CameraCharacteristics? {
+    val cameraProvider = ProcessCameraProvider.getInstance(context).get()
+
+    for (cameraInfo in cameraProvider.availableCameraInfos) {
+        val cameraSelectorResult = cameraSelector.filter(cameraProvider.availableCameraInfos)
+        if (cameraSelectorResult.contains(cameraInfo)) {
+            return Camera2CameraInfo.extractCameraCharacteristics(cameraInfo)
+        }
+    }
+    return null
 }
