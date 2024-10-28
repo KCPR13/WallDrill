@@ -73,12 +73,6 @@ android {
     buildFeatures {
         compose = true
     }
-    packaging {
-        // TODO K remove?
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
@@ -126,9 +120,8 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
-//    TODO K remove?
-    implementation("androidx.camera:camera-extensions:1.3.4")
-    implementation("androidx.camera:camera-view:1.3.4") // lub nowsza wersja
+    implementation(libs.androidx.camera.extensions)
+    implementation(libs.androidx.camera.view)
 }
 
 subprojects {

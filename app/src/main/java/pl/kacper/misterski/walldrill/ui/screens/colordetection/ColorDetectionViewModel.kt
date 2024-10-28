@@ -41,14 +41,6 @@ class ColorDetectionViewModel
         private val _uiState = MutableStateFlow(Color.Black)
         val uiState = _uiState.asStateFlow()
 
-        val redDot = // TODO K needed?
-            colorAnalyzer.redDot.stateIn(
-                scope = viewModelScope,
-                started =
-                    kotlinx.coroutines.flow.SharingStarted
-                        .WhileSubscribed(5000),
-                initialValue = null,
-            )
 
         fun saveColor() {
             CoroutineScope(backgroundDispatcher).launch {
