@@ -48,6 +48,7 @@ import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
+import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
 import pl.kacper.misterski.walldrill.ui.theme.MinGridSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
@@ -128,7 +129,8 @@ private fun EmptyColorsPlaceHolder(modifier: Modifier) {
         modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(painter = painterResource(id = R.drawable.ic_paint), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.ic_paint), contentDescription = null,
+            colorFilter = getIconTint())
         Text(
             modifier = Modifier.padding(vertical = PaddingLarge),
             text = stringResource(R.string.no_colors_set),

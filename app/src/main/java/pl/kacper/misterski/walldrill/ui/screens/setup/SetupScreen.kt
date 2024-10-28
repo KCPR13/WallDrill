@@ -16,7 +16,6 @@
 package pl.kacper.misterski.walldrill.ui.screens.setup
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,15 +28,13 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
@@ -59,9 +56,9 @@ fun SetupScreen(modifier: Modifier) {
     ) { paddingValues ->
         Column(
             modifier =
-                modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(PaddingLarge),
         ) {
@@ -69,12 +66,7 @@ fun SetupScreen(modifier: Modifier) {
                 modifier = Modifier.padding(top = PaddingExtraLarge),
                 painter = painterResource(id = R.drawable.ic_camera),
                 contentDescription = null,
-                colorFilter =
-                if (isSystemInDarkTheme()) {
-                    ColorFilter.tint(Color.White)
-                } else {
-                    ColorFilter.tint(Color.Black)
-                },
+                colorFilter = getIconTint(),
             )
             Text(text = stringResource(R.string.camera_permission_message))
         }

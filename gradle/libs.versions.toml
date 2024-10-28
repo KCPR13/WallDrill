@@ -38,6 +38,7 @@ android-room-runtime = { module = "androidx.room:room-runtime", version.ref = "r
 android-roomKapt = { module = "androidx.room:room-compiler", version.ref = "room" }
 #CAMERAX
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "camerax" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }

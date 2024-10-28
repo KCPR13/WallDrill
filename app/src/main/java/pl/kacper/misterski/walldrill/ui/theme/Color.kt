@@ -1,5 +1,4 @@
 package pl.kacper.misterski.walldrill.ui.theme
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF3B6939)
