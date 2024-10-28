@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.di.BackgroundDispatcher
+import pl.kacper.misterski.walldrill.domain.constants.Constants.FLOW_STOP_TIMEOUT
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,7 +50,7 @@ class ColorsViewModel
                     viewModelScope,
                     started =
                         kotlinx.coroutines.flow.SharingStarted
-                            .WhileSubscribed(5000),
+                            .WhileSubscribed(FLOW_STOP_TIMEOUT),
                     initialValue = ColorsUiState(),
                 )
 

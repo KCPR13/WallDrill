@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
+import pl.kacper.misterski.walldrill.domain.constants.Constants.FLOW_STOP_TIMEOUT
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +39,7 @@ constructor(
             scope = viewModelScope,
             started =
             kotlinx.coroutines.flow.SharingStarted
-                .WhileSubscribed(5000),
+                .WhileSubscribed(FLOW_STOP_TIMEOUT),
             initialValue = null,
         )
 
