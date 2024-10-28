@@ -19,43 +19,42 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import pl.kacper.misterski.walldrill.R
+import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.core.BaseViewModel
-import pl.kacper.misterski.walldrill.domain.ResourceProvider
+import pl.kacper.misterski.walldrill.domain.constants.Constants.FLOW_STOP_TIMEOUT
+import pl.kacper.misterski.walldrill.domain.use_case.SettingsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel
-    @Inject
-    constructor(
-        private val resourceProvider: ResourceProvider,
-    ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(SettingsUiState())
-        val uiState =
-            _uiState
-                .onStart {
-                    fetchModels() // TODO K check if works
-                }.stateIn(
-                    viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000), // TODO K constants
-                    initialValue = SettingsUiState(),
-                )
+@Inject
+constructor(
+    private val settingsUseCase: SettingsUseCase,
+) : BaseViewModel() {
+    private val _uiState = MutableStateFlow(SettingsUiState())
+    val uiState =
+        _uiState
+            .onStart {
+                fetchModels()
+            }.stateIn(
+                viewModelScope,
+                started = SharingStarted.WhileSubscribed(FLOW_STOP_TIMEOUT),
+                initialValue = SettingsUiState(),
+            )
 
-        private fun fetchModels() {
-            val colorDetection =
-                SettingsModel(
-                    resourceProvider.getString(R.string.colors),
-                    SettingsAction.COLORS,
-                )
-            val calibration =
-                SettingsModel(
-                    resourceProvider.getString(R.string.calibration),
-                    SettingsAction.CALIBRATION,
-                )
-
-            _uiState.update { SettingsUiState(listOf(calibration, colorDetection)) }
+    private fun fetchModels() {
+        viewModelScope.launch {
+            settingsUseCase.invoke().onEach { items ->
+                _uiState.update { SettingsUiState(items) }
+            }.catch { error ->
+                _uiState.update { SettingsUiState(emptyList()) }
+            }.collect()
         }
     }
+}
