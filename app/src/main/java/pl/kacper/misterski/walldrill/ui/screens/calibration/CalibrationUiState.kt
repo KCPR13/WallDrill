@@ -27,8 +27,4 @@ data class CalibrationUiState(
     val width: Int = 0,
     val hight: Int = 0,
     val rotationDegrees: Int = 0,
-) {
-    fun showError(
-        @StringRes message: Int,
-    ) = this.copy(snackbarMessage = message)
-}
+)

@@ -98,10 +98,6 @@ private fun SettingsItem(
             CardDefaults.cardElevation(
                 defaultElevation = CardElevation,
             ),
-//        colors = TODO K remove?
-//            CardDefaults.cardColors(
-//                containerColor = Color.White,
-//            ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -135,8 +131,12 @@ fun SettingsScreenPreview() {
         SettingsScreen(
             onColorsClick = {},
             onCalibrationClick = {},
-            modifier = TODO(),
-            uiState = TODO(),
+            modifier = Modifier,
+            uiState = SettingsUiState(
+                listOf(
+                SettingsModel("title", SettingsAction.COLORS)
+                )
+            ),
         )
     }
 }

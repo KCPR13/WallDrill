@@ -56,7 +56,7 @@ fun SelectedColor(
     ) {
         onRemove?.let { removeColor ->
             Icon(
-                //  tint = if (color.isColorDark()) Color.White else Color.Black, TODO K remove?
+                  tint = getIconTintColor(),
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)

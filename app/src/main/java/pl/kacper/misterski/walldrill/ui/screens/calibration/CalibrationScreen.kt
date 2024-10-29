@@ -42,14 +42,15 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.common.AppProgress
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
+import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 // TODO K cleanup
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +59,7 @@ fun CalibrationScreen(
     modifier: Modifier,
     onSettingsClick: () -> Unit = {},
     uiState: CalibrationUiState,
-    analyzer: TestColorAnalyzer,
+    analyzer: ImageAnalysis.Analyzer,
     redDotRect: Rect?,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -94,9 +95,9 @@ fun CalibrationScreen(
         content = { paddingValues ->
             BoxWithConstraints(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             ) {
                 if (uiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
@@ -110,7 +111,7 @@ fun CalibrationScreen(
 
 @Composable
 fun TestCameraScreen(
-    analyzer: TestColorAnalyzer,
+    analyzer: ImageAnalysis.Analyzer,
     redDotRect: Rect?,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -124,10 +125,10 @@ fun TestCameraScreen(
                     color = Color.Red,
                     topLeft = Offset(rect.left.toFloat(), rect.top.toFloat()),
                     size =
-                        Size(
-                            (rect.right - rect.left).toFloat(),
-                            (rect.bottom - rect.top).toFloat(),
-                        ),
+                    Size(
+                        (rect.right - rect.left).toFloat(),
+                        (rect.bottom - rect.top).toFloat(),
+                    ),
                     style = Stroke(width = 4f),
                 )
             }
@@ -137,7 +138,7 @@ fun TestCameraScreen(
 
 @Composable
 fun CameraPreviewWithDetection(
-    testColorAnalyzer: TestColorAnalyzer,
+    analyzer: ImageAnalysis.Analyzer,
     modifier: Modifier,
 ) {
     val context = LocalContext.current
@@ -149,53 +150,57 @@ fun CameraPreviewWithDetection(
             val previewView = PreviewView(ctx)
             val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
 
-            cameraProviderFuture.addListener({
-                val cameraProvider = cameraProviderFuture.get()
+            cameraProviderFuture.addListener(
+                {
+                    val cameraProvider = cameraProviderFuture.get()
 
-                // Konfiguracja Preview
-                val preview =
-                    Preview.Builder().build().apply {
-                        setSurfaceProvider(previewView.surfaceProvider)
-                    }
-
-                // Konfiguracja ImageAnalysis
-                val imageAnalyzer =
-                    ImageAnalysis
-                        .Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also {
-                            it.setAnalyzer(
-                                ContextCompat.getMainExecutor(ctx),
-                                testColorAnalyzer,
-                            )
+                    // Konfiguracja Preview
+                    val preview =
+                        Preview.Builder().build().apply {
+                            setSurfaceProvider(previewView.surfaceProvider)
                         }
 
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                    // Konfiguracja ImageAnalysis
+                    val imageAnalyzer =
+                        ImageAnalysis
+                            .Builder()
+                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .also {
+                                it.setAnalyzer(
+                                    ContextCompat.getMainExecutor(ctx),
+                                    analyzer,
+                                )
+                            }
 
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    cameraSelector,
-                    preview,
-                    imageAnalyzer,
-                )
-            }, ContextCompat.getMainExecutor(ctx))
+                    val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        imageAnalyzer,
+                    )
+                },
+                ContextCompat.getMainExecutor(ctx),
+            )
 
             previewView
         },
     )
 }
 
-// @PreviewLightDark
-// @Composable TODO K setup
-// fun CalibrationScreenPreview() {
-//    WallDrillTheme {
-//        CalibrationScreen(
-//            modifier = Modifier,
-//            onSettingsClick = {},
-//            uiState = CalibrationUiState(),
-//            analyzer = ColorAnalyzer(AnalyzerMode.COLOR_DETECTION),
-//        )
-//    }
-// }
+@PreviewLightDark
+@Composable
+fun CalibrationScreenPreview() {
+    WallDrillTheme {
+        CalibrationScreen(
+            modifier = Modifier,
+            onSettingsClick = {},
+            uiState = CalibrationUiState(),
+            analyzer = { },
+            redDotRect = null,
+        )
+    }
+}

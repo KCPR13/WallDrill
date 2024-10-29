@@ -13,3 +13,12 @@ fun getIconTint(): ColorFilter {
         ColorFilter.tint(Color.Black)
     }
 }
+
+@Composable
+fun getIconTintColor(): Color {
+    return if (isSystemInDarkTheme()) {
+        Color.White
+    } else {
+        Color.Black
+    }
+}

@@ -56,7 +56,6 @@ fun AimScreen(
                     FloatingActionButton(
                         onClick = {
                             onFolderClick.invoke()
-                            // showBottomBar.invoke(true) TODO K needed?
                         },
                     ) {
                         Icon(
