@@ -31,7 +31,7 @@ import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 fun MainScreen(
     modifier: Modifier = Modifier,
     uiState: MainUiState,
-    onAimClick: () -> Unit,
+    displayBottomBar: (display: Boolean) -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
@@ -43,7 +43,7 @@ fun MainScreen(
                     navController.navigate(NavigationItem.Settings.route)
                 },
                 onAimClick = {
-                    onAimClick.invoke()
+                    displayBottomBar.invoke(false)
                     navController.navigate(NavigationItem.Aim.route)
                 },
                 onFolderClick = { navController.navigate(NavigationItem.Folder.route) },
@@ -64,6 +64,7 @@ fun MainScreen(
             modifier = contentModifier,
             navController = navController,
             startDestination = startDestination,
+            showBottomBar = { displayBottomBar.invoke(true) },
         )
     }
 }
@@ -74,7 +75,7 @@ fun MainScreenPreview() {
     WallDrillTheme {
         MainScreen(
             uiState = MainUiState(),
-            onAimClick = { },
+            displayBottomBar = {},
         )
     }
 }

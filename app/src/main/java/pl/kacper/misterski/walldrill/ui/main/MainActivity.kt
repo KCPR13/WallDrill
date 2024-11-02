@@ -50,7 +50,10 @@ class MainActivity : ComponentActivity() {
                 val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
                 MainScreen(
                     uiState = uiState,
-                    onAimClick = { viewModel.updateBottomBarVisibility(false) },
+                    displayBottomBar = { display ->
+                        viewModel.updateBottomBarVisibility(display)
+
+                    }
                 )
             }
         }

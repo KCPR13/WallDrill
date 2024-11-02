@@ -6,7 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import pl.kacper.misterski.walldrill.ui.common.animatedDestination
 import pl.kacper.misterski.walldrill.ui.screens.aim.AimScreen
 import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationScreen
 import pl.kacper.misterski.walldrill.ui.screens.calibration.CalibrationViewModel
@@ -23,6 +23,7 @@ import pl.kacper.misterski.walldrill.ui.screens.setup.SetupScreen
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    showBottomBar: () -> Unit,
     startDestination: String = NavigationItem.Setup.route,
 ) {
     NavHost(
@@ -30,15 +31,19 @@ fun AppNavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
-        composable(NavigationItem.Setup.route) {
+        animatedDestination(NavigationItem.Setup.route) {
             SetupScreen(modifier = modifier)
         }
-        composable(NavigationItem.Aim.route) {
-            AimScreen(modifier = modifier, onFolderClick = {
-                navController.navigate(NavigationItem.Folder.route)
-            })
+        animatedDestination(NavigationItem.Aim.route) {
+            AimScreen(
+                modifier = modifier,
+                onFolderClick = {
+                    navController.navigateUp()
+                    showBottomBar.invoke()
+                },
+            )
         }
-        composable(NavigationItem.Calibration.route) {
+        animatedDestination(NavigationItem.Calibration.route) {
             val viewModel: CalibrationViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
             val redDot = viewModel.redDot.collectAsStateWithLifecycle().value
@@ -52,7 +57,7 @@ fun AppNavHost(
                 redDotRect = redDot,
             )
         }
-        composable(NavigationItem.ColorDetection.route) {
+        animatedDestination(NavigationItem.ColorDetection.route) {
             val viewModel: ColorDetectionViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -66,7 +71,7 @@ fun AppNavHost(
                 colorAnalyzer = viewModel.colorAnalyzer,
             )
         }
-        composable(NavigationItem.Settings.route) {
+        animatedDestination(NavigationItem.Settings.route) {
             val viewModel: SettingsViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
             SettingsScreen(
@@ -80,10 +85,10 @@ fun AppNavHost(
                 uiState = uiState,
             )
         }
-        composable(NavigationItem.Folder.route) {
+        animatedDestination(NavigationItem.Folder.route) {
             FolderScreen(modifier = modifier)
         }
-        composable(NavigationItem.Colors.route) {
+        animatedDestination(NavigationItem.Colors.route) {
             val viewModel: ColorsViewModel = hiltViewModel()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
