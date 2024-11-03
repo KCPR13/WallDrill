@@ -31,22 +31,23 @@ import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 fun MainScreen(
     modifier: Modifier = Modifier,
     uiState: MainUiState,
+    navController: NavHostController,
     displayBottomBar: (display: Boolean) -> Unit,
-    navController: NavHostController = rememberNavController(),
+    onSettingsClick: () -> Unit,
+    onFolderClick: () -> Unit,
 ) {
     Scaffold(
         modifier.safeContentPadding(),
         bottomBar = {
             AnimatedBottomBar(
+                selectedBottomBarOption = uiState.selectedBottomBarOption,
                 show = uiState.showBottomBar,
-                onSettingsClick = {
-                    navController.navigate(NavigationItem.Settings.route)
-                },
+                onSettingsClick = { onSettingsClick.invoke() },
                 onAimClick = {
                     displayBottomBar.invoke(false)
                     navController.navigate(NavigationItem.Aim.route)
                 },
-                onFolderClick = { navController.navigate(NavigationItem.Folder.route) },
+                onFolderClick = { onFolderClick.invoke() },
             )
         },
     ) { paddingValues ->
@@ -76,6 +77,9 @@ fun MainScreenPreview() {
         MainScreen(
             uiState = MainUiState(),
             displayBottomBar = {},
+            navController = rememberNavController(),
+            onSettingsClick = {},
+            onFolderClick = {},
         )
     }
 }

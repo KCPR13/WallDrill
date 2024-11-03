@@ -25,8 +25,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.kacper.misterski.walldrill.domain.enums.PermissionStatus
+import pl.kacper.misterski.walldrill.ui.navigation.NavigationItem
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
 @AndroidEntryPoint
@@ -48,11 +50,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             WallDrillTheme {
                 val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+                val navController =  rememberNavController()
                 MainScreen(
                     uiState = uiState,
+                    navController = navController,
                     displayBottomBar = { display ->
                         viewModel.updateBottomBarVisibility(display)
 
+                    },
+                    onSettingsClick = {
+                        viewModel.setSettingsSelected()
+                        navController.navigate(NavigationItem.Settings.route)
+                    },
+                    onFolderClick = {
+                        viewModel.setFolderSelected()
+                        navController.navigate(NavigationItem.Folder.route)
                     }
                 )
             }

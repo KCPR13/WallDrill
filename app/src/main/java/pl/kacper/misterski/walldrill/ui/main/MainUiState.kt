@@ -15,4 +15,15 @@
  */
 package pl.kacper.misterski.walldrill.ui.main
 
-data class MainUiState(val permissionGranted: Boolean = false, val showBottomBar: Boolean = true)
+data class MainUiState(
+    val permissionGranted: Boolean = false, val showBottomBar: Boolean = true,
+    val selectedBottomBarOption: BottomBarOption = BottomBarOption.SETTINGS,
+) {
+    enum class BottomBarOption {
+        SETTINGS,
+        FOLDER
+    }
+}
+
+
+

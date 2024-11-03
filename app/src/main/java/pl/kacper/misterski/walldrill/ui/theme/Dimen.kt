@@ -31,7 +31,9 @@ val BorderWidth = 4.dp
 
 val CardElevation = 6.dp
 
-val BottomBarIconSize = 30.dp
+val BottomBarDefaultIconSize = 30.dp
+
+val BottomBarSelectedIconSize = 40.dp
 
 val AimPointSize = 100.dp
 

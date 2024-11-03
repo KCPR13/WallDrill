@@ -39,4 +39,20 @@ constructor() : BaseViewModel() {
     fun updateBottomBarVisibility(showBottomBar: Boolean) = _uiState.update {
         it.copy(showBottomBar = showBottomBar)
     }
+
+    fun setSettingsSelected() {
+        _uiState.update {
+            it.copy(
+                selectedBottomBarOption = MainUiState.BottomBarOption.SETTINGS,
+            )
+        }
+    }
+
+    fun setFolderSelected() {
+        _uiState.update {
+            it.copy(
+                selectedBottomBarOption = MainUiState.BottomBarOption.FOLDER,
+            )
+        }
+    }
 }
