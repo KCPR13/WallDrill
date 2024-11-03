@@ -1,7 +1,9 @@
 package pl.kacper.misterski.walldrill.ui.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -93,7 +95,7 @@ fun AppNavHost(
             val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
             ColorsScreen(
-                modifier = modifier,
+                modifier = Modifier.padding(0.dp),
                 onSettingsClick = {
                     navController.navigate(NavigationItem.Settings.route)
                 },

@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,11 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import pl.kacper.misterski.walldrill.R
+import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
@@ -52,37 +52,41 @@ fun AimScreen(
         Scaffold(
             modifier = modifier,
             floatingActionButton =
-                {
-                    FloatingActionButton(
-                        onClick = {
-                            onFolderClick.invoke()
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.KeyboardArrowLeft,
-                            contentDescription = null,
-                        )
-                    }
-                },
+            {
+                FloatingActionButton(
+                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                    onClick = {
+                        onFolderClick.invoke()
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.KeyboardArrowLeft,
+                        contentDescription = null,
+                    )
+                }
+            },
         ) { paddingValues ->
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             ) {
                 Icon(
                     modifier =
-                        Modifier
-                            .align(Alignment.TopStart)
-                            .padding(PaddingExtraLarge)
-                            .clickable { },
+                    Modifier
+                        .align(Alignment.TopStart)
+                        .padding(PaddingExtraLarge)
+                        .clickable { },
                     // TODO K
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
                 )
 
-                AimPoint(Modifier.align(Alignment.Center).size(AimPointSize), AimPointSize)
+                AimPoint(
+                    Modifier
+                        .align(Alignment.Center)
+                        .size(AimPointSize), AimPointSize)
             }
         }
     }

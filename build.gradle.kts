@@ -14,7 +14,7 @@ plugins {
 }
 
 apply(from = "$rootDir/gradle/gradle-update.gradle")
- apply(from = "$rootDir/gradle/spotless.gradle")
+apply(from = "$rootDir/gradle/spotless.gradle")
 
 detekt {
     buildUponDefaultConfig = true

@@ -15,11 +15,9 @@
  */
 package pl.kacper.misterski.walldrill.ui.screens.colors
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,25 +28,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.db.color.Color
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
-import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
 import pl.kacper.misterski.walldrill.ui.theme.MinGridSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
@@ -78,6 +72,7 @@ fun ColorsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { onColorDetectionClick.invoke() },
             ) {
                 Icon(
@@ -89,9 +84,9 @@ fun ColorsScreen(
     ) { paddingValues ->
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         ) {
             val colors = uiState.colors
             if (colors.isEmpty()) {
@@ -99,9 +94,9 @@ fun ColorsScreen(
             } else {
                 LazyVerticalGrid(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(PaddingLarge),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(PaddingLarge),
                     columns = GridCells.Adaptive(minSize = MinGridSize),
                     horizontalArrangement = Arrangement.spacedBy(PaddingMedium),
                     verticalArrangement = Arrangement.spacedBy(PaddingMedium),
@@ -109,9 +104,9 @@ fun ColorsScreen(
                     items(colors) { color ->
                         SelectedColor(
                             modifier =
-                                Modifier
-                                    .size(MaxGridSize)
-                                    .clickable { onItemClick.invoke(color) },
+                            Modifier
+                                .size(MaxGridSize)
+                                .clickable { onItemClick.invoke(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
                             onRemove = { onRemoveItem.invoke(color) },
@@ -123,21 +118,6 @@ fun ColorsScreen(
     }
 }
 
-@Composable
-private fun EmptyColorsPlaceHolder(modifier: Modifier) {
-    Column(
-        modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(painter = painterResource(id = R.drawable.ic_paint), contentDescription = null,
-            colorFilter = getIconTint())
-        Text(
-            modifier = Modifier.padding(vertical = PaddingLarge),
-            text = stringResource(R.string.no_colors_set),
-        )
-    }
-}
-
 @PreviewLightDark
 @Composable
 fun ColorsScreenPreview() {
@@ -146,7 +126,16 @@ fun ColorsScreenPreview() {
             modifier = Modifier,
             onSettingsClick = {},
             onColorDetectionClick = {},
-            uiState = ColorsUiState(emptyList()),
+            uiState = ColorsUiState(
+                listOf(
+                    Color(
+                        1,
+                        androidx.compose.ui.graphics.Color.Black
+                            .value.toString(),
+                        true,
+                    ),
+                ),
+            ),
             onRemoveItem = {},
             onItemClick = {},
         )
