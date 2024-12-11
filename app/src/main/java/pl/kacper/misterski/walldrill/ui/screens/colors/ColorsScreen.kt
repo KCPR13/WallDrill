@@ -84,9 +84,9 @@ fun ColorsScreen(
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             val colors = uiState.colors
             if (colors.isEmpty()) {
@@ -94,9 +94,9 @@ fun ColorsScreen(
             } else {
                 LazyVerticalGrid(
                     modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(PaddingLarge),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(PaddingLarge),
                     columns = GridCells.Adaptive(minSize = MinGridSize),
                     horizontalArrangement = Arrangement.spacedBy(PaddingMedium),
                     verticalArrangement = Arrangement.spacedBy(PaddingMedium),
@@ -104,9 +104,9 @@ fun ColorsScreen(
                     items(colors) { color ->
                         SelectedColor(
                             modifier =
-                            Modifier
-                                .size(MaxGridSize)
-                                .clickable { onItemClick.invoke(color) },
+                                Modifier
+                                    .size(MaxGridSize)
+                                    .clickable { onItemClick.invoke(color) },
                             color = color.getColorObject(),
                             drawBorder = color.selected,
                             onRemove = { onRemoveItem.invoke(color) },
@@ -126,16 +126,23 @@ fun ColorsScreenPreview() {
             modifier = Modifier,
             onSettingsClick = {},
             onColorDetectionClick = {},
-            uiState = ColorsUiState(
-                listOf(
-                    Color(
-                        1,
-                        androidx.compose.ui.graphics.Color.Black
-                            .value.toString(),
-                        true,
+            uiState =
+                ColorsUiState(
+                    listOf(
+                        Color(
+                            1,
+                            androidx
+                                .compose
+                                .ui
+                                .graphics
+                                .Color
+                                .Black
+                                .value
+                                .toString(),
+                            true,
+                        ),
                     ),
                 ),
-            ),
             onRemoveItem = {},
             onItemClick = {},
         )

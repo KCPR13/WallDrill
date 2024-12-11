@@ -46,7 +46,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import pl.kacper.misterski.walldrill.ui.CameraPreview
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
@@ -153,9 +152,9 @@ private fun Ring(modifier: Modifier) {
     }
 }
 
- @PreviewLightDark
- @Composable
- fun ColorDetectPreview() {
+@PreviewLightDark
+@Composable
+fun ColorDetectPreview() {
     WallDrillTheme {
         ColorDetection(
             Modifier,
@@ -165,4 +164,4 @@ private fun Ring(modifier: Modifier) {
             colorAnalyzer = {},
         )
     }
- }
+}

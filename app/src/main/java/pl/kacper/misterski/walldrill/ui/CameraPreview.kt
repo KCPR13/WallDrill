@@ -63,7 +63,10 @@ fun CameraPreview(
         val cameraCharacteristics = getCameraCharacteristics(context, cameraSelector)
 
         if (cameraCharacteristics != null) {
-            val streamConfigurationMap = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            val streamConfigurationMap =
+                cameraCharacteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP,
+                )
             val resolutions = streamConfigurationMap?.getOutputSizes(ImageFormat.JPEG)
 
             // Log the available resolutions
@@ -106,7 +109,10 @@ fun CameraPreview(
 
 //            // CameraX Preview UseCase
             val previewUseCase =
-                androidx.camera.core.Preview
+                androidx
+                    .camera
+                    .core
+                    .Preview
                     .Builder()
                     .build()
                     .also {
@@ -135,7 +141,7 @@ fun CameraPreview(
     )
 }
 
-//TODO K NEEDED?
+// TODO K NEEDED?
 // Helper function to get camera characteristics
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalCamera2Interop::class)

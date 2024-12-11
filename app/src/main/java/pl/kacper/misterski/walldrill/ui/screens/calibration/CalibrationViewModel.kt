@@ -27,21 +27,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalibrationViewModel
-@Inject
-constructor(
-    val colorAnalyzer: TestColorAnalyzer,
-) : BaseViewModel() {
-    private val _uiState = MutableStateFlow(CalibrationUiState())
-    val uiState = _uiState.asStateFlow()
+    @Inject
+    constructor(
+        val colorAnalyzer: TestColorAnalyzer,
+    ) : BaseViewModel() {
+        private val _uiState = MutableStateFlow(CalibrationUiState())
+        val uiState = _uiState.asStateFlow()
 
-    val redDot =
-        colorAnalyzer.redDot.stateIn(
-            scope = viewModelScope,
-            started =
-            kotlinx.coroutines.flow.SharingStarted
-                .WhileSubscribed(FLOW_STOP_TIMEOUT),
-            initialValue = null,
-        )
-
-
-}
+        val redDot =
+            colorAnalyzer.redDot.stateIn(
+                scope = viewModelScope,
+                started =
+                    kotlinx
+                        .coroutines
+                        .flow
+                        .SharingStarted
+                        .WhileSubscribed(FLOW_STOP_TIMEOUT),
+                initialValue = null,
+            )
+    }

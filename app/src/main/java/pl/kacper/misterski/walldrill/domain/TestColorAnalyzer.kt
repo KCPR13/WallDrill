@@ -1,3 +1,18 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package pl.kacper.misterski.walldrill.domain
 
 import android.graphics.Bitmap
@@ -21,7 +36,8 @@ class TestColorAnalyzer(
     @ApplicationScope private val applicationScope: CoroutineScope,
     @BackgroundDispatcher private val backgroundDispatcher: CoroutineDispatcher,
 ) : ImageAnalysis.Analyzer {
-    private val scaleFactor: Float = 50f // przykładowa wartość pikseli na cm dla referencyjnej odległości
+    private val scaleFactor: Float =
+        50f // przykładowa wartość pikseli na cm dla referencyjnej odległości
 
     private val _redDot = MutableSharedFlow<Rect>()
     val redDot =
@@ -37,7 +53,8 @@ class TestColorAnalyzer(
             val data = ByteArray(buffer.remaining())
             buffer.get(data)
 
-            val yuvImage = YuvImage(data, ImageFormat.NV21, imageProxy.width, imageProxy.height, null)
+            val yuvImage =
+                YuvImage(data, ImageFormat.NV21, imageProxy.width, imageProxy.height, null)
             val out = ByteArrayOutputStream()
             yuvImage.compressToJpeg(Rect(0, 0, imageProxy.width, imageProxy.height), 100, out)
             val bitmap = BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size())
@@ -57,7 +74,8 @@ class TestColorAnalyzer(
     private fun findRedDot(bitmap: Bitmap): Rect? {
         val width = bitmap.width
         val height = bitmap.height
-        val minDotSizePixels = (scaleFactor * 1).toInt() // Minimalny rozmiar czerwonej kropki o średnicy 1 cm
+        val minDotSizePixels =
+            (scaleFactor * 1).toInt() // Minimalny rozmiar czerwonej kropki o średnicy 1 cm
 
         val visited = mutableSetOf<Pair<Int, Int>>()
         val redRegions = mutableListOf<Rect>()
@@ -73,7 +91,9 @@ class TestColorAnalyzer(
                     // Warunek wykrywania czerwonego koloru
                     if (red > 200 && green < 100 && blue < 100) {
                         val redRegion = findConnectedRedRegion(bitmap, x, y, visited)
-                        if (redRegion.width() >= minDotSizePixels && redRegion.height() >= minDotSizePixels) {
+                        if (redRegion.width() >= minDotSizePixels &&
+                            redRegion.height() >= minDotSizePixels
+                        ) {
                             redRegions.add(redRegion)
                         }
                     }
@@ -98,7 +118,7 @@ class TestColorAnalyzer(
         var minX = startX
         var minY = startY
         var maxX = startX
-        var maxY =             startY
+        var maxY = startY
 
         while (queue.isNotEmpty()) {
             val (x, y) = queue.removeFirst()
@@ -111,7 +131,11 @@ class TestColorAnalyzer(
                 )
 
             for ((nx, ny) in neighbors) {
-                if (nx in 0 until bitmap.width && ny in 0 until bitmap.height && Pair(nx, ny) !in visited) {
+                if (nx in 0 until bitmap.width && ny in 0 until bitmap.height && Pair(
+                        nx,
+                        ny,
+                    ) !in visited
+                ) {
                     val pixel = bitmap.getPixel(nx, ny)
                     val red = (pixel shr 16) and 0xFF
                     val green = (pixel shr 8) and 0xFF

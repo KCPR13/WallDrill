@@ -52,32 +52,32 @@ fun AimScreen(
         Scaffold(
             modifier = modifier,
             floatingActionButton =
-            {
-                FloatingActionButton(
-                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                    onClick = {
-                        onFolderClick.invoke()
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowLeft,
-                        contentDescription = null,
-                    )
-                }
-            },
+                {
+                    FloatingActionButton(
+                        elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                        onClick = {
+                            onFolderClick.invoke()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.KeyboardArrowLeft,
+                            contentDescription = null,
+                        )
+                    }
+                },
         ) { paddingValues ->
             Box(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 Icon(
                     modifier =
-                    Modifier
-                        .align(Alignment.TopStart)
-                        .padding(PaddingExtraLarge)
-                        .clickable { },
+                        Modifier
+                            .align(Alignment.TopStart)
+                            .padding(PaddingExtraLarge)
+                            .clickable { },
                     // TODO K
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
@@ -86,7 +86,9 @@ fun AimScreen(
                 AimPoint(
                     Modifier
                         .align(Alignment.Center)
-                        .size(AimPointSize), AimPointSize)
+                        .size(AimPointSize),
+                    AimPointSize,
+                )
             }
         }
     }

@@ -24,35 +24,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel
-@Inject
-constructor() : BaseViewModel() {
-    private val _uiState = MutableStateFlow(MainUiState())
-    val uiState = _uiState.asStateFlow()
+    @Inject
+    constructor() : BaseViewModel() {
+        private val _uiState = MutableStateFlow(MainUiState())
+        val uiState = _uiState.asStateFlow()
 
-    fun updatePermissionState(permissionGranted: Boolean) =
-        _uiState.update {
-            it.copy(
-                permissionGranted = permissionGranted,
-            )
+        fun updatePermissionState(permissionGranted: Boolean) =
+            _uiState.update {
+                it.copy(
+                    permissionGranted = permissionGranted,
+                )
+            }
+
+        fun updateBottomBarVisibility(showBottomBar: Boolean) =
+            _uiState.update {
+                it.copy(showBottomBar = showBottomBar)
+            }
+
+        fun setSettingsSelected() {
+            _uiState.update {
+                it.copy(
+                    selectedBottomBarOption = MainUiState.BottomBarOption.SETTINGS,
+                )
+            }
         }
 
-    fun updateBottomBarVisibility(showBottomBar: Boolean) = _uiState.update {
-        it.copy(showBottomBar = showBottomBar)
-    }
-
-    fun setSettingsSelected() {
-        _uiState.update {
-            it.copy(
-                selectedBottomBarOption = MainUiState.BottomBarOption.SETTINGS,
-            )
+        fun setFolderSelected() {
+            _uiState.update {
+                it.copy(
+                    selectedBottomBarOption = MainUiState.BottomBarOption.FOLDER,
+                )
+            }
         }
     }
-
-    fun setFolderSelected() {
-        _uiState.update {
-            it.copy(
-                selectedBottomBarOption = MainUiState.BottomBarOption.FOLDER,
-            )
-        }
-    }
-}

@@ -132,11 +132,12 @@ fun SettingsScreenPreview() {
             onColorsClick = {},
             onCalibrationClick = {},
             modifier = Modifier,
-            uiState = SettingsUiState(
-                listOf(
-                SettingsModel("title", SettingsAction.COLORS)
-                )
-            ),
+            uiState =
+                SettingsUiState(
+                    listOf(
+                        SettingsModel("title", SettingsAction.COLORS),
+                    ),
+                ),
         )
     }
 }

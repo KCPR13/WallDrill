@@ -56,7 +56,7 @@ fun SelectedColor(
     ) {
         onRemove?.let { removeColor ->
             Icon(
-                  tint = getIconTintColor(),
+                tint = getIconTintColor(),
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)

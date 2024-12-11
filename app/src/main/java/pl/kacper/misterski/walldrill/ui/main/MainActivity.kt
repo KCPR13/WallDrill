@@ -50,13 +50,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             WallDrillTheme {
                 val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-                val navController =  rememberNavController()
+                val navController = rememberNavController()
                 MainScreen(
                     uiState = uiState,
                     navController = navController,
                     displayBottomBar = { display ->
                         viewModel.updateBottomBarVisibility(display)
-
                     },
                     onSettingsClick = {
                         viewModel.setSettingsSelected()
@@ -65,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     onFolderClick = {
                         viewModel.setFolderSelected()
                         navController.navigate(NavigationItem.Folder.route)
-                    }
+                    },
                 )
             }
         }

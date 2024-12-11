@@ -28,33 +28,35 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.domain.constants.Constants.FLOW_STOP_TIMEOUT
-import pl.kacper.misterski.walldrill.domain.use_case.SettingsUseCase
+import pl.kacper.misterski.walldrill.domain.usecase.SettingsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel
-@Inject
-constructor(
-    private val settingsUseCase: SettingsUseCase,
-) : BaseViewModel() {
-    private val _uiState = MutableStateFlow(SettingsUiState())
-    val uiState =
-        _uiState
-            .onStart {
-                fetchModels()
-            }.stateIn(
-                viewModelScope,
-                started = SharingStarted.WhileSubscribed(FLOW_STOP_TIMEOUT),
-                initialValue = SettingsUiState(),
-            )
+    @Inject
+    constructor(
+        private val settingsUseCase: SettingsUseCase,
+    ) : BaseViewModel() {
+        private val _uiState = MutableStateFlow(SettingsUiState())
+        val uiState =
+            _uiState
+                .onStart {
+                    fetchModels()
+                }.stateIn(
+                    viewModelScope,
+                    started = SharingStarted.WhileSubscribed(FLOW_STOP_TIMEOUT),
+                    initialValue = SettingsUiState(),
+                )
 
-    private fun fetchModels() {
-        viewModelScope.launch {
-            settingsUseCase.invoke().onEach { items ->
-                _uiState.update { SettingsUiState(items) }
-            }.catch { error ->
-                _uiState.update { SettingsUiState(emptyList()) }
-            }.collect()
+        private fun fetchModels() {
+            viewModelScope.launch {
+                settingsUseCase
+                    .invoke()
+                    .onEach { items ->
+                        _uiState.update { SettingsUiState(items) }
+                    }.catch { error ->
+                        _uiState.update { SettingsUiState(emptyList()) }
+                    }.collect()
+            }
         }
     }
-}

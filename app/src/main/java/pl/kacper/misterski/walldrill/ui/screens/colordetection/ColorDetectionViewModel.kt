@@ -16,13 +16,11 @@
 package pl.kacper.misterski.walldrill.ui.screens.colordetection
 
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.core.BaseViewModel
 import pl.kacper.misterski.walldrill.db.color.ColorRepository
@@ -40,7 +38,6 @@ class ColorDetectionViewModel
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(Color.Black)
         val uiState = _uiState.asStateFlow()
-
 
         fun saveColor() {
             CoroutineScope(backgroundDispatcher).launch {

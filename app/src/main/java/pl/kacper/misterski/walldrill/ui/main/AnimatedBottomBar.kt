@@ -37,7 +37,7 @@ import pl.kacper.misterski.walldrill.ui.theme.BottomBarDefaultIconSize
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarSelectedIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 
-//TODO K separate uistate
+// TODO K separate uistate
 @Composable
 fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
@@ -95,17 +95,20 @@ fun BottomBarAction(
             if (!isSelected) onClick.invoke()
         },
     ) {
-
         Image(
-            modifier = if (isSelected) Modifier.size(BottomBarSelectedIconSize) else Modifier
-                .size(
-                    BottomBarDefaultIconSize,
-                ),
+            modifier =
+                if (isSelected) {
+                    Modifier.size(BottomBarSelectedIconSize)
+                } else {
+                    Modifier
+                        .size(
+                            BottomBarDefaultIconSize,
+                        )
+                },
             painter = painterResource(id = icon),
             contentDescription = null,
             colorFilter = getIconTint(),
         )
-
     }
 }
 

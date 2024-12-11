@@ -95,9 +95,9 @@ fun CalibrationScreen(
         content = { paddingValues ->
             BoxWithConstraints(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 if (uiState.progress) {
                     AppProgress(Modifier.align(Alignment.Center))
@@ -125,10 +125,10 @@ fun TestCameraScreen(
                     color = Color.Red,
                     topLeft = Offset(rect.left.toFloat(), rect.top.toFloat()),
                     size =
-                    Size(
-                        (rect.right - rect.left).toFloat(),
-                        (rect.bottom - rect.top).toFloat(),
-                    ),
+                        Size(
+                            (rect.right - rect.left).toFloat(),
+                            (rect.bottom - rect.top).toFloat(),
+                        ),
                     style = Stroke(width = 4f),
                 )
             }

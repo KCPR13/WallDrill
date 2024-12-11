@@ -7,8 +7,9 @@ plugins {
     alias(libs.plugins.android.kapt)
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
-    alias(libs.plugins.spotless)
+    // alias(libs.plugins.spotless)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -17,22 +18,30 @@ android {
 
     namespace = appId
     compileSdk =
-        libs.versions.sdk
+        libs
+            .versions
+            .sdk
             .get()
             .toInt()
 
     defaultConfig {
         applicationId = appId
         minSdk =
-            libs.versions.minSdk
+            libs
+                .versions
+                .minSdk
                 .get()
                 .toInt()
         targetSdk =
-            libs.versions.sdk
+            libs
+                .versions
+                .sdk
                 .get()
                 .toInt()
         versionCode =
-            libs.versions.versionCode
+            libs
+                .versions
+                .versionCode
                 .get()
                 .toInt()
         versionName = libs.versions.versionName.get()
@@ -87,7 +96,14 @@ dependencies {
 
 //    Hilt
     implementation(libs.hilt)
-    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(
+        libs
+            .androidx
+            .ui
+            .text
+            .google
+            .fonts,
+    )
     implementation(libs.expresso.core)
     kapt(libs.hiltKapt)
 
@@ -124,10 +140,23 @@ dependencies {
     implementation(libs.androidx.camera.view)
 }
 
+tasks.register("yourCustomTask") {
+    doLast {
+        exec {
+            commandLine("gradlew", "spotlessApply")
+            // For Windows, you may need to use "gradlew.bat" instead of "gradlew"
+        }
+        // Add your custom logic here
+    }
+}
+
 subprojects {
     afterEvaluate {
-        tasks.named("preBuild") {
-            dependsOn("spotlessApply")
+        tasks.named("preDebugBuild") {
+            dependsOn("yourCustomTask")
+        }
+        tasks.named("preReleaseBuild") {
+            dependsOn("yourCustomTask")
         }
     }
 

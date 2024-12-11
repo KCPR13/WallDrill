@@ -49,7 +49,10 @@ class ColorsViewModel
                 }.stateIn(
                     viewModelScope,
                     started =
-                        kotlinx.coroutines.flow.SharingStarted
+                        kotlinx
+                            .coroutines
+                            .flow
+                            .SharingStarted
                             .WhileSubscribed(FLOW_STOP_TIMEOUT),
                     initialValue = ColorsUiState(),
                 )
