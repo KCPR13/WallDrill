@@ -19,14 +19,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object AppProvider {
+object ViewModelModule {
     @Provides
+    @ViewModelScoped
     fun provideTestColorAnalyzer(
         @ApplicationScope applicationScope: CoroutineScope,
         @BackgroundDispatcher backgroundDispatcher: CoroutineDispatcher,

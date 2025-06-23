@@ -19,6 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 import pl.kacper.misterski.walldrill.domain.ResourceProvider
 import pl.kacper.misterski.walldrill.domain.usecase.SettingsUseCase
 
@@ -26,6 +27,7 @@ import pl.kacper.misterski.walldrill.domain.usecase.SettingsUseCase
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
     @Provides
+    @ViewModelScoped
     fun provideSettingsUseCase(resourceProvider: ResourceProvider) =
         SettingsUseCase(resourceProvider)
 }

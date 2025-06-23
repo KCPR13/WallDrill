@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.db.color
+package pl.kacper.misterski.walldrill.data.db.color
 
 import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import pl.kacper.misterski.walldrill.db.base.BaseDao
-import pl.kacper.misterski.walldrill.db.color.Color.Companion.TABLE_NAME
+import pl.kacper.misterski.walldrill.data.db.base.BaseDao
+import pl.kacper.misterski.walldrill.data.db.color.Color.Companion.TABLE_NAME
 
 @Dao
 interface ColorDao : BaseDao<Color> {

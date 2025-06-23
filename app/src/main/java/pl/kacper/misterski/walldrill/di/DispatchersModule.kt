@@ -24,29 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class BackgroundScope
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class MainScope
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class ApplicationScope
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class BackgroundDispatcher
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class MainDispatcher
-
 @Module
 @InstallIn(SingletonComponent::class)
-object CoreProvider {
+object DispatchersModule {
     @BackgroundDispatcher
     @Provides
     fun provideBackgroundDispatcher() = Dispatchers.IO

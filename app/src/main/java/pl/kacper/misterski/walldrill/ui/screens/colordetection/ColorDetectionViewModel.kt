@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pl.kacper.misterski.walldrill.core.BaseViewModel
-import pl.kacper.misterski.walldrill.db.color.ColorRepository
+import pl.kacper.misterski.walldrill.data.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.di.BackgroundDispatcher
 import pl.kacper.misterski.walldrill.domain.TestColorAnalyzer
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class ColorDetectionViewModel
         fun saveColor() {
             CoroutineScope(backgroundDispatcher).launch {
                 colorRepository.insert(
-                    pl.kacper.misterski.walldrill.db.color.Color(
+                    pl.kacper.misterski.walldrill.data.db.color.Color(
                         color = _uiState.value.value.toString(),
                         selected = !colorRepository.hasAnyColorSaved(),
                     ),

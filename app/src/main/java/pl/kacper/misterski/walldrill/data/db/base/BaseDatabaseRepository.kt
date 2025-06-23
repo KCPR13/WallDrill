@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.db.base
+package pl.kacper.misterski.walldrill.data.db.base
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
-interface BaseDao<T> {
-    @Insert
-    fun insert(entity: T)
+abstract class BaseDatabaseRepository<Entity, Dao> {
+    abstract fun getDao(): Dao
 
-    @Insert
-    fun insert(entities: List<T>)
+    val daoInstance: Dao by lazy { getDao() }
 
-    @Update
-    fun update(entity: T)
+    abstract suspend fun insert(toInsert: Entity)
 
-    @Update
-    fun update(entities: List<T>)
+    abstract fun getAll(): Flow<List<Entity>?>
 
-    @Delete
-    fun delete(entity: T)
-
-    @Delete
-    fun delete(entities: List<T>)
+    abstract suspend fun remove(entity: Entity)
 }

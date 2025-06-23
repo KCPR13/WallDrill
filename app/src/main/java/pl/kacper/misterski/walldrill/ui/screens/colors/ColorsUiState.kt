@@ -15,7 +15,7 @@
  */
 package pl.kacper.misterski.walldrill.ui.screens.colors
 
-import pl.kacper.misterski.walldrill.db.color.Color
+import pl.kacper.misterski.walldrill.data.db.color.Color
 
 data class ColorsUiState(
     val colors: List<Color> = emptyList(),

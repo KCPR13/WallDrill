@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.di
+package pl.kacper.misterski.walldrill.data.db
 
-import android.content.Context
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import pl.kacper.misterski.walldrill.domain.ResourceProvider
-import javax.inject.Singleton
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import pl.kacper.misterski.walldrill.data.db.color.Color
+import pl.kacper.misterski.walldrill.data.db.color.ColorDao
 
-@Module
-@InstallIn(SingletonComponent::class)
-object CommonModule {
-    @Provides
-    @Singleton
-    fun provideResourceProvider(
-        @ApplicationContext context: Context,
-    ) = ResourceProvider(context)
+@Database(entities = [Color::class], version = 1)
+abstract class AppRoom : RoomDatabase() {
+    abstract fun colorDao(): ColorDao
+
+    companion object {
+        const val DB_NAME = "WALL_DRILL_DB"
+    }
 }

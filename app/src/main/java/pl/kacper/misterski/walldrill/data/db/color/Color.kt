@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.db.color
+package pl.kacper.misterski.walldrill.data.db.color
 
 import androidx.compose.ui.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import pl.kacper.misterski.walldrill.db.color.Color.Companion.TABLE_NAME
+import pl.kacper.misterski.walldrill.data.db.color.Color.Companion.TABLE_NAME
 
 @Entity(tableName = TABLE_NAME)
 data class Color(

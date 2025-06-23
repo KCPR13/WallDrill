@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.kacper.misterski.walldrill.db
+package pl.kacper.misterski.walldrill.data.db.base
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import pl.kacper.misterski.walldrill.db.color.Color
-import pl.kacper.misterski.walldrill.db.color.ColorDao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Update
 
-@Database(entities = [Color::class], version = 1)
-abstract class AppRoom : RoomDatabase() {
-    abstract fun configurationDao(): ColorDao
+interface BaseDao<T> {
+    @Insert
+    fun insert(entity: T)
+
+    @Insert
+    fun insert(entities: List<T>)
+
+    @Update
+    fun update(entity: T)
+
+    @Update
+    fun update(entities: List<T>)
+
+    @Delete
+    fun delete(entity: T)
+
+    @Delete
+    fun delete(entities: List<T>)
 }

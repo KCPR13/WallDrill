@@ -40,7 +40,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
-import pl.kacper.misterski.walldrill.db.color.Color
+import pl.kacper.misterski.walldrill.data.db.color.Color
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize

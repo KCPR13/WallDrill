@@ -28,8 +28,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import pl.kacper.misterski.walldrill.db.color.Color
-import pl.kacper.misterski.walldrill.db.color.ColorRepository
+import pl.kacper.misterski.walldrill.data.db.color.Color
+import pl.kacper.misterski.walldrill.data.db.color.ColorRepository
 import pl.kacper.misterski.walldrill.di.BackgroundDispatcher
 import pl.kacper.misterski.walldrill.domain.constants.Constants.FLOW_STOP_TIMEOUT
 import javax.inject.Inject
