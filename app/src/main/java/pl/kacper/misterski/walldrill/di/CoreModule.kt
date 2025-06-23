@@ -22,13 +22,16 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideAppRoom(@ApplicationContext context: Context) = Room
-        .databaseBuilder(
-            context,
-            AppRoom::class.java,
-            AppRoom.DB_NAME,
-        )
-        .build()
+    fun provideAppRoom(
+        @ApplicationContext context: Context,
+    ) =
+        Room
+            .databaseBuilder(
+                context,
+                AppRoom::class.java,
+                AppRoom.DB_NAME,
+            )
+            .build()
 
     @Provides
     @Singleton

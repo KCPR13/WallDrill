@@ -24,7 +24,7 @@ import pl.kacper.misterski.walldrill.data.db.color.Color.Companion.TABLE_NAME
 @Dao
 interface ColorDao : BaseDao<Color> {
     @Query("SELECT * FROM $TABLE_NAME")
-    fun getColors(): Flow<List<Color>?>
+    fun getColors(): Flow<List<Color>>
 
     @Query("UPDATE $TABLE_NAME SET selected = :selectedValue")
     suspend fun uncheckSelectedColor(selectedValue: Boolean = false)
