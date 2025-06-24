@@ -33,8 +33,6 @@ val CardElevation = 6.dp
 
 val BottomBarDefaultIconSize = 30.dp
 
-val BottomBarSelectedIconSize = 40.dp
-
 val AimPointSize = 100.dp
 
 val MinGridSize = 60.dp

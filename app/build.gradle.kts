@@ -140,7 +140,6 @@ dependencies {
     implementation(libs.androidx.camera.view)
 
     implementation(libs.androidx.material.icons.extended)
-
 }
 
 tasks.register("yourCustomTask") {

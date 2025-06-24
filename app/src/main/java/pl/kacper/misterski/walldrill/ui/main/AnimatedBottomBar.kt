@@ -37,18 +37,15 @@ import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarDefaultIconSize
-import pl.kacper.misterski.walldrill.ui.theme.BottomBarSelectedIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
-import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
-//TODO main screen
-//TODO BottomBar visible only on main screen
+// TODO main screen
+// TODO BottomBar visible only on main screen
 // TODO K separate uistate
 // TODO different fab color
 @Composable
 fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
-    selectedBottomBarOption: MainUiState.BottomBarOption,
     show: Boolean,
     onSettingsClick: () -> Unit,
     onFolderClick: () -> Unit,
@@ -64,14 +61,12 @@ fun AnimatedBottomBar(
                     imageVector = Icons.Outlined.Settings,
                     testTag = stringResource(R.string.test_tag_settings_icon),
                     onClick = onSettingsClick,
-                    isSelected = false// selectedBottomBarOption == MainUiState.BottomBarOption.SETTINGS, //TODO K remove?
                 )
 
                 BottomBarAction(
                     imageVector = Icons.Outlined.Folder,
                     testTag = stringResource(R.string.test_tag_folder_icon),
                     onClick = onFolderClick,
-                    isSelected = false// selectedBottomBarOption == MainUiState.BottomBarOption.FOLDER, //TODO K remove?
                 )
             },
             floatingActionButton = {
@@ -95,24 +90,16 @@ fun BottomBarAction(
     imageVector: ImageVector,
     testTag: String,
     onClick: () -> Unit,
-    isSelected: Boolean,
 ) {
     IconButton(
         modifier = modifier.testTag(testTag),
-        onClick = {
-            if (!isSelected) onClick.invoke()
-        },
+        onClick = onClick,
     ) {
         Image(
             modifier =
-                if (isSelected) {
-                    Modifier.size(BottomBarSelectedIconSize)
-                } else {
-                    Modifier
-                        .size(
-                            BottomBarDefaultIconSize,
-                        )
-                },
+                Modifier.size(
+                    BottomBarDefaultIconSize,
+                ),
             imageVector = imageVector,
             contentDescription = null,
             colorFilter = getIconTint(),
@@ -126,7 +113,6 @@ fun AnimatedBottomBarPreview() {
     WallDrillTheme {
         AnimatedBottomBar(
             modifier = Modifier,
-            MainUiState.BottomBarOption.SETTINGS,
             true,
             {},
             {},

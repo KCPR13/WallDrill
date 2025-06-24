@@ -21,6 +21,7 @@ data class MainUiState(
     val selectedBottomBarOption: BottomBarOption = BottomBarOption.SETTINGS,
 ) {
     enum class BottomBarOption {
+        // TODO needed?
         SETTINGS,
         FOLDER,
     }

@@ -22,8 +22,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
-import pl.kacper.misterski.walldrill.ui.theme.primaryContainerLight
 import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
 @Composable
@@ -63,7 +62,7 @@ fun AimScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.KeyboardArrowLeft,
+                            imageVector = Icons.Outlined.ArrowBackIosNew,
                             contentDescription = null,
                         )
                     }

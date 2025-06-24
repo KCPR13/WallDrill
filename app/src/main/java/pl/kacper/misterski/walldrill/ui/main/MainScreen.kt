@@ -40,7 +40,6 @@ fun MainScreen(
         modifier.safeContentPadding(),
         bottomBar = {
             AnimatedBottomBar(
-                selectedBottomBarOption = uiState.selectedBottomBarOption,
                 show = uiState.showBottomBar,
                 onSettingsClick = { onSettingsClick.invoke() },
                 onAimClick = {
