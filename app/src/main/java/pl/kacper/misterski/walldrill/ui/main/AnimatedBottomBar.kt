@@ -15,10 +15,12 @@
  */
 package pl.kacper.misterski.walldrill.ui.main
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -26,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,8 +39,12 @@ import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarDefaultIconSize
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarSelectedIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
+import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
+//TODO main screen
+//TODO BottomBar visible only on main screen
 // TODO K separate uistate
+// TODO different fab color
 @Composable
 fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
@@ -54,16 +61,17 @@ fun AnimatedBottomBar(
             modifier = modifier,
             actions = {
                 BottomBarAction(
-                    icon = R.drawable.ic_settings,
+                    imageVector = Icons.Outlined.Settings,
                     testTag = stringResource(R.string.test_tag_settings_icon),
                     onClick = onSettingsClick,
-                    isSelected = selectedBottomBarOption == MainUiState.BottomBarOption.SETTINGS,
+                    isSelected = false// selectedBottomBarOption == MainUiState.BottomBarOption.SETTINGS, //TODO K remove?
                 )
+
                 BottomBarAction(
-                    icon = R.drawable.ic_folder,
+                    imageVector = Icons.Outlined.Folder,
                     testTag = stringResource(R.string.test_tag_folder_icon),
                     onClick = onFolderClick,
-                    isSelected = selectedBottomBarOption == MainUiState.BottomBarOption.FOLDER,
+                    isSelected = false// selectedBottomBarOption == MainUiState.BottomBarOption.FOLDER, //TODO K remove?
                 )
             },
             floatingActionButton = {
@@ -84,7 +92,7 @@ fun AnimatedBottomBar(
 @Composable
 fun BottomBarAction(
     modifier: Modifier = Modifier,
-    @DrawableRes icon: Int,
+    imageVector: ImageVector,
     testTag: String,
     onClick: () -> Unit,
     isSelected: Boolean,
@@ -105,7 +113,7 @@ fun BottomBarAction(
                             BottomBarDefaultIconSize,
                         )
                 },
-            painter = painterResource(id = icon),
+            imageVector = imageVector,
             contentDescription = null,
             colorFilter = getIconTint(),
         )

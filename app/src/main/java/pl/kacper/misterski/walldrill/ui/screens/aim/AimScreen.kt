@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
+import pl.kacper.misterski.walldrill.ui.theme.primaryContainerLight
+import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
 @Composable
 fun AimScreen(
@@ -54,6 +56,7 @@ fun AimScreen(
             floatingActionButton =
                 {
                     FloatingActionButton(
+                        containerColor = secondaryContainerDarkHighContrast,
                         elevation = FloatingActionButtonDefaults.elevation(0.dp),
                         onClick = {
                             onFolderClick.invoke()

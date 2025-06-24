@@ -48,6 +48,7 @@ import pl.kacper.misterski.walldrill.ui.theme.MinGridSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
+import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +73,7 @@ fun ColorsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                containerColor = secondaryContainerDarkHighContrast,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { onColorDetectionClick.invoke() },
             ) {
