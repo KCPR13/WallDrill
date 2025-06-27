@@ -22,19 +22,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
+import pl.kacper.misterski.walldrill.ui.common.AppFab
 import pl.kacper.misterski.walldrill.ui.common.getIconTint
 import pl.kacper.misterski.walldrill.ui.theme.BottomBarDefaultIconSize
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
@@ -42,7 +38,6 @@ import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
 // TODO main screen
 // TODO BottomBar visible only on main screen
 // TODO K separate uistate
-// TODO different fab color
 @Composable
 fun AnimatedBottomBar(
     modifier: Modifier = Modifier,
@@ -70,15 +65,10 @@ fun AnimatedBottomBar(
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                AppFab(
+                    iconResource = R.drawable.ic_shooting,
                     onClick = onAimClick,
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_shooting),
-                        contentDescription = null,
-                    )
-                }
+                )
             },
         )
     }

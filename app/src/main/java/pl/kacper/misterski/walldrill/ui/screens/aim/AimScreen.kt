@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,11 +36,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import pl.kacper.misterski.walldrill.ui.common.AppFab
 import pl.kacper.misterski.walldrill.ui.theme.AimPointSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingExtraLarge
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
-import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
 @Composable
 fun AimScreen(
@@ -54,18 +51,10 @@ fun AimScreen(
             modifier = modifier,
             floatingActionButton =
                 {
-                    FloatingActionButton(
-                        containerColor = secondaryContainerDarkHighContrast,
-                        elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                        onClick = {
-                            onFolderClick.invoke()
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBackIosNew,
-                            contentDescription = null,
-                        )
-                    }
+                    AppFab(
+                        imageVector = Icons.Outlined.ArrowBackIosNew,
+                        onClick = onFolderClick,
+                    )
                 },
         ) { paddingValues ->
             Box(

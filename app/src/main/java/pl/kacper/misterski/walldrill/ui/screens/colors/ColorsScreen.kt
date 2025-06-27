@@ -27,9 +27,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -38,9 +35,9 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
 import pl.kacper.misterski.walldrill.R
 import pl.kacper.misterski.walldrill.data.db.color.Color
+import pl.kacper.misterski.walldrill.ui.common.AppFab
 import pl.kacper.misterski.walldrill.ui.common.AppToolbar
 import pl.kacper.misterski.walldrill.ui.common.SelectedColor
 import pl.kacper.misterski.walldrill.ui.theme.MaxGridSize
@@ -48,7 +45,6 @@ import pl.kacper.misterski.walldrill.ui.theme.MinGridSize
 import pl.kacper.misterski.walldrill.ui.theme.PaddingLarge
 import pl.kacper.misterski.walldrill.ui.theme.PaddingMedium
 import pl.kacper.misterski.walldrill.ui.theme.WallDrillTheme
-import pl.kacper.misterski.walldrill.ui.theme.secondaryContainerDarkHighContrast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,16 +68,10 @@ fun ColorsScreen(
             ) { onSettingsClick.invoke() }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = secondaryContainerDarkHighContrast,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                onClick = { onColorDetectionClick.invoke() },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = null,
-                )
-            }
+            AppFab(
+                imageVector = Icons.Outlined.Add,
+                onClick = onColorDetectionClick,
+            )
         },
     ) { paddingValues ->
         Box(
