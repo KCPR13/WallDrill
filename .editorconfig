@@ -1,9 +1,5 @@
 root = true
 
-# //TODO K zagadnienia
-# - kiedu używać jakiś scopeów i porównanie
-
-
 [*]
 charset = utf-8
 indent_style = space
